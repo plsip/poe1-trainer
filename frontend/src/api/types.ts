@@ -147,6 +147,10 @@ export interface DetailedRankingEntry {
   is_pb: boolean
 }
 
+export interface IntegrationStatus {
+  log_watcher: 'active' | 'waiting_for_file' | 'waiting_for_new_lines' | 'game_not_running' | 'parser_error' | 'disabled'
+}
+
 export interface RankingStats {
   count: number
   pb_ms?: number

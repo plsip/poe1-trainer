@@ -1,3 +1,7 @@
+import { useEffect, useState } from 'react'
+import * as api from '../api/client'
+import type { IntegrationStatus as IntegrationStatusType } from '../api/types'
+
 /** Displays current integration status (log watcher, GGG API). */
 
 interface StatusDotProps {
@@ -33,33 +37,36 @@ function StatusDot({ online, label, detail }: StatusDotProps) {
   )
 }
 
-interface Props {
-  /** ISO timestamp of the most recent area_entered event, if any. */
-  lastAreaAt?: string
-  /** Area name from the most recent logtail event, if any. */
-  lastArea?: string
+const watcherLabel: Record<IntegrationStatusType['log_watcher'], string> = {
+  active: 'aktywny',
+  waiting_for_file: 'brak pliku',
+  waiting_for_new_lines: 'czeka na dane',
+  game_not_running: 'gra wyłączona',
+  parser_error: 'błąd parsera',
+  disabled: 'offline',
 }
 
-export function IntegrationStatus({ lastAreaAt, lastArea }: Props) {
-  const logWatcherOnline = !!lastAreaAt
-  const lastSeenLabel = lastAreaAt
-    ? new Date(lastAreaAt).toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit', second: '2-digit' })
-    : undefined
+export function IntegrationStatus() {
+  const [status, setStatus] = useState<IntegrationStatusType | null>(null)
+
+  useEffect(() => {
+    const load = () => api.getIntegrationStatus().then(setStatus).catch(() => {})
+    load()
+    const id = setInterval(load, 5_000)
+    return () => clearInterval(id)
+  }, [])
+
+  const watcherStatus = status?.log_watcher ?? 'disabled'
+  const watcherOnline = watcherStatus === 'active' || watcherStatus === 'waiting_for_new_lines'
 
   return (
     <div className="panel">
       <h3 className="panel-title">Integracje</h3>
 
       <StatusDot
-        online={logWatcherOnline}
+        online={watcherOnline}
         label="Log watcher"
-        detail={
-          lastArea
-            ? `${lastArea} · ${lastSeenLabel}`
-            : logWatcherOnline
-            ? lastSeenLabel
-            : 'offline'
-        }
+        detail={watcherLabel[watcherStatus]}
       />
 
       <StatusDot

@@ -33,6 +33,15 @@ type Handlers struct {
 	// oauthStates stores in-flight OAuth state nonces for CSRF protection.
 	// map[state string]expiresAt time.Time
 	oauthStates sync.Map
+	// watcherStatus returns the current logtail status string.
+	// Nil when LOG_PATH is not configured.
+	watcherStatus func() string
+}
+
+// SetWatcherStatusFunc registers a callback that returns the current logtail status.
+// Called from main after the watcher is created.
+func (h *Handlers) SetWatcherStatusFunc(fn func() string) {
+	h.watcherStatus = fn
 }
 
 // NewHandlers creates a new Handlers instance.
@@ -56,6 +65,17 @@ func NewHandlers(
 		gggProvider: gggProvider,
 		gggClient:   gggClient,
 	}
+}
+
+// ─── Integration status ───────────────────────────────────────────────────
+
+// GetIntegrationStatus handles GET /integration/status
+func (h *Handlers) GetIntegrationStatus(w http.ResponseWriter, r *http.Request) {
+	status := "disabled"
+	if h.watcherStatus != nil {
+		status = h.watcherStatus()
+	}
+	writeJSON(w, http.StatusOK, IntegrationStatusResponse{LogWatcher: status})
 }
 
 // ─── Guides ────────────────────────────────────────────────────────────────

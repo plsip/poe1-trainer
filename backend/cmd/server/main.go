@@ -83,6 +83,7 @@ func main() {
 			}
 		})
 		watcher.Start(ctx)
+		h.SetWatcherStatusFunc(func() string { return string(watcher.Status()) })
 		log.Printf("logtail: nasłuchiwanie pliku %s", logPath)
 
 		go func() {

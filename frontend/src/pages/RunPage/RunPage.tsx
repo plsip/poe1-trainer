@@ -42,8 +42,6 @@ export function RunPage() {
   const [ranking, setRanking] = useState<DetailedRankingEntry[]>([])
   const [deltas, setDeltas] = useState<RunDeltasResponse | undefined>()
   const [paused, setPaused] = useState(false)
-  const [lastArea, setLastArea] = useState<string | undefined>()
-  const [lastAreaAt, setLastAreaAt] = useState<string | undefined>()
 
   const id = Number(runId)
   const isActive = runState?.run.is_active ?? false
@@ -78,22 +76,6 @@ export function RunPage() {
       .catch(() => {})
   }, [id])
 
-  useEffect(() => {
-    if (!id) return
-    api
-      .listEvents(id)
-      .then((events) => {
-        const areaEvents = events
-          .filter((e) => e.event_type === 'area_entered')
-          .sort((a, b) => new Date(b.occurred_at).getTime() - new Date(a.occurred_at).getTime())
-        if (areaEvents.length > 0) {
-          setLastArea(areaEvents[0].payload?.area)
-          setLastAreaAt(areaEvents[0].occurred_at)
-        }
-      })
-      .catch(() => {})
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id])
 
   // Periodic refresh when active
   const pollingRef = useRef<ReturnType<typeof setInterval> | null>(null)
@@ -282,7 +264,7 @@ export function RunPage() {
             deltas={deltas}
           />
 
-          <IntegrationStatus lastArea={lastArea} lastAreaAt={lastAreaAt} />
+          <IntegrationStatus />
         </div>
       </div>
     </div>

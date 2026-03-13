@@ -1,5 +1,13 @@
 package api
 
+// ─── Integration status ──────────────────────────────────────────────────────
+
+// IntegrationStatusResponse is the body for GET /integration/status.
+type IntegrationStatusResponse struct {
+	// LogWatcher reflects the current logtail.Status, or "disabled" when LOG_PATH is not set.
+	LogWatcher string `json:"log_watcher"`
+}
+
 // ─── Builds ──────────────────────────────────────────────────────────────────
 
 // CreateBuildRequest is the body for POST /builds.

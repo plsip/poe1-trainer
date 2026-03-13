@@ -11,6 +11,7 @@ import type {
   ManualCheck,
   RunEvent,
   RunDeltasResponse,
+  IntegrationStatus,
 } from './types'
 
 const BASE = '/api'
@@ -125,6 +126,12 @@ export function answerCheck(runId: number, checkId: number, value: string): Prom
     method: 'POST',
     body: JSON.stringify({ response_value: value }),
   })
+}
+
+// ─── integration status ────────────────────────────────────────────────────
+
+export function getIntegrationStatus(): Promise<IntegrationStatus> {
+  return request('/integration/status')
 }
 
 // ─── events ────────────────────────────────────────────────────────────────
