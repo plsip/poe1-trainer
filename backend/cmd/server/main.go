@@ -158,12 +158,43 @@ func dispatchLogtailEvent(ctx context.Context, repo *runpkg.Repository, svc *run
 		if err := svc.HandleAreaEvent(ctx, active.ID, runpkg.AreaEvent{AreaName: ev.Area.AreaName}); err != nil {
 			slog.Warn("logtail: HandleAreaEvent error", "run_id", active.ID, "area", ev.Area.AreaName, "err", err)
 		}
+	case progress.KindAreaGenerated:
+		if ev.AreaGenerated == nil {
+			return active.ID
+		}
+		if err := svc.RecordLogEvent(ctx, active.ID, runpkg.EventAreaGenerated, map[string]string{
+			"area_code":  ev.AreaGenerated.AreaCode,
+			"area_level": fmt.Sprint(ev.AreaGenerated.AreaLevel),
+			"seed":       fmt.Sprint(ev.AreaGenerated.Seed),
+		}); err != nil {
+			slog.Warn("logtail: RecordLogEvent area_generated error", "run_id", active.ID, "area_code", ev.AreaGenerated.AreaCode, "err", err)
+		}
 	case progress.KindLevelUp:
 		if ev.Level == nil {
 			return active.ID
 		}
 		slog.Info("logtail: level up", "run_id", active.ID, "level", ev.Level.Level)
+		if err := svc.RecordLogEvent(ctx, active.ID, runpkg.EventLevelUp, map[string]string{
+			"level": fmt.Sprint(ev.Level.Level),
+		}); err != nil {
+			slog.Warn("logtail: RecordLogEvent level_up error", "run_id", active.ID, "level", ev.Level.Level, "err", err)
+		}
+	case progress.KindPassiveAllocated:
+		if ev.Passive == nil {
+			return active.ID
+		}
+		if err := svc.RecordLogEvent(ctx, active.ID, runpkg.EventPassiveAllocated, map[string]string{
+			"passive_id":   ev.Passive.PassiveID,
+			"passive_name": ev.Passive.PassiveName,
+		}); err != nil {
+			slog.Warn("logtail: RecordLogEvent passive_allocated error", "run_id", active.ID, "passive_id", ev.Passive.PassiveID, "err", err)
+		}
+	case progress.KindTradeAccepted:
+		if err := svc.RecordLogEvent(ctx, active.ID, runpkg.EventTradeAccepted, map[string]string{
+			"outcome": "accepted",
+		}); err != nil {
+			slog.Warn("logtail: RecordLogEvent trade_accepted error", "run_id", active.ID, "err", err)
+		}
 	}
 	return active.ID
 }
-

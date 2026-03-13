@@ -13,15 +13,15 @@ const (
 
 // RunSession represents one character's run through the campaign.
 type RunSession struct {
-	ID             int        `json:"id"`
-	GuideID        int        `json:"guide_id"`
-	CharacterName  string     `json:"character_name"`
-	League         string     `json:"league"`
-	Status         Status     `json:"status"`
-	Notes          string     `json:"notes,omitempty"`
-	StartedAt      time.Time  `json:"started_at"`
-	FinishedAt     *time.Time `json:"finished_at,omitempty"`
-	IsActive       bool       `json:"is_active"`
+	ID            int        `json:"id"`
+	GuideID       int        `json:"guide_id"`
+	CharacterName string     `json:"character_name"`
+	League        string     `json:"league"`
+	Status        Status     `json:"status"`
+	Notes         string     `json:"notes,omitempty"`
+	StartedAt     time.Time  `json:"started_at"`
+	FinishedAt    *time.Time `json:"finished_at,omitempty"`
+	IsActive      bool       `json:"is_active"`
 	// Timer fields (migration 005)
 	TimerStartedAt *time.Time `json:"timer_started_at,omitempty"`
 	PausedAt       *time.Time `json:"paused_at,omitempty"`
@@ -50,9 +50,13 @@ type Checkpoint struct {
 type EventType string
 
 const (
-	EventAreaEntered    EventType = "area_entered"
-	EventStepConfirmed  EventType = "step_confirmed"
-	EventExternalHint   EventType = "hint"
+	EventAreaEntered      EventType = "area_entered"
+	EventAreaGenerated    EventType = "area_generated"
+	EventLevelUp          EventType = "level_up"
+	EventPassiveAllocated EventType = "passive_allocated"
+	EventTradeAccepted    EventType = "trade_accepted"
+	EventStepConfirmed    EventType = "step_confirmed"
+	EventExternalHint     EventType = "hint"
 )
 
 // Event is an immutable record of something that happened during a run.
@@ -99,11 +103,11 @@ type Character struct {
 type StepProgressStatus string
 
 const (
-	StepPending             StepProgressStatus = "pending"
-	StepInProgress          StepProgressStatus = "in_progress"
-	StepNeedsConfirmation   StepProgressStatus = "needs_confirmation"
-	StepCompleted           StepProgressStatus = "completed"
-	StepSkipped             StepProgressStatus = "skipped"
+	StepPending           StepProgressStatus = "pending"
+	StepInProgress        StepProgressStatus = "in_progress"
+	StepNeedsConfirmation StepProgressStatus = "needs_confirmation"
+	StepCompleted         StepProgressStatus = "completed"
+	StepSkipped           StepProgressStatus = "skipped"
 )
 
 // StepProgress is the authoritative record of a step's state in a run.

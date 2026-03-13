@@ -10,8 +10,14 @@ type DomainEventKind string
 const (
 	// KindAreaEntered jest emitowany przez logtail gdy gracz wchodzi do nowej strefy.
 	KindAreaEntered DomainEventKind = "area_entered"
+	// KindAreaGenerated jest emitowany gdy klient wygeneruje instancję obszaru.
+	KindAreaGenerated DomainEventKind = "area_generated"
 	// KindLevelUp jest emitowany gdy postać awansuje na wyższy poziom.
 	KindLevelUp DomainEventKind = "level_up"
+	// KindPassiveAllocated jest emitowany gdy gracz przydzieli punkt pasywki.
+	KindPassiveAllocated DomainEventKind = "passive_allocated"
+	// KindTradeAccepted jest emitowany gdy gracz zaakceptuje trade lub zakup u NPC.
+	KindTradeAccepted DomainEventKind = "trade_accepted"
 	// KindQuestCompleted jest emitowany gdy quest zmienia status na Finished.
 	KindQuestCompleted DomainEventKind = "quest_completed"
 	// KindCharSnapshot jest emitowany po pobraniu migawki postaci z GGG API.
@@ -28,11 +34,14 @@ type DomainEvent struct {
 	RunID      int
 
 	// Payloads — dokładnie jedno non-nil pole na zdarzenie.
-	Area     *AreaPayload
-	Level    *LevelPayload
-	Quest    *QuestPayload
-	Snapshot *SnapshotPayload
-	Manual   *ManualPayload
+	Area          *AreaPayload
+	AreaGenerated *AreaGeneratedPayload
+	Level         *LevelPayload
+	Passive       *PassivePayload
+	Trade         *TradePayload
+	Quest         *QuestPayload
+	Snapshot      *SnapshotPayload
+	Manual        *ManualPayload
 }
 
 // AreaPayload carries data for KindAreaEntered events.
@@ -40,9 +49,27 @@ type AreaPayload struct {
 	AreaName string
 }
 
+// AreaGeneratedPayload carries data for KindAreaGenerated events.
+type AreaGeneratedPayload struct {
+	AreaCode  string
+	AreaLevel int
+	Seed      int64
+}
+
 // LevelPayload carries data for KindLevelUp events.
 type LevelPayload struct {
 	Level int
+}
+
+// PassivePayload carries data for KindPassiveAllocated events.
+type PassivePayload struct {
+	PassiveID   string
+	PassiveName string
+}
+
+// TradePayload carries data for KindTradeAccepted events.
+type TradePayload struct {
+	Outcome string
 }
 
 // QuestPayload carries data for KindQuestCompleted events.
@@ -80,6 +107,20 @@ func NewAreaEnteredEvent(runID int, areaName string, at time.Time) DomainEvent {
 	}
 }
 
+// NewAreaGeneratedEvent tworzy zdarzenie wygenerowania instancji obszaru.
+func NewAreaGeneratedEvent(runID, areaLevel int, areaCode string, seed int64, at time.Time) DomainEvent {
+	return DomainEvent{
+		Kind:       KindAreaGenerated,
+		RunID:      runID,
+		OccurredAt: at,
+		AreaGenerated: &AreaGeneratedPayload{
+			AreaCode:  areaCode,
+			AreaLevel: areaLevel,
+			Seed:      seed,
+		},
+	}
+}
+
 // NewLevelUpEvent tworzy zdarzenie awansu postaci.
 func NewLevelUpEvent(runID, level int, at time.Time) DomainEvent {
 	return DomainEvent{
@@ -87,6 +128,29 @@ func NewLevelUpEvent(runID, level int, at time.Time) DomainEvent {
 		RunID:      runID,
 		OccurredAt: at,
 		Level:      &LevelPayload{Level: level},
+	}
+}
+
+// NewPassiveAllocatedEvent tworzy zdarzenie przydzielenia pasywki.
+func NewPassiveAllocatedEvent(runID int, passiveID, passiveName string, at time.Time) DomainEvent {
+	return DomainEvent{
+		Kind:       KindPassiveAllocated,
+		RunID:      runID,
+		OccurredAt: at,
+		Passive: &PassivePayload{
+			PassiveID:   passiveID,
+			PassiveName: passiveName,
+		},
+	}
+}
+
+// NewTradeAcceptedEvent tworzy zdarzenie zatwierdzonej transakcji.
+func NewTradeAcceptedEvent(runID int, at time.Time) DomainEvent {
+	return DomainEvent{
+		Kind:       KindTradeAccepted,
+		RunID:      runID,
+		OccurredAt: at,
+		Trade:      &TradePayload{Outcome: "accepted"},
 	}
 }
 

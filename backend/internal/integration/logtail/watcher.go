@@ -277,8 +277,14 @@ func (w *Watcher) emitEvent(p *ParsedLine) {
 	switch p.Kind {
 	case ParsedKindAreaEntered:
 		w.sink.Emit(progress.NewAreaEnteredEvent(0, p.AreaName, p.Timestamp))
+	case ParsedKindAreaGenerated:
+		w.sink.Emit(progress.NewAreaGeneratedEvent(0, p.AreaLevel, p.AreaCode, p.AreaSeed, p.Timestamp))
 	case ParsedKindLevelUp:
 		w.sink.Emit(progress.NewLevelUpEvent(0, p.Level, p.Timestamp))
+	case ParsedKindPassiveAllocated:
+		w.sink.Emit(progress.NewPassiveAllocatedEvent(0, p.PassiveID, p.PassiveName, p.Timestamp))
+	case ParsedKindTradeAccepted:
+		w.sink.Emit(progress.NewTradeAcceptedEvent(0, p.Timestamp))
 	}
 }
 

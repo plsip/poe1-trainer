@@ -155,6 +155,22 @@ func (s *Service) HandleAreaEvent(ctx context.Context, runID int, ev AreaEvent) 
 	})
 }
 
+// RecordLogEvent stores a non-authoritative logtail event for later analysis.
+// Unlike step confirmations, these events never mutate progress on their own.
+func (s *Service) RecordLogEvent(ctx context.Context, runID int, eventType EventType, payload map[string]string) error {
+	run, err := s.repo.GetRun(ctx, runID)
+	if err != nil {
+		return err
+	}
+	if !run.IsActive {
+		return nil
+	}
+	if payload == nil {
+		payload = map[string]string{}
+	}
+	return s.repo.RecordEvent(ctx, runID, eventType, payload)
+}
+
 // FinishRun marks a run as completed and recomputes the local ranking.
 func (s *Service) FinishRun(ctx context.Context, runID int) error {
 	run, err := s.repo.GetRun(ctx, runID)
