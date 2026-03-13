@@ -8,7 +8,7 @@ import { StepList } from '../../components/StepList'
 import { SplitsPanel } from '../../components/SplitsPanel'
 import { IntegrationStatus } from '../../components/IntegrationStatus'
 import { ChecksPanel } from '../../components/ChecksPanel'
-import type { GuideStep, RankingEntry } from '../../api/types'
+import type { GuideStep, DetailedRankingEntry, RunDeltasResponse } from '../../api/types'
 import * as api from '../../api/client'
 
 export function RunPage() {
@@ -39,7 +39,9 @@ export function RunPage() {
     setStepFilter,
   } = useAppStore()
 
-  const [ranking, setRanking] = useState<RankingEntry[]>([])
+  const [ranking, setRanking] = useState<DetailedRankingEntry[]>([])
+  const [deltas, setDeltas] = useState<RunDeltasResponse | undefined>()
+  const [paused, setPaused] = useState(false)
   const [lastArea, setLastArea] = useState<string | undefined>()
   const [lastAreaAt, setLastAreaAt] = useState<string | undefined>()
 
@@ -66,6 +68,15 @@ export function RunPage() {
       .then((r) => setRanking(r ?? []))
       .catch(() => {})
   }, [guideSlug])
+
+  // Load split deltas whenever splits or run changes
+  useEffect(() => {
+    if (!id) return
+    api
+      .getSplitDeltas(id)
+      .then((d) => setDeltas(d))
+      .catch(() => {})
+  }, [id])
 
   useEffect(() => {
     if (!id) return
@@ -111,12 +122,23 @@ export function RunPage() {
     if (!confirm('Zakończyć run? Zostaną zapisane finalne splity.')) return
     await finishRun(id)
     loadSplits(id)
+    api.getSplitDeltas(id).then(setDeltas).catch(() => {})
   }
 
   const handleAbandon = async () => {
     if (!confirm('Porzucić run? Tego nie można cofnąć.')) return
     await abandonRun(id)
     navigate(-1)
+  }
+
+  const handlePause = async () => {
+    if (paused) {
+      await api.resumeRun(id).catch(() => {})
+    } else {
+      await api.pauseRun(id).catch(() => {})
+    }
+    setPaused(!paused)
+    loadRunState(id)
   }
 
   // ─── Loading / error states ───────────────────────────────────────────────
@@ -194,6 +216,14 @@ export function RunPage() {
                 </button>
                 <button
                   className="btn-sm"
+                  onClick={handlePause}
+                  title={paused ? 'Wznów timer' : 'Wstrzymaj timer (AFK)'}
+                  style={{ color: paused ? '#ffd166' : undefined }}
+                >
+                  {paused ? '▶ Wznów' : '⏸ Pauza'}
+                </button>
+                <button
+                  className="btn-sm"
                   onClick={handleFinish}
                 >
                   Zakończ run
@@ -249,6 +279,7 @@ export function RunPage() {
             steps={steps}
             elapsedMs={runState.elapsed_ms}
             ranking={ranking}
+            deltas={deltas}
           />
 
           <IntegrationStatus lastArea={lastArea} lastAreaAt={lastAreaAt} />

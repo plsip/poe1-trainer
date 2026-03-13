@@ -4,11 +4,13 @@ import type {
   CurrentState,
   Recommendation,
   Checkpoint,
-  RankingEntry,
+  DetailedRankingEntry,
+  RankingStats,
   AlertsResponse,
   Split,
   ManualCheck,
   RunEvent,
+  RunDeltasResponse,
 } from './types'
 
 const BASE = '/api'
@@ -64,8 +66,12 @@ export function listRuns(guideSlug: string): Promise<RunSession[]> {
   return request(`/guides/${guideSlug}/runs`)
 }
 
-export function getRanking(guideSlug: string): Promise<RankingEntry[]> {
+export function getRanking(guideSlug: string): Promise<DetailedRankingEntry[]> {
   return request(`/guides/${guideSlug}/ranking`)
+}
+
+export function getRankingStats(guideSlug: string): Promise<RankingStats> {
+  return request(`/guides/${guideSlug}/ranking/stats`)
 }
 
 // ─── extended run actions ──────────────────────────────────────────────────
@@ -92,6 +98,20 @@ export function getAlerts(runId: number): Promise<AlertsResponse> {
 
 export function getSplits(runId: number): Promise<Split[]> {
   return request(`/runs/${runId}/splits`)
+}
+
+export function getSplitDeltas(runId: number): Promise<RunDeltasResponse> {
+  return request(`/runs/${runId}/split-deltas`)
+}
+
+// ─── pause / resume ────────────────────────────────────────────────────────
+
+export function pauseRun(runId: number): Promise<void> {
+  return request(`/runs/${runId}/pause`, { method: 'POST' })
+}
+
+export function resumeRun(runId: number): Promise<void> {
+  return request(`/runs/${runId}/resume`, { method: 'POST' })
 }
 
 // ─── manual checks ─────────────────────────────────────────────────────────

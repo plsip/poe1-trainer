@@ -13,15 +13,19 @@ const (
 
 // RunSession represents one character's run through the campaign.
 type RunSession struct {
-	ID            int        `json:"id"`
-	GuideID       int        `json:"guide_id"`
-	CharacterName string     `json:"character_name"`
-	League        string     `json:"league"`
-	Status        Status     `json:"status"`
-	Notes         string     `json:"notes,omitempty"`
-	StartedAt     time.Time  `json:"started_at"`
-	FinishedAt    *time.Time `json:"finished_at,omitempty"`
-	IsActive      bool       `json:"is_active"`
+	ID             int        `json:"id"`
+	GuideID        int        `json:"guide_id"`
+	CharacterName  string     `json:"character_name"`
+	League         string     `json:"league"`
+	Status         Status     `json:"status"`
+	Notes          string     `json:"notes,omitempty"`
+	StartedAt      time.Time  `json:"started_at"`
+	FinishedAt     *time.Time `json:"finished_at,omitempty"`
+	IsActive       bool       `json:"is_active"`
+	// Timer fields (migration 005)
+	TimerStartedAt *time.Time `json:"timer_started_at,omitempty"`
+	PausedAt       *time.Time `json:"paused_at,omitempty"`
+	TotalPausedMs  int64      `json:"total_paused_ms"`
 }
 
 // ConfirmedBy describes how a checkpoint was confirmed.
@@ -194,7 +198,7 @@ type Split struct {
 // LocalRanking is a pre-computed summary of a finished run's performance.
 //
 // All fields are derived:
-//   - TotalMs   from runs.finished_at − runs.started_at
+//   - TotalMs   from runs.finished_at − runs.timer_started_at
 //   - ActSplits from run_splits aggregated per act
 //   - Rank      from ordering all finished runs of the same guide by TotalMs
 //
@@ -207,4 +211,42 @@ type LocalRanking struct {
 	ActSplits  map[string]int `json:"act_splits"` // {"1": 120000, "2": 345000, …}
 	Rank       int            `json:"rank"`
 	ComputedAt time.Time      `json:"computed_at"`
+}
+
+// DetailedRankingEntry is a full ranking row returned by GET /guides/{slug}/ranking.
+// Combines local_rankings with run metadata.
+type DetailedRankingEntry struct {
+	Rank          int            `json:"rank"`
+	RunID         int            `json:"run_id"`
+	CharacterName string         `json:"character_name"`
+	StartedAt     time.Time      `json:"started_at"`
+	TotalMs       int64          `json:"total_ms"`
+	ActSplits     map[string]int `json:"act_splits"` // {"1": 120000, …}
+	IsPB          bool           `json:"is_pb"`
+}
+
+// RankingStats aggregates key timing statistics for a guide's runs.
+type RankingStats struct {
+	Count     int    `json:"count"`
+	PBMs      *int64 `json:"pb_ms,omitempty"`
+	MedianMs  *int64 `json:"median_ms,omitempty"`
+	LastRunMs *int64 `json:"last_run_ms,omitempty"`
+	LastRunID *int   `json:"last_run_id,omitempty"`
+}
+
+// SplitDelta describes a split in the current run relative to the PB run and
+// the most recent previous run.
+type SplitDelta struct {
+	StepID      int    `json:"step_id"`
+	SplitMs     int64  `json:"split_ms"`
+	DeltaPBMs   *int64 `json:"delta_pb_ms,omitempty"`   // positive = slower than PB
+	DeltaPrevMs *int64 `json:"delta_prev_ms,omitempty"` // positive = slower than prev run
+}
+
+// RunDeltasResponse is the body of GET /runs/{id}/split-deltas.
+type RunDeltasResponse struct {
+	RunID     int          `json:"run_id"`
+	PBRunID   *int         `json:"pb_run_id,omitempty"`
+	PrevRunID *int         `json:"prev_run_id,omitempty"`
+	Splits    []SplitDelta `json:"splits"`
 }

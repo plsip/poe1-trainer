@@ -22,6 +22,7 @@ func NewRouter(h *Handlers) http.Handler {
 	mux.HandleFunc("GET /guides/{slug}", h.GetGuide)
 	mux.HandleFunc("GET /guides/{slug}/runs", h.ListRuns)
 	mux.HandleFunc("GET /guides/{slug}/ranking", h.GetRanking)
+	mux.HandleFunc("GET /guides/{slug}/ranking/stats", h.GetRankingStats)
 
 	// --- runs ---
 	mux.HandleFunc("POST /runs", h.CreateRun)
@@ -29,6 +30,8 @@ func NewRouter(h *Handlers) http.Handler {
 	mux.HandleFunc("GET /runs/{id}/state", h.GetRunState)
 	mux.HandleFunc("POST /runs/{id}/finish", h.FinishRun)
 	mux.HandleFunc("POST /runs/{id}/abandon", h.AbandonRun)
+	mux.HandleFunc("POST /runs/{id}/pause", h.PauseRun)
+	mux.HandleFunc("POST /runs/{id}/resume", h.ResumeRun)
 
 	// --- step actions ---
 	mux.HandleFunc("GET /runs/{id}/recommendations", h.GetRunRecommendations)
@@ -50,8 +53,9 @@ func NewRouter(h *Handlers) http.Handler {
 	mux.HandleFunc("GET /runs/{id}/events", h.ListEvents)
 	mux.HandleFunc("POST /runs/{id}/events", h.RecordEvent)
 
-	// --- splits & ranking ---
+	// --- splits, deltas & ranking ---
 	mux.HandleFunc("GET /runs/{id}/splits", h.ListSplits)
+	mux.HandleFunc("GET /runs/{id}/split-deltas", h.GetSplitDeltas)
 
 	// --- manual checks ---
 	mux.HandleFunc("GET /runs/{id}/checks", h.ListPendingChecks)

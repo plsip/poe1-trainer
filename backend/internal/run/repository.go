@@ -21,15 +21,28 @@ func NewRepository(db *pgxpool.Pool) *Repository {
 }
 
 // CreateRun inserts a new active run.
-func (r *Repository) CreateRun(ctx context.Context, guideID int, characterName, league string) (*RunSession, error) {
+// When autoStart=true the timer_started_at is left NULL; it will be set on the
+// first logtail area event. When autoStart=false the timer starts immediately.
+func (r *Repository) CreateRun(ctx context.Context, guideID int, characterName, league string, autoStart bool) (*RunSession, error) {
 	run := &RunSession{}
-	err := r.db.QueryRow(ctx, `
-		INSERT INTO runs (guide_id, character_name, league)
+	var timerSQL string
+	if autoStart {
+		// timer_started_at stays NULL — set later by HandleAreaEvent
+		timerSQL = `INSERT INTO runs (guide_id, character_name, league)
 		VALUES ($1, $2, $3)
-		RETURNING id, guide_id, character_name, league, status, notes, started_at, finished_at, is_active`,
-		guideID, characterName, league,
-	).Scan(&run.ID, &run.GuideID, &run.CharacterName, &run.League, &run.Status, &run.Notes,
-		&run.StartedAt, &run.FinishedAt, &run.IsActive)
+		RETURNING id, guide_id, character_name, league, status, notes, started_at, finished_at,
+		          is_active, timer_started_at, paused_at, total_paused_ms`
+	} else {
+		// timer starts immediately
+		timerSQL = `INSERT INTO runs (guide_id, character_name, league, timer_started_at)
+		VALUES ($1, $2, $3, NOW())
+		RETURNING id, guide_id, character_name, league, status, notes, started_at, finished_at,
+		          is_active, timer_started_at, paused_at, total_paused_ms`
+	}
+	err := r.db.QueryRow(ctx, timerSQL, guideID, characterName, league).
+		Scan(&run.ID, &run.GuideID, &run.CharacterName, &run.League, &run.Status, &run.Notes,
+			&run.StartedAt, &run.FinishedAt, &run.IsActive,
+			&run.TimerStartedAt, &run.PausedAt, &run.TotalPausedMs)
 	if err != nil {
 		return nil, fmt.Errorf("run: insert: %w", err)
 	}
@@ -40,10 +53,12 @@ func (r *Repository) CreateRun(ctx context.Context, guideID int, characterName, 
 func (r *Repository) GetRun(ctx context.Context, runID int) (*RunSession, error) {
 	run := &RunSession{}
 	err := r.db.QueryRow(ctx, `
-		SELECT id, guide_id, character_name, league, status, notes, started_at, finished_at, is_active
+		SELECT id, guide_id, character_name, league, status, notes, started_at, finished_at,
+		       is_active, timer_started_at, paused_at, total_paused_ms
 		FROM runs WHERE id = $1`, runID,
 	).Scan(&run.ID, &run.GuideID, &run.CharacterName, &run.League, &run.Status, &run.Notes,
-		&run.StartedAt, &run.FinishedAt, &run.IsActive)
+		&run.StartedAt, &run.FinishedAt, &run.IsActive,
+		&run.TimerStartedAt, &run.PausedAt, &run.TotalPausedMs)
 	if err != nil {
 		if err == pgx.ErrNoRows {
 			return nil, fmt.Errorf("run: %d not found", runID)
@@ -56,7 +71,8 @@ func (r *Repository) GetRun(ctx context.Context, runID int) (*RunSession, error)
 // ListRuns returns all runs for a guide, most recent first.
 func (r *Repository) ListRuns(ctx context.Context, guideID int) ([]RunSession, error) {
 	rows, err := r.db.Query(ctx, `
-		SELECT id, guide_id, character_name, league, status, notes, started_at, finished_at, is_active
+		SELECT id, guide_id, character_name, league, status, notes, started_at, finished_at,
+		       is_active, timer_started_at, paused_at, total_paused_ms
 		FROM runs WHERE guide_id = $1 ORDER BY started_at DESC`, guideID)
 	if err != nil {
 		return nil, fmt.Errorf("run: list: %w", err)
@@ -66,7 +82,8 @@ func (r *Repository) ListRuns(ctx context.Context, guideID int) ([]RunSession, e
 	for rows.Next() {
 		var run RunSession
 		if err := rows.Scan(&run.ID, &run.GuideID, &run.CharacterName, &run.League, &run.Status, &run.Notes,
-			&run.StartedAt, &run.FinishedAt, &run.IsActive); err != nil {
+			&run.StartedAt, &run.FinishedAt, &run.IsActive,
+			&run.TimerStartedAt, &run.PausedAt, &run.TotalPausedMs); err != nil {
 			return nil, err
 		}
 		runs = append(runs, run)
@@ -142,37 +159,241 @@ func (r *Repository) RecordSplit(ctx context.Context, runID, stepID int, splitMs
 	return err
 }
 
-// GetRanking returns the top N runs for a guide ordered by total time (fastest first).
-func (r *Repository) GetRanking(ctx context.Context, guideID, limit int) ([]RankingEntry, error) {
+// GetDetailedRanking returns up to limit entries from local_rankings for a guide,
+// ordered by rank ascending. Returns an empty slice if no runs have been computed yet.
+func (r *Repository) GetDetailedRanking(ctx context.Context, guideID, limit int) ([]DetailedRankingEntry, error) {
 	rows, err := r.db.Query(ctx, `
-		SELECT r.id, r.character_name, r.started_at,
-		       EXTRACT(EPOCH FROM (r.finished_at - r.started_at)) * 1000 AS total_ms
-		FROM runs r
-		WHERE r.guide_id = $1 AND r.finished_at IS NOT NULL
-		ORDER BY total_ms ASC
-		LIMIT $2`,
-		guideID, limit)
+		SELECT lr.rank, lr.run_id, ru.character_name, ru.started_at, lr.total_ms, lr.act_splits
+		FROM local_rankings lr
+		JOIN runs ru ON ru.id = lr.run_id
+		WHERE lr.guide_id = $1
+		ORDER BY lr.rank ASC
+		LIMIT $2`, guideID, limit)
 	if err != nil {
-		return nil, fmt.Errorf("run: ranking: %w", err)
+		return nil, fmt.Errorf("run: detailed ranking: %w", err)
 	}
 	defer rows.Close()
-	entries := []RankingEntry{}
+	entries := []DetailedRankingEntry{}
 	for rows.Next() {
-		var e RankingEntry
-		if err := rows.Scan(&e.RunID, &e.CharacterName, &e.StartedAt, &e.TotalMs); err != nil {
+		var e DetailedRankingEntry
+		var actJSON []byte
+		if err := rows.Scan(&e.Rank, &e.RunID, &e.CharacterName, &e.StartedAt, &e.TotalMs, &actJSON); err != nil {
 			return nil, err
+		}
+		if err := json.Unmarshal(actJSON, &e.ActSplits); err != nil {
+			e.ActSplits = map[string]int{}
 		}
 		entries = append(entries, e)
 	}
-	return entries, rows.Err()
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	if len(entries) > 0 {
+		entries[0].IsPB = true
+	}
+	return entries, nil
 }
 
-// RankingEntry is a row in the local ranking table.
-type RankingEntry struct {
-	RunID         int       `json:"run_id"`
-	CharacterName string    `json:"character_name"`
-	StartedAt     time.Time `json:"started_at"`
-	TotalMs       float64   `json:"total_ms"`
+// GetRankingStats returns aggregate timing statistics (count, PB, median, last run)
+// for all finished runs of a guide.
+func (r *Repository) GetRankingStats(ctx context.Context, guideID int) (*RankingStats, error) {
+	rows, err := r.db.Query(ctx, `
+		SELECT lr.run_id, lr.total_ms, lr.rank, ru.finished_at
+		FROM local_rankings lr
+		JOIN runs ru ON ru.id = lr.run_id
+		WHERE lr.guide_id = $1
+		ORDER BY lr.rank ASC`, guideID)
+	if err != nil {
+		return nil, fmt.Errorf("run: ranking stats: %w", err)
+	}
+	defer rows.Close()
+
+	type row struct {
+		runID      int
+		totalMs    int64
+		rank       int
+		finishedAt *time.Time
+	}
+	var all []row
+	for rows.Next() {
+		var ro row
+		if err := rows.Scan(&ro.runID, &ro.totalMs, &ro.rank, &ro.finishedAt); err != nil {
+			return nil, err
+		}
+		all = append(all, ro)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	stats := &RankingStats{Count: len(all)}
+	if len(all) == 0 {
+		return stats, nil
+	}
+
+	// PB = rank 1 (already sorted)
+	pbMs := all[0].totalMs
+	stats.PBMs = &pbMs
+
+	// Median
+	medianMs := all[len(all)/2].totalMs
+	stats.MedianMs = &medianMs
+
+	// Last run by finished_at
+	var lastRunID int
+	var lastMs int64
+	var latestFinish *time.Time
+	for _, ro := range all {
+		if ro.finishedAt != nil && (latestFinish == nil || ro.finishedAt.After(*latestFinish)) {
+			latestFinish = ro.finishedAt
+			lastRunID = ro.runID
+			lastMs = ro.totalMs
+		}
+	}
+	if latestFinish != nil {
+		stats.LastRunMs = &lastMs
+		stats.LastRunID = &lastRunID
+	}
+	return stats, nil
+}
+
+// ComputeAndUpsertRanking derives act_splits + total_ms for the given finished run,
+// upserts the local_rankings row, then recomputes ranks for the whole guide.
+func (r *Repository) ComputeAndUpsertRanking(ctx context.Context, runID, guideID int) error {
+	// total_ms: finished_at - COALESCE(timer_started_at, started_at) - total_paused_ms
+	var totalMs int64
+	err := r.db.QueryRow(ctx, `
+		SELECT GREATEST(0,
+		    EXTRACT(EPOCH FROM (finished_at - COALESCE(timer_started_at, started_at))) * 1000
+		    - total_paused_ms)
+		FROM runs WHERE id = $1 AND finished_at IS NOT NULL`, runID).Scan(&totalMs)
+	if err != nil {
+		return fmt.Errorf("run: ranking compute total_ms: %w", err)
+	}
+
+	// act_splits: for each act, take the last (maximum) split_ms in that act
+	actRows, err := r.db.Query(ctx, `
+		SELECT gs.act, MAX(rs.split_ms)
+		FROM run_splits rs
+		JOIN guide_steps gs ON gs.id = rs.step_id
+		WHERE rs.run_id = $1
+		GROUP BY gs.act
+		ORDER BY gs.act`, runID)
+	if err != nil {
+		return fmt.Errorf("run: ranking compute act_splits: %w", err)
+	}
+	defer actRows.Close()
+	actSplits := map[string]int64{}
+	for actRows.Next() {
+		var act int
+		var ms int64
+		if err := actRows.Scan(&act, &ms); err != nil {
+			return err
+		}
+		actSplits[fmt.Sprint(act)] = ms
+	}
+	if err := actRows.Err(); err != nil {
+		return err
+	}
+
+	actJSON, err := json.Marshal(actSplits)
+	if err != nil {
+		return fmt.Errorf("run: ranking marshal act_splits: %w", err)
+	}
+
+	// Upsert local_rankings
+	_, err = r.db.Exec(ctx, `
+		INSERT INTO local_rankings (guide_id, run_id, total_ms, act_splits, rank, computed_at)
+		VALUES ($1, $2, $3, $4, 0, NOW())
+		ON CONFLICT (run_id)
+		DO UPDATE SET total_ms = EXCLUDED.total_ms, act_splits = EXCLUDED.act_splits,
+		              computed_at = NOW()`,
+		guideID, runID, totalMs, actJSON)
+	if err != nil {
+		return fmt.Errorf("run: ranking upsert: %w", err)
+	}
+
+	// Recompute ranks for all runs of this guide
+	_, err = r.db.Exec(ctx, `
+		UPDATE local_rankings lr
+		SET rank = sub.new_rank
+		FROM (
+		    SELECT id, ROW_NUMBER() OVER (ORDER BY total_ms ASC) AS new_rank
+		    FROM local_rankings
+		    WHERE guide_id = $1
+		) sub
+		WHERE lr.id = sub.id`, guideID)
+	if err != nil {
+		return fmt.Errorf("run: ranking rerank: %w", err)
+	}
+	return nil
+}
+
+// GetPBSplitsForGuide returns the run_id and splits of the rank-1 run for a guide.
+// Returns (0, nil, nil) when no ranking entry exists yet.
+func (r *Repository) GetPBSplitsForGuide(ctx context.Context, guideID int) (int, []Split, error) {
+	var pbRunID int
+	err := r.db.QueryRow(ctx,
+		`SELECT run_id FROM local_rankings WHERE guide_id = $1 AND rank = 1`, guideID,
+	).Scan(&pbRunID)
+	if err == pgx.ErrNoRows {
+		return 0, nil, nil
+	}
+	if err != nil {
+		return 0, nil, fmt.Errorf("run: get pb run: %w", err)
+	}
+	splits, err := r.ListSplits(ctx, pbRunID)
+	return pbRunID, splits, err
+}
+
+// GetPrevRunSplits returns the run_id and splits of the most recently finished
+// run for guideID, excluding excludeRunID.
+// Returns (0, nil, nil) when no such run exists.
+func (r *Repository) GetPrevRunSplits(ctx context.Context, guideID, excludeRunID int) (int, []Split, error) {
+	var prevRunID int
+	err := r.db.QueryRow(ctx, `
+		SELECT r.id
+		FROM runs r
+		JOIN local_rankings lr ON lr.run_id = r.id
+		WHERE r.guide_id = $1 AND r.id != $2 AND r.finished_at IS NOT NULL
+		ORDER BY r.finished_at DESC
+		LIMIT 1`, guideID, excludeRunID,
+	).Scan(&prevRunID)
+	if err == pgx.ErrNoRows {
+		return 0, nil, nil
+	}
+	if err != nil {
+		return 0, nil, fmt.Errorf("run: get prev run: %w", err)
+	}
+	splits, err := r.ListSplits(ctx, prevRunID)
+	return prevRunID, splits, err
+}
+
+// SetTimerStartedAt sets timer_started_at on a run (used for auto-start from logtail).
+func (r *Repository) SetTimerStartedAt(ctx context.Context, runID int, t time.Time) error {
+	_, err := r.db.Exec(ctx,
+		`UPDATE runs SET timer_started_at = $1 WHERE id = $2 AND timer_started_at IS NULL`,
+		t, runID)
+	return err
+}
+
+// PauseRun records the current time as paused_at (idempotent if already paused).
+func (r *Repository) PauseRun(ctx context.Context, runID int) error {
+	_, err := r.db.Exec(ctx,
+		`UPDATE runs SET paused_at = NOW() WHERE id = $1 AND is_active = TRUE AND paused_at IS NULL`,
+		runID)
+	return err
+}
+
+// ResumeRun clears paused_at and accumulates the paused duration into total_paused_ms.
+func (r *Repository) ResumeRun(ctx context.Context, runID int) error {
+	_, err := r.db.Exec(ctx, `
+		UPDATE runs
+		SET total_paused_ms = total_paused_ms +
+		    GREATEST(0, EXTRACT(EPOCH FROM (NOW() - paused_at)) * 1000)::BIGINT,
+		    paused_at = NULL
+		WHERE id = $1 AND is_active = TRUE AND paused_at IS NOT NULL`, runID)
+	return err
 }
 
 // AbandonRun marks a run as abandoned.

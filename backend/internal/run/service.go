@@ -20,12 +20,13 @@ func NewService(repo *Repository, guideRepo *guide.Repository) *Service {
 }
 
 // CreateRun starts a new run for the given guide.
-func (s *Service) CreateRun(ctx context.Context, guideID int, characterName, league string) (*RunSession, error) {
+// When autoStart=true the run timer does not begin until the first logtail area event.
+func (s *Service) CreateRun(ctx context.Context, guideID int, characterName, league string, autoStart bool) (*RunSession, error) {
 	// Verify the guide exists.
 	if _, err := s.guideRepo.GetByID(ctx, guideID); err != nil {
 		return nil, fmt.Errorf("run: guide %d not found: %w", guideID, err)
 	}
-	run, err := s.repo.CreateRun(ctx, guideID, characterName, league)
+	run, err := s.repo.CreateRun(ctx, guideID, characterName, league, autoStart)
 	if err != nil {
 		return nil, fmt.Errorf("run: create: %w", err)
 	}
@@ -102,10 +103,27 @@ func (s *Service) GetCurrentState(ctx context.Context, runID int) (*CurrentState
 	}
 
 	var elapsedMs int64
-	if run.IsActive {
-		elapsedMs = time.Since(run.StartedAt).Milliseconds()
-	} else if run.FinishedAt != nil {
-		elapsedMs = run.FinishedAt.Sub(run.StartedAt).Milliseconds()
+	timerStart := run.StartedAt
+	if run.TimerStartedAt != nil {
+		timerStart = *run.TimerStartedAt
+	}
+	if run.IsActive && run.TimerStartedAt != nil {
+		raw := time.Since(timerStart).Milliseconds() - run.TotalPausedMs
+		if run.PausedAt != nil {
+			// don't advance elapsed while paused
+			raw = timerStart.Sub(timerStart).Milliseconds()
+			// elapsed up to pause moment
+			raw = run.PausedAt.Sub(timerStart).Milliseconds() - run.TotalPausedMs
+		}
+		if raw < 0 {
+			raw = 0
+		}
+		elapsedMs = raw
+	} else if !run.IsActive && run.FinishedAt != nil && run.TimerStartedAt != nil {
+		elapsedMs = run.FinishedAt.Sub(timerStart).Milliseconds() - run.TotalPausedMs
+		if elapsedMs < 0 {
+			elapsedMs = 0
+		}
 	}
 
 	return &CurrentState{
@@ -119,6 +137,7 @@ func (s *Service) GetCurrentState(ctx context.Context, runID int) (*CurrentState
 // HandleAreaEvent processes an event emitted by the logtail watcher.
 // It does not automatically confirm steps — it only records the event.
 // The run service treats logtail signals as informational, not authoritative.
+// Side effect: if timer_started_at is NULL (auto-start mode), it is set to now.
 func (s *Service) HandleAreaEvent(ctx context.Context, runID int, ev AreaEvent) error {
 	run, err := s.repo.GetRun(ctx, runID)
 	if err != nil {
@@ -127,14 +146,112 @@ func (s *Service) HandleAreaEvent(ctx context.Context, runID int, ev AreaEvent) 
 	if !run.IsActive {
 		return nil // silently drop events for finished runs
 	}
+	// Auto-start: first area event starts the timer.
+	if run.TimerStartedAt == nil {
+		_ = s.repo.SetTimerStartedAt(ctx, runID, time.Now())
+	}
 	return s.repo.RecordEvent(ctx, runID, EventAreaEntered, map[string]string{
 		"area": ev.AreaName,
 	})
 }
 
-// FinishRun marks a run as completed.
+// FinishRun marks a run as completed and recomputes the local ranking.
 func (s *Service) FinishRun(ctx context.Context, runID int) error {
-	return s.repo.FinishRun(ctx, runID)
+	run, err := s.repo.GetRun(ctx, runID)
+	if err != nil {
+		return err
+	}
+	// Resume first if paused so the final elapsed time is accurate.
+	if run.PausedAt != nil {
+		_ = s.repo.ResumeRun(ctx, runID)
+	}
+	if err := s.repo.FinishRun(ctx, runID); err != nil {
+		return err
+	}
+	// Compute ranking — best-effort, failure is non-fatal.
+	if run.TimerStartedAt != nil {
+		_ = s.repo.ComputeAndUpsertRanking(ctx, runID, run.GuideID)
+	}
+	return nil
+}
+
+// PauseRun pauses the run timer. Safe to call on already-paused runs (no-op).
+func (s *Service) PauseRun(ctx context.Context, runID int) error {
+	run, err := s.repo.GetRun(ctx, runID)
+	if err != nil {
+		return err
+	}
+	if !run.IsActive {
+		return fmt.Errorf("run: %d is not active", runID)
+	}
+	return s.repo.PauseRun(ctx, runID)
+}
+
+// ResumeRun resumes a paused run timer. Safe to call on running runs (no-op).
+func (s *Service) ResumeRun(ctx context.Context, runID int) error {
+	run, err := s.repo.GetRun(ctx, runID)
+	if err != nil {
+		return err
+	}
+	if !run.IsActive {
+		return fmt.Errorf("run: %d is not active", runID)
+	}
+	return s.repo.ResumeRun(ctx, runID)
+}
+
+// GetRunDeltas returns per-split timing deltas versus the PB run and the most
+// recently finished previous run for the same guide.
+func (s *Service) GetRunDeltas(ctx context.Context, runID int) (*RunDeltasResponse, error) {
+	run, err := s.repo.GetRun(ctx, runID)
+	if err != nil {
+		return nil, err
+	}
+
+	currentSplits, err := s.repo.ListSplits(ctx, runID)
+	if err != nil {
+		return nil, err
+	}
+
+	pbRunID, pbSplits, _ := s.repo.GetPBSplitsForGuide(ctx, run.GuideID)
+	prevRunID, prevSplits, _ := s.repo.GetPrevRunSplits(ctx, run.GuideID, runID)
+
+	pbMap := make(map[int]int64, len(pbSplits))
+	for _, sp := range pbSplits {
+		pbMap[sp.StepID] = sp.SplitMs
+	}
+	prevMap := make(map[int]int64, len(prevSplits))
+	for _, sp := range prevSplits {
+		prevMap[sp.StepID] = sp.SplitMs
+	}
+
+	deltas := make([]SplitDelta, 0, len(currentSplits))
+	for _, sp := range currentSplits {
+		d := SplitDelta{
+			StepID:  sp.StepID,
+			SplitMs: sp.SplitMs,
+		}
+		if pbMs, ok := pbMap[sp.StepID]; ok && pbRunID != runID {
+			delta := sp.SplitMs - pbMs
+			d.DeltaPBMs = &delta
+		}
+		if prevMs, ok := prevMap[sp.StepID]; ok {
+			delta := sp.SplitMs - prevMs
+			d.DeltaPrevMs = &delta
+		}
+		deltas = append(deltas, d)
+	}
+
+	resp := &RunDeltasResponse{
+		RunID:  runID,
+		Splits: deltas,
+	}
+	if pbRunID != 0 {
+		resp.PBRunID = &pbRunID
+	}
+	if prevRunID != 0 {
+		resp.PrevRunID = &prevRunID
+	}
+	return resp, nil
 }
 
 // ListRuns returns all runs for a given guide, most recent first.

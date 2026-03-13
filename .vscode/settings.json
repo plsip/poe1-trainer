@@ -14,6 +14,7 @@
         "/^docker restart poe1-trainer-frontend-1 && sleep 3 && docker logs poe1-trainer-frontend-1 --tail 10$/": {
             "approve": true,
             "matchCommandLine": true
-        }
+        },
+        "git add": true
     }
 }

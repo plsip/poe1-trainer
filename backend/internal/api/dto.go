@@ -37,6 +37,9 @@ type CreateRunRequest struct {
 	GuideID       int    `json:"guide_id"`
 	CharacterName string `json:"character_name"`
 	League        string `json:"league"`
+	// AutoStart: gdy true, timer nie startuje w momencie stworzenia runu,
+	// lecz czeka na pierwszy zdarzenie area_entered z logtaila.
+	AutoStart bool `json:"auto_start"`
 }
 
 // ─── Characters & snapshots ───────────────────────────────────────────────────

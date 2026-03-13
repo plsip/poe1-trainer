@@ -48,6 +48,9 @@ export interface RunSession {
   started_at: string
   finished_at?: string
   is_active: boolean
+  timer_started_at?: string
+  paused_at?: string
+  total_paused_ms: number
 }
 
 export interface Checkpoint {
@@ -127,4 +130,36 @@ export interface RankingEntry {
   character_name: string
   started_at: string
   total_ms: number
+}
+
+export interface DetailedRankingEntry {
+  rank: number
+  run_id: number
+  character_name: string
+  started_at: string
+  total_ms: number
+  act_splits: Record<string, number>
+  is_pb: boolean
+}
+
+export interface RankingStats {
+  count: number
+  pb_ms?: number
+  median_ms?: number
+  last_run_ms?: number
+  last_run_id?: number
+}
+
+export interface SplitDelta {
+  step_id: number
+  split_ms: number
+  delta_pb_ms?: number
+  delta_prev_ms?: number
+}
+
+export interface RunDeltasResponse {
+  run_id: number
+  pb_run_id?: number
+  prev_run_id?: number
+  splits: SplitDelta[]
 }

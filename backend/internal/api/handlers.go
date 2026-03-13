@@ -77,7 +77,7 @@ func (h *Handlers) CreateRun(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusBadRequest, "guide_id is required")
 		return
 	}
-	run, err := h.runs.CreateRun(r.Context(), req.GuideID, req.CharacterName, req.League)
+	run, err := h.runs.CreateRun(r.Context(), req.GuideID, req.CharacterName, req.League, req.AutoStart)
 	if err != nil {
 		writeError(w, http.StatusBadRequest, err.Error())
 		return
@@ -175,7 +175,8 @@ func (h *Handlers) ListRuns(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, runs)
 }
 
-// GetRanking handles GET /guides/{slug}/ranking
+// GetRanking handles GET /guides/{slug}/ranking — returns top 20 entries from
+// local_rankings with act_splits and PB flag.
 func (h *Handlers) GetRanking(w http.ResponseWriter, r *http.Request) {
 	slug := pathParam(r, "slug")
 	if slug == "" {
@@ -187,12 +188,75 @@ func (h *Handlers) GetRanking(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusNotFound, err.Error())
 		return
 	}
-	entries, err := h.runRepo.GetRanking(r.Context(), g.ID, 20)
+	entries, err := h.runRepo.GetDetailedRanking(r.Context(), g.ID, 20)
 	if err != nil {
 		writeError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 	writeJSON(w, http.StatusOK, entries)
+}
+
+// GetRankingStats handles GET /guides/{slug}/ranking/stats.
+func (h *Handlers) GetRankingStats(w http.ResponseWriter, r *http.Request) {
+	slug := pathParam(r, "slug")
+	if slug == "" {
+		writeError(w, http.StatusBadRequest, "missing guide slug")
+		return
+	}
+	g, err := h.guides.GetBySlug(r.Context(), slug)
+	if err != nil {
+		writeError(w, http.StatusNotFound, err.Error())
+		return
+	}
+	stats, err := h.runRepo.GetRankingStats(r.Context(), g.ID)
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	writeJSON(w, http.StatusOK, stats)
+}
+
+// GetSplitDeltas handles GET /runs/{id}/split-deltas.
+func (h *Handlers) GetSplitDeltas(w http.ResponseWriter, r *http.Request) {
+	id, ok := intPathParam(r, "id")
+	if !ok {
+		writeError(w, http.StatusBadRequest, "invalid run id")
+		return
+	}
+	deltas, err := h.runs.GetRunDeltas(r.Context(), id)
+	if err != nil {
+		writeError(w, http.StatusNotFound, err.Error())
+		return
+	}
+	writeJSON(w, http.StatusOK, deltas)
+}
+
+// PauseRun handles POST /runs/{id}/pause.
+func (h *Handlers) PauseRun(w http.ResponseWriter, r *http.Request) {
+	id, ok := intPathParam(r, "id")
+	if !ok {
+		writeError(w, http.StatusBadRequest, "invalid run id")
+		return
+	}
+	if err := h.runs.PauseRun(r.Context(), id); err != nil {
+		writeError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+	w.WriteHeader(http.StatusNoContent)
+}
+
+// ResumeRun handles POST /runs/{id}/resume.
+func (h *Handlers) ResumeRun(w http.ResponseWriter, r *http.Request) {
+	id, ok := intPathParam(r, "id")
+	if !ok {
+		writeError(w, http.StatusBadRequest, "invalid run id")
+		return
+	}
+	if err := h.runs.ResumeRun(r.Context(), id); err != nil {
+		writeError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+	w.WriteHeader(http.StatusNoContent)
 }
 
 // ─── helpers ───────────────────────────────────────────────────────────────
