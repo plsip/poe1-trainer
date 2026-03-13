@@ -69,10 +69,12 @@ func main() {
 	router := api.NewRouter(h)
 
 	// Konfiguracja logtail watchera (opcjonalna).
-	// Ustaw LOG_PATH w .env lub docker-compose, aby włączyć nasłuchiwanie Client.txt.
+	// LOG_PATH nadpisuje ścieżkę domyślną do LatestClient.txt, jeśli środowisko tego wymaga.
+	ltCfg := logtail.DefaultConfig()
 	if logPath := os.Getenv("LOG_PATH"); logPath != "" {
-		ltCfg := logtail.DefaultConfig()
 		ltCfg.LogPath = logPath
+	}
+	if ltCfg.LogPath != "" {
 
 		ch := make(chan progress.DomainEvent, 64)
 		watcher := logtail.New(ltCfg, logtail.NewChannelSink(ch), func(s logtail.Status, err error) {
@@ -85,7 +87,7 @@ func main() {
 		watcher.Start(ctx)
 		watcher.SetRawLineObserver(h.EmitLogLine)
 		h.SetWatcherStatusFunc(func() string { return string(watcher.Status()) })
-		log.Printf("logtail: nasłuchiwanie pliku %s", logPath)
+		log.Printf("logtail: nasłuchiwanie pliku %s", ltCfg.LogPath)
 
 		go func() {
 			for {
@@ -100,7 +102,7 @@ func main() {
 			}
 		}()
 	} else {
-		log.Println("logtail: LOG_PATH nie ustawiony — nasłuchiwanie Client.txt wyłączone")
+		log.Println("logtail: brak ścieżki do logu gry — nasłuchiwanie wyłączone")
 	}
 
 	srv := &http.Server{

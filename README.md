@@ -110,24 +110,24 @@ docker compose -f docker-compose.dev.yml up -d db
 
 Następnie uruchom backend i frontend lokalnie zgodnie z [docs/next-steps.md](docs/next-steps.md).
 
-### Konfiguracja ścieżki do Client.txt
+### Konfiguracja ścieżki do LatestClient.txt
 
-Obserwator `Client.txt` jest opcjonalny — aplikacja działa bez niego.
-Kiedy zdecydujesz się go włączyć:
+Obserwator `LatestClient.txt` jest opcjonalny — aplikacja działa bez niego.
+Backend domyślnie próbuje użyć tej ścieżki na Windows. `LOG_PATH` służy tylko do nadpisania domyślnej lokalizacji, na przykład w Dockerze.
 
-1. Ustal ścieżkę do `Client.txt` na swoim hoście:
-   - Windows/Steam: `C:\Program Files (x86)\Steam\steamapps\common\Path of Exile\logs\Client.txt`
+1. Ustal ścieżkę do `LatestClient.txt` na swoim hoście:
+   - Windows/Steam: `C:\Program Files (x86)\Steam\steamapps\common\Path of Exile\logs\LatestClient.txt`
 
-2. W pliku `.env` ustaw:
+2. Jeśli uruchamiasz backend poza domyślną lokalizacją albo przez Docker, w pliku `.env` ustaw:
    ```
-   LOG_PATH=/mnt/poe-logs/Client.txt
+   LOG_PATH=/mnt/poe-logs/LatestClient.txt
    ```
 
 3. W `docker-compose.dev.yml` odkomentuj wolumen `poe-logs` w sekcji `backend.volumes`:
    ```yaml
    - ${POE_LOG_DIR}:/mnt/poe-logs:ro
    ```
-   Ustaw `POE_LOG_DIR` w `.env` na katalog zawierający `Client.txt`:
+   Ustaw `POE_LOG_DIR` w `.env` na katalog zawierający `LatestClient.txt`:
    ```
    POE_LOG_DIR=C:/Program Files (x86)/Steam/steamapps/common/Path of Exile/logs
    ```

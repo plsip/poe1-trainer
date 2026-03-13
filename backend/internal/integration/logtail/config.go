@@ -9,7 +9,7 @@ import (
 
 // Config parametryzuje działanie Watchera.
 type Config struct {
-	// LogPath to absolutna ścieżka do pliku Client.txt gry.
+	// LogPath to absolutna ścieżka do aktywnego pliku logu gry.
 	// Użyj DefaultLogPath() lub DefaultConfig() dla wartości domyślnej.
 	LogPath string
 
@@ -31,7 +31,7 @@ type Config struct {
 }
 
 // DefaultConfig zwraca Config wypełniony sensownymi wartościami domyślnymi.
-// Na Windows ścieżka logu wskazuje na standardową instalację PoE1 przez Steam.
+// Na Windows ścieżka logu wskazuje na LatestClient.txt ze standardowej instalacji PoE1 przez Steam.
 func DefaultConfig() Config {
 	return Config{
 		LogPath:             DefaultLogPath(),
@@ -42,12 +42,12 @@ func DefaultConfig() Config {
 	}
 }
 
-// DefaultLogPath zwraca domyślną ścieżkę do Client.txt dla bieżącej platformy.
+// DefaultLogPath zwraca domyślną ścieżkę do LatestClient.txt dla bieżącej platformy.
 // Na Windows zwraca standardową lokalizację instalacji Steam.
 // Na innych platformach zwraca pusty string — ścieżkę trzeba skonfigurować ręcznie.
 func DefaultLogPath() string {
 	if runtime.GOOS == "windows" {
-		return `C:\Program Files (x86)\Steam\steamapps\common\Path of Exile\logs\Client.txt`
+		return `C:\Program Files (x86)\Steam\steamapps\common\Path of Exile\logs\LatestClient.txt`
 	}
 	return ""
 }
