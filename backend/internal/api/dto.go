@@ -103,3 +103,23 @@ type AlertsResponse struct {
 	StepID int     `json:"step_id"`
 	Alerts []Alert `json:"alerts"`
 }
+
+// ─── GGG Integration ──────────────────────────────────────────────────────────
+
+// GGGStatusResponse is the response body for GET /ggg/status.
+type GGGStatusResponse struct {
+	// Configured is true when GGG_CLIENT_ID and GGG_CLIENT_SECRET are set.
+	Configured bool `json:"configured"`
+	// Available is true when there is a valid OAuth token stored on disk.
+	Available bool `json:"available"`
+	// Username is the GGG account name from the stored token (empty when unavailable).
+	Username string `json:"username,omitempty"`
+}
+
+// GGGSyncSnapshotRequest is the body for POST /runs/{id}/snapshots/ggg.
+type GGGSyncSnapshotRequest struct {
+	CharacterName string `json:"character_name"`
+	// Realm: "pc" (default), "xbox", "sony".
+	Realm string `json:"realm,omitempty"`
+}
+

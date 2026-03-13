@@ -1,12 +1,17 @@
 package api
 
 import (
+	"crypto/rand"
+	"encoding/hex"
 	"encoding/json"
 	"net/http"
 	"strconv"
+	"sync"
+	"time"
 
 	buildpkg "github.com/poe1-trainer/internal/build"
 	"github.com/poe1-trainer/internal/guide"
+	"github.com/poe1-trainer/internal/integration/ggg"
 	"github.com/poe1-trainer/internal/recommendation"
 	runpkg "github.com/poe1-trainer/internal/run"
 )
@@ -18,6 +23,14 @@ type Handlers struct {
 	runs    *runpkg.Service
 	runRepo *runpkg.Repository
 	engine  *recommendation.Engine
+	// gggProvider is always non-nil: either *ggg.Client or ggg.NoopProvider.
+	gggProvider ggg.CharacterProvider
+	// gggClient is non-nil only when GGG OAuth is configured.
+	// Provides AuthorizeURL and HandleCallback beyond the CharacterProvider interface.
+	gggClient   *ggg.Client
+	// oauthStates stores in-flight OAuth state nonces for CSRF protection.
+	// map[state string]expiresAt time.Time
+	oauthStates sync.Map
 }
 
 // NewHandlers creates a new Handlers instance.
@@ -27,13 +40,17 @@ func NewHandlers(
 	runs *runpkg.Service,
 	runRepo *runpkg.Repository,
 	engine *recommendation.Engine,
+	gggProvider ggg.CharacterProvider,
+	gggClient *ggg.Client,
 ) *Handlers {
 	return &Handlers{
-		builds:  builds,
-		guides:  guides,
-		runs:    runs,
-		runRepo: runRepo,
-		engine:  engine,
+		builds:      builds,
+		guides:      guides,
+		runs:        runs,
+		runRepo:     runRepo,
+		engine:      engine,
+		gggProvider: gggProvider,
+		gggClient:   gggClient,
 	}
 }
 
@@ -786,3 +803,125 @@ func (h *Handlers) AnswerCheck(w http.ResponseWriter, r *http.Request) {
 	}
 	writeJSON(w, http.StatusOK, mc)
 }
+
+// ─── GGG Integration ───────────────────────────────────────────────────────
+
+// GGGStatus handles GET /ggg/status
+// Zwraca czy integracja jest skonfigurowana i czy jest ważny token.
+func (h *Handlers) GGGStatus(w http.ResponseWriter, r *http.Request) {
+	resp := GGGStatusResponse{
+		Configured: h.gggClient != nil,
+		Available:  h.gggProvider.IsAvailable(),
+	}
+	writeJSON(w, http.StatusOK, resp)
+}
+
+// GGGAuth handles GET /ggg/auth
+// Przekierowuje przeglądarkę do strony autoryzacji GGG OAuth.
+// Wymaga skonfigurowanego GGG_CLIENT_ID i GGG_CLIENT_SECRET.
+func (h *Handlers) GGGAuth(w http.ResponseWriter, r *http.Request) {
+	if h.gggClient == nil {
+		writeError(w, http.StatusServiceUnavailable, "GGG OAuth nie skonfigurowany — ustaw GGG_CLIENT_ID i GGG_CLIENT_SECRET")
+		return
+	}
+	state, err := generateOAuthState()
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, "błąd generowania state")
+		return
+	}
+	h.oauthStates.Store(state, time.Now().Add(10*time.Minute))
+	http.Redirect(w, r, h.gggClient.AuthorizeURL(state), http.StatusFound)
+}
+
+// GGGCallback handles GET /ggg/callback
+// Odbiera kod autoryzacji od GGG, weryfikuje state (CSRF), wymienia kod na token.
+func (h *Handlers) GGGCallback(w http.ResponseWriter, r *http.Request) {
+	if h.gggClient == nil {
+		writeError(w, http.StatusServiceUnavailable, "GGG OAuth nie skonfigurowany")
+		return
+	}
+	state := r.URL.Query().Get("state")
+	code := r.URL.Query().Get("code")
+	if state == "" || code == "" {
+		writeError(w, http.StatusBadRequest, "wymagane parametry: state, code")
+		return
+	}
+
+	// Weryfikacja CSRF state.
+	val, ok := h.oauthStates.LoadAndDelete(state)
+	if !ok {
+		writeError(w, http.StatusBadRequest, "nieprawidłowy lub wygasły state")
+		return
+	}
+	if expiresAt, ok := val.(time.Time); !ok || time.Now().After(expiresAt) {
+		writeError(w, http.StatusBadRequest, "wygasły state — powtórz autoryzację")
+		return
+	}
+
+	tok, err := h.gggClient.HandleCallback(r.Context(), code)
+	if err != nil {
+		writeError(w, http.StatusBadGateway, "nie udało się wymienić kodu: "+err.Error())
+		return
+	}
+	writeJSON(w, http.StatusOK, map[string]any{
+		"ok":       true,
+		"username": tok.Username,
+		"scope":    tok.Scope,
+	})
+}
+
+// GGGSyncSnapshot handles POST /runs/{id}/snapshots/ggg
+// Pobiera aktualny stan postaci z GGG API i zapisuje jako snapshot.
+func (h *Handlers) GGGSyncSnapshot(w http.ResponseWriter, r *http.Request) {
+	id, ok := intPathParam(r, "id")
+	if !ok {
+		writeError(w, http.StatusBadRequest, "invalid run id")
+		return
+	}
+	if !h.gggProvider.IsAvailable() {
+		writeError(w, http.StatusServiceUnavailable, "GGG API niedostępne — skonfiguruj OAuth lub użyj GET /ggg/auth")
+		return
+	}
+	var req GGGSyncSnapshotRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		writeError(w, http.StatusBadRequest, "invalid request body")
+		return
+	}
+	if req.CharacterName == "" {
+		writeError(w, http.StatusBadRequest, "character_name is required")
+		return
+	}
+	realm := req.Realm
+	if realm == "" {
+		realm = "pc"
+	}
+
+	data, err := h.gggProvider.FetchSnapshot(r.Context(), req.CharacterName, realm)
+	if err != nil {
+		writeError(w, http.StatusBadGateway, "GGG API error: "+err.Error())
+		return
+	}
+
+	snap := &runpkg.CharacterSnapshot{
+		RunID:         id,
+		Level:         data.Level,
+		EquippedItems: data.EquippedItems,
+		Skills:        data.Skills,
+		RawResponse:   data.RawResponse,
+	}
+	if err := h.runs.CreateGGGSnapshot(r.Context(), snap); err != nil {
+		writeError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+	writeJSON(w, http.StatusCreated, snap)
+}
+
+// generateOAuthState tworzy losową wartość state dla CSRF protection.
+func generateOAuthState() (string, error) {
+	b := make([]byte, 16)
+	if _, err := rand.Read(b); err != nil {
+		return "", err
+	}
+	return hex.EncodeToString(b), nil
+}
+

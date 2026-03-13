@@ -513,6 +513,38 @@ func (r *Repository) CreateSnapshot(ctx context.Context, s *CharacterSnapshot) e
 	return nil
 }
 
+// CreateGGGSnapshot inserts a GGG-sourced snapshot including JSONB cache fields
+// (equipped_items, skills, raw_response).
+func (r *Repository) CreateGGGSnapshot(ctx context.Context, s *CharacterSnapshot) error {
+	equippedJSON, err := json.Marshal(s.EquippedItems)
+	if err != nil {
+		equippedJSON = []byte("{}")
+	}
+	skillsJSON, err := json.Marshal(s.Skills)
+	if err != nil {
+		skillsJSON = []byte("{}")
+	}
+	rawJSON, err := json.Marshal(s.RawResponse)
+	if err != nil {
+		rawJSON = []byte("{}")
+	}
+	var src string
+	if err := r.db.QueryRow(ctx, `
+		INSERT INTO character_snapshots
+			(run_id, source, level, life_max, mana_max, res_fire, res_cold, res_lightning, res_chaos,
+			 equipped_items, skills, raw_response)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+		RETURNING id, captured_at, source`,
+		s.RunID, string(SnapshotGGG), s.Level,
+		s.LifeMax, s.ManaMax, s.ResFire, s.ResCold, s.ResLightning, s.ResChaos,
+		equippedJSON, skillsJSON, rawJSON,
+	).Scan(&s.ID, &s.CapturedAt, &src); err != nil {
+		return fmt.Errorf("run: create ggg snapshot: %w", err)
+	}
+	s.Source = SnapshotSource(src)
+	return nil
+}
+
 // ListEvents returns log events for a run, most recent first, up to limit rows.
 func (r *Repository) ListEvents(ctx context.Context, runID, limit int) ([]Event, error) {
 	rows, err := r.db.Query(ctx, `

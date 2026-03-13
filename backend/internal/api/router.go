@@ -61,6 +61,12 @@ func NewRouter(h *Handlers) http.Handler {
 	mux.HandleFunc("GET /runs/{id}/checks", h.ListPendingChecks)
 	mux.HandleFunc("POST /runs/{id}/checks/{check_id}/answer", h.AnswerCheck)
 
+	// --- GGG integration (optional, gracefully disabled when not configured) ---
+	mux.HandleFunc("GET /ggg/status", h.GGGStatus)
+	mux.HandleFunc("GET /ggg/auth", h.GGGAuth)
+	mux.HandleFunc("GET /ggg/callback", h.GGGCallback)
+	mux.HandleFunc("POST /runs/{id}/snapshots/ggg", h.GGGSyncSnapshot)
+
 	return corsMiddleware(mux)
 }
 

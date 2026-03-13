@@ -332,6 +332,16 @@ func (s *Service) CreateSnapshot(ctx context.Context, snap *CharacterSnapshot) e
 	return s.repo.CreateSnapshot(ctx, snap)
 }
 
+// CreateGGGSnapshot stores a snapshot sourced from the GGG API.
+// Persists JSONB cache fields (equipped_items, skills, raw_response) in addition to scalars.
+func (s *Service) CreateGGGSnapshot(ctx context.Context, snap *CharacterSnapshot) error {
+	if _, err := s.repo.GetRun(ctx, snap.RunID); err != nil {
+		return err
+	}
+	snap.Source = SnapshotGGG
+	return s.repo.CreateGGGSnapshot(ctx, snap)
+}
+
 // ListEvents returns recent events for a run (up to limit entries).
 func (s *Service) ListEvents(ctx context.Context, runID, limit int) ([]Event, error) {
 	if _, err := s.repo.GetRun(ctx, runID); err != nil {

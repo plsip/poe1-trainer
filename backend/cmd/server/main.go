@@ -14,6 +14,7 @@ import (
 	buildpkg "github.com/poe1-trainer/internal/build"
 	"github.com/poe1-trainer/internal/db"
 	"github.com/poe1-trainer/internal/guide"
+	"github.com/poe1-trainer/internal/integration/ggg"
 	"github.com/poe1-trainer/internal/recommendation"
 	runpkg "github.com/poe1-trainer/internal/run"
 )
@@ -38,7 +39,28 @@ func main() {
 	runService := runpkg.NewService(runRepo, guideRepo)
 	engine := recommendation.NewEngine()
 
-	h := api.NewHandlers(buildRepo, guideRepo, runService, runRepo, engine)
+	// Konfiguracja integracji GGG API (opcjonalna).
+	// Bez ustawienia GGG_CLIENT_ID i GGG_CLIENT_SECRET aplikacja działa normalnie.
+	gggCfg := ggg.ConfigFromEnv()
+	var gggProvider ggg.CharacterProvider
+	var gggClient *ggg.Client
+
+	if gggCfg.IsConfigured() {
+		c, err := ggg.NewClient(gggCfg)
+		if err != nil {
+			log.Printf("ggg: błąd inicjalizacji klienta: %v — integracja wyłączona", err)
+			gggProvider = ggg.NoopProvider{}
+		} else {
+			gggClient = c
+			gggProvider = c
+			log.Println("ggg: OAuth skonfigurowany — integracja aktywna")
+		}
+	} else {
+		log.Println("ggg: brak konfiguracji OAuth — integracja wyłączona (aplikacja działa normalnie)")
+		gggProvider = ggg.NoopProvider{}
+	}
+
+	h := api.NewHandlers(buildRepo, guideRepo, runService, runRepo, engine, gggProvider, gggClient)
 	router := api.NewRouter(h)
 
 	srv := &http.Server{
@@ -71,3 +93,4 @@ func envOrDefault(key, def string) string {
 	}
 	return def
 }
+
