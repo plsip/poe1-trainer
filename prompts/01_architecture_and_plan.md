@@ -1,7 +1,7 @@
 # Prompt 01: Architecture and Repository Plan
 
 ```text
-Based on the shared context below, design the architecture for a new repository for a React + Go + PostgreSQL web application that acts as a Path of Exile 1 campaign trainer for a specific build.
+Based on the shared context below, design the architecture for a React + Go + PostgreSQL web application that acts as a Path of Exile 1 campaign trainer for a specific build.
 
 [Paste shared context here]
 

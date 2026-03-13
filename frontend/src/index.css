@@ -1,0 +1,48 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #1a1a1a;
+  color: #e0e0e0;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+a {
+  color: #a8dadc;
+}
+
+button {
+  background: #2a2a2a;
+  color: #e0e0e0;
+  border: 1px solid #555;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+button:hover:not(:disabled) {
+  background: #3a3a3a;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+input[type="text"] {
+  background: #2a2a2a;
+  color: #e0e0e0;
+  border: 1px solid #555;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  padding: 0.4rem 0.7rem;
+  outline: none;
+}
+
+input[type="text"]:focus {
+  border-color: #a8dadc;
+}

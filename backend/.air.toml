@@ -1,0 +1,23 @@
+root = "."
+tmp_dir = "tmp"
+
+[build]
+  cmd        = "go build -o ./tmp/server ./cmd/server"
+  bin        = "./tmp/server"
+  delay      = 500
+  kill_delay = "1s"
+  send_interrupt = true
+  include_ext = ["go", "sql", "toml"]
+  exclude_dir = ["vendor", "testdata", "cmd/import", "tmp"]
+  poll          = true
+  poll_interval = 300
+
+[log]
+  time = false
+
+[misc]
+  clean_on_exit = false
+
+[screen]
+  clear_on_rebuild = false
+  keep_scroll      = true

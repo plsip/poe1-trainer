@@ -1,0 +1,19 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "mkdir": true,
+        "mv": true,
+        "go": true,
+        "cp": true,
+        "npm install": true,
+        "npx tsc": true,
+        "/^cd c:/Workspace/github\\.com/poe1-trainer && docker compose -f docker-compose\\.dev\\.yml up --build 2>&1$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "docker compose": true,
+        "/^docker restart poe1-trainer-frontend-1 && sleep 3 && docker logs poe1-trainer-frontend-1 --tail 10$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}
