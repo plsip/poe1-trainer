@@ -286,3 +286,30 @@ func (r *Repository) GetStepByID(ctx context.Context, stepID int) (*Step, error)
 	s.CompletionMode = CompletionMode(completionMode)
 	return &s, nil
 }
+
+// GetGearHints returns gear hint rules for the given guide that apply either to
+// the specified step or globally (step_id IS NULL).
+func (r *Repository) GetGearHints(ctx context.Context, guideID, stepID int) ([]GearHintRule, error) {
+	rows, err := r.db.Query(ctx, `
+		SELECT id, guide_id, step_id, slot, description, min_life, min_res, priority, notes
+		FROM gear_hint_rules
+		WHERE guide_id = $1 AND (step_id = $2 OR step_id IS NULL)
+		ORDER BY CASE priority WHEN 'high' THEN 1 WHEN 'medium' THEN 2 ELSE 3 END`,
+		guideID, stepID)
+	if err != nil {
+		return nil, fmt.Errorf("guide: get gear hints: %w", err)
+	}
+	defer rows.Close()
+	hints := []GearHintRule{}
+	for rows.Next() {
+		var h GearHintRule
+		var priority string
+		if err := rows.Scan(&h.ID, &h.GuideID, &h.StepID, &h.Slot, &h.Description,
+			&h.MinLife, &h.MinRes, &priority, &h.Notes); err != nil {
+			return nil, err
+		}
+		h.Priority = GearHintPriority(priority)
+		hints = append(hints, h)
+	}
+	return hints, rows.Err()
+}

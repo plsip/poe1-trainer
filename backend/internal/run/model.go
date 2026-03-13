@@ -178,6 +178,17 @@ type ManualCheck struct {
 	CreatedAt     time.Time  `json:"created_at"`
 }
 
+// ─── run_splits ──────────────────────────────────────────────────────────────
+
+// Split records the elapsed time (in ms from run start) when a step was completed.
+type Split struct {
+	ID         int       `json:"id"`
+	RunID      int       `json:"run_id"`
+	StepID     int       `json:"step_id"`
+	SplitMs    int64     `json:"split_ms"`
+	RecordedAt time.Time `json:"recorded_at"`
+}
+
 // ─── local_rankings ──────────────────────────────────────────────────────────
 
 // LocalRanking is a pre-computed summary of a finished run's performance.

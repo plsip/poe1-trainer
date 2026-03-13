@@ -20,12 +20,12 @@ func NewService(repo *Repository, guideRepo *guide.Repository) *Service {
 }
 
 // CreateRun starts a new run for the given guide.
-func (s *Service) CreateRun(ctx context.Context, guideID int, characterName string) (*RunSession, error) {
+func (s *Service) CreateRun(ctx context.Context, guideID int, characterName, league string) (*RunSession, error) {
 	// Verify the guide exists.
 	if _, err := s.guideRepo.GetByID(ctx, guideID); err != nil {
 		return nil, fmt.Errorf("run: guide %d not found: %w", guideID, err)
 	}
-	run, err := s.repo.CreateRun(ctx, guideID, characterName)
+	run, err := s.repo.CreateRun(ctx, guideID, characterName, league)
 	if err != nil {
 		return nil, fmt.Errorf("run: create: %w", err)
 	}
@@ -140,4 +140,127 @@ func (s *Service) FinishRun(ctx context.Context, runID int) error {
 // ListRuns returns all runs for a given guide, most recent first.
 func (s *Service) ListRuns(ctx context.Context, guideID int) ([]RunSession, error) {
 	return s.repo.ListRuns(ctx, guideID)
+}
+
+// AbandonRun marks a run as abandoned.
+func (s *Service) AbandonRun(ctx context.Context, runID int) error {
+	run, err := s.repo.GetRun(ctx, runID)
+	if err != nil {
+		return err
+	}
+	if !run.IsActive {
+		return fmt.Errorf("run: run %d is not active", runID)
+	}
+	return s.repo.AbandonRun(ctx, runID)
+}
+
+// SkipStep records a step as skipped in the current run.
+func (s *Service) SkipStep(ctx context.Context, runID, stepID int) error {
+	run, err := s.repo.GetRun(ctx, runID)
+	if err != nil {
+		return err
+	}
+	if !run.IsActive {
+		return fmt.Errorf("run: run %d is not active", runID)
+	}
+	step, err := s.guideRepo.GetStepByID(ctx, stepID)
+	if err != nil {
+		return fmt.Errorf("run: step %d: %w", stepID, err)
+	}
+	if step.GuideID != run.GuideID {
+		return fmt.Errorf("run: step %d does not belong to guide %d", stepID, run.GuideID)
+	}
+	return s.repo.SkipStep(ctx, runID, stepID)
+}
+
+// UndoStep removes a step confirmation from the current run.
+func (s *Service) UndoStep(ctx context.Context, runID, stepID int) error {
+	run, err := s.repo.GetRun(ctx, runID)
+	if err != nil {
+		return err
+	}
+	if !run.IsActive {
+		return fmt.Errorf("run: run %d is not active", runID)
+	}
+	return s.repo.UndoStep(ctx, runID, stepID)
+}
+
+// UpsertCharacter inserts or updates the character record for a run.
+func (s *Service) UpsertCharacter(ctx context.Context, c *Character) error {
+	if _, err := s.repo.GetRun(ctx, c.RunID); err != nil {
+		return err
+	}
+	return s.repo.UpsertCharacter(ctx, c)
+}
+
+// GetCharacter returns the character record for a run.
+func (s *Service) GetCharacter(ctx context.Context, runID int) (*Character, error) {
+	return s.repo.GetCharacter(ctx, runID)
+}
+
+// ListSnapshots returns all character snapshots for a run.
+func (s *Service) ListSnapshots(ctx context.Context, runID int) ([]CharacterSnapshot, error) {
+	if _, err := s.repo.GetRun(ctx, runID); err != nil {
+		return nil, err
+	}
+	return s.repo.ListSnapshots(ctx, runID)
+}
+
+// CreateSnapshot adds a new manual character snapshot for a run.
+func (s *Service) CreateSnapshot(ctx context.Context, snap *CharacterSnapshot) error {
+	if _, err := s.repo.GetRun(ctx, snap.RunID); err != nil {
+		return err
+	}
+	snap.Source = SnapshotManual
+	return s.repo.CreateSnapshot(ctx, snap)
+}
+
+// ListEvents returns recent events for a run (up to limit entries).
+func (s *Service) ListEvents(ctx context.Context, runID, limit int) ([]Event, error) {
+	if _, err := s.repo.GetRun(ctx, runID); err != nil {
+		return nil, err
+	}
+	if limit <= 0 {
+		limit = 50
+	}
+	return s.repo.ListEvents(ctx, runID, limit)
+}
+
+// RecordAreaEvent processes an area event from the logtail watcher.
+// It does not automatically confirm steps — it only records the event.
+func (s *Service) RecordAreaEvent(ctx context.Context, runID int, ev AreaEvent) error {
+	return s.HandleAreaEvent(ctx, runID, ev)
+}
+
+// ListSplits returns timing splits for a run.
+func (s *Service) ListSplits(ctx context.Context, runID int) ([]Split, error) {
+	if _, err := s.repo.GetRun(ctx, runID); err != nil {
+		return nil, err
+	}
+	return s.repo.ListSplits(ctx, runID)
+}
+
+// RecordSplit records a timing split for a step in a run.
+func (s *Service) RecordSplit(ctx context.Context, runID, stepID int, splitMs int64) error {
+	run, err := s.repo.GetRun(ctx, runID)
+	if err != nil {
+		return err
+	}
+	if !run.IsActive {
+		return fmt.Errorf("run: run %d is not active", runID)
+	}
+	return s.repo.RecordSplit(ctx, runID, stepID, splitMs)
+}
+
+// ListPendingChecks returns all unanswered manual checks for a run.
+func (s *Service) ListPendingChecks(ctx context.Context, runID int) ([]ManualCheck, error) {
+	if _, err := s.repo.GetRun(ctx, runID); err != nil {
+		return nil, err
+	}
+	return s.repo.ListPendingChecks(ctx, runID)
+}
+
+// AnswerCheck confirms a manual check with the given response.
+func (s *Service) AnswerCheck(ctx context.Context, checkID int, responseValue string) (*ManualCheck, error) {
+	return s.repo.AnswerCheck(ctx, checkID, responseValue)
 }

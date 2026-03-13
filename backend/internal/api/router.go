@@ -9,18 +9,53 @@ import (
 func NewRouter(h *Handlers) http.Handler {
 	mux := http.NewServeMux()
 
+	// --- builds ---
+	mux.HandleFunc("GET /builds", h.ListBuilds)
+	mux.HandleFunc("POST /builds", h.CreateBuild)
+	mux.HandleFunc("GET /builds/{id}", h.GetBuild)
+	mux.HandleFunc("GET /builds/{id}/versions", h.ListBuildVersions)
+	mux.HandleFunc("POST /builds/{id}/versions", h.CreateBuildVersion)
+
 	// --- guides ---
 	mux.HandleFunc("GET /guides", h.ListGuides)
+	mux.HandleFunc("POST /guides/import", h.ImportGuide)
 	mux.HandleFunc("GET /guides/{slug}", h.GetGuide)
 	mux.HandleFunc("GET /guides/{slug}/runs", h.ListRuns)
 	mux.HandleFunc("GET /guides/{slug}/ranking", h.GetRanking)
 
 	// --- runs ---
 	mux.HandleFunc("POST /runs", h.CreateRun)
+	mux.HandleFunc("GET /runs/{id}", h.GetRun)
 	mux.HandleFunc("GET /runs/{id}/state", h.GetRunState)
+	mux.HandleFunc("POST /runs/{id}/finish", h.FinishRun)
+	mux.HandleFunc("POST /runs/{id}/abandon", h.AbandonRun)
+
+	// --- step actions ---
 	mux.HandleFunc("GET /runs/{id}/recommendations", h.GetRunRecommendations)
 	mux.HandleFunc("POST /runs/{id}/steps/{step_id}/confirm", h.ConfirmStep)
-	mux.HandleFunc("POST /runs/{id}/finish", h.FinishRun)
+	mux.HandleFunc("POST /runs/{id}/steps/{step_id}/skip", h.SkipStep)
+	mux.HandleFunc("POST /runs/{id}/steps/{step_id}/undo", h.UndoStep)
+	mux.HandleFunc("POST /runs/{id}/steps/{step_id}/split", h.RecordSplit)
+
+	// --- character & snapshots ---
+	mux.HandleFunc("GET /runs/{id}/character", h.GetCharacter)
+	mux.HandleFunc("PUT /runs/{id}/character", h.UpsertCharacter)
+	mux.HandleFunc("GET /runs/{id}/snapshots", h.ListSnapshots)
+	mux.HandleFunc("POST /runs/{id}/snapshots", h.CreateSnapshot)
+
+	// --- alerts ---
+	mux.HandleFunc("GET /runs/{id}/alerts", h.GetAlerts)
+
+	// --- events (logtail-driven) ---
+	mux.HandleFunc("GET /runs/{id}/events", h.ListEvents)
+	mux.HandleFunc("POST /runs/{id}/events", h.RecordEvent)
+
+	// --- splits & ranking ---
+	mux.HandleFunc("GET /runs/{id}/splits", h.ListSplits)
+
+	// --- manual checks ---
+	mux.HandleFunc("GET /runs/{id}/checks", h.ListPendingChecks)
+	mux.HandleFunc("POST /runs/{id}/checks/{check_id}/answer", h.AnswerCheck)
 
 	return corsMiddleware(mux)
 }

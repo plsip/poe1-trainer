@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/poe1-trainer/internal/api"
+	buildpkg "github.com/poe1-trainer/internal/build"
 	"github.com/poe1-trainer/internal/db"
 	"github.com/poe1-trainer/internal/guide"
 	"github.com/poe1-trainer/internal/recommendation"
@@ -32,11 +33,12 @@ func main() {
 	log.Println("database connected and migrations applied")
 
 	guideRepo := guide.NewRepository(store.Pool)
+	buildRepo := buildpkg.NewRepository(store.Pool)
 	runRepo := runpkg.NewRepository(store.Pool)
 	runService := runpkg.NewService(runRepo, guideRepo)
 	engine := recommendation.NewEngine()
 
-	h := api.NewHandlers(guideRepo, runService, runRepo, engine)
+	h := api.NewHandlers(buildRepo, guideRepo, runService, runRepo, engine)
 	router := api.NewRouter(h)
 
 	srv := &http.Server{

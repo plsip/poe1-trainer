@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
+	buildpkg "github.com/poe1-trainer/internal/build"
 	"github.com/poe1-trainer/internal/guide"
 	"github.com/poe1-trainer/internal/recommendation"
 	runpkg "github.com/poe1-trainer/internal/run"
@@ -12,6 +13,7 @@ import (
 
 // Handlers holds all HTTP handler dependencies.
 type Handlers struct {
+	builds  *buildpkg.Repository
 	guides  *guide.Repository
 	runs    *runpkg.Service
 	runRepo *runpkg.Repository
@@ -20,12 +22,14 @@ type Handlers struct {
 
 // NewHandlers creates a new Handlers instance.
 func NewHandlers(
+	builds *buildpkg.Repository,
 	guides *guide.Repository,
 	runs *runpkg.Service,
 	runRepo *runpkg.Repository,
 	engine *recommendation.Engine,
 ) *Handlers {
 	return &Handlers{
+		builds:  builds,
 		guides:  guides,
 		runs:    runs,
 		runRepo: runRepo,
@@ -64,10 +68,7 @@ func (h *Handlers) GetGuide(w http.ResponseWriter, r *http.Request) {
 
 // CreateRun handles POST /runs
 func (h *Handlers) CreateRun(w http.ResponseWriter, r *http.Request) {
-	var req struct {
-		GuideID       int    `json:"guide_id"`
-		CharacterName string `json:"character_name"`
-	}
+	var req CreateRunRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		writeError(w, http.StatusBadRequest, "invalid request body")
 		return
@@ -76,7 +77,7 @@ func (h *Handlers) CreateRun(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusBadRequest, "guide_id is required")
 		return
 	}
-	run, err := h.runs.CreateRun(r.Context(), req.GuideID, req.CharacterName)
+	run, err := h.runs.CreateRun(r.Context(), req.GuideID, req.CharacterName, req.League)
 	if err != nil {
 		writeError(w, http.StatusBadRequest, err.Error())
 		return
@@ -222,4 +223,502 @@ func intPathParam(r *http.Request, key string) (int, bool) {
 		return 0, false
 	}
 	return n, true
+}
+
+// ─── Builds ────────────────────────────────────────────────────────────────
+
+// ListBuilds handles GET /builds
+func (h *Handlers) ListBuilds(w http.ResponseWriter, r *http.Request) {
+	builds, err := h.builds.List(r.Context())
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	writeJSON(w, http.StatusOK, builds)
+}
+
+// GetBuild handles GET /builds/{id}
+func (h *Handlers) GetBuild(w http.ResponseWriter, r *http.Request) {
+	id, ok := intPathParam(r, "id")
+	if !ok {
+		writeError(w, http.StatusBadRequest, "invalid build id")
+		return
+	}
+	b, err := h.builds.GetByID(r.Context(), id)
+	if err != nil {
+		writeError(w, http.StatusNotFound, err.Error())
+		return
+	}
+	versions, err := h.builds.ListVersions(r.Context(), id)
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	writeJSON(w, http.StatusOK, map[string]any{"build": b, "versions": versions})
+}
+
+// CreateBuild handles POST /builds
+func (h *Handlers) CreateBuild(w http.ResponseWriter, r *http.Request) {
+	var req CreateBuildRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		writeError(w, http.StatusBadRequest, "invalid request body")
+		return
+	}
+	if req.Slug == "" || req.Name == "" {
+		writeError(w, http.StatusBadRequest, "slug and name are required")
+		return
+	}
+	b := &buildpkg.Build{
+		Slug:        req.Slug,
+		Name:        req.Name,
+		Class:       req.Class,
+		Description: req.Description,
+	}
+	if err := h.builds.Create(r.Context(), b); err != nil {
+		writeError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+	writeJSON(w, http.StatusCreated, b)
+}
+
+// ListBuildVersions handles GET /builds/{id}/versions
+func (h *Handlers) ListBuildVersions(w http.ResponseWriter, r *http.Request) {
+	id, ok := intPathParam(r, "id")
+	if !ok {
+		writeError(w, http.StatusBadRequest, "invalid build id")
+		return
+	}
+	versions, err := h.builds.ListVersions(r.Context(), id)
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	writeJSON(w, http.StatusOK, versions)
+}
+
+// CreateBuildVersion handles POST /builds/{id}/versions
+func (h *Handlers) CreateBuildVersion(w http.ResponseWriter, r *http.Request) {
+	id, ok := intPathParam(r, "id")
+	if !ok {
+		writeError(w, http.StatusBadRequest, "invalid build id")
+		return
+	}
+	var req CreateVersionRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		writeError(w, http.StatusBadRequest, "invalid request body")
+		return
+	}
+	if req.Version == "" {
+		writeError(w, http.StatusBadRequest, "version is required")
+		return
+	}
+	v := &buildpkg.Version{
+		BuildID:   id,
+		Version:   req.Version,
+		PatchTag:  req.PatchTag,
+		Notes:     req.Notes,
+		IsCurrent: req.IsCurrent,
+	}
+	if err := h.builds.CreateVersion(r.Context(), v); err != nil {
+		writeError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+	writeJSON(w, http.StatusCreated, v)
+}
+
+// ─── Guide import ──────────────────────────────────────────────────────────
+
+// ImportGuide handles POST /guides/import
+func (h *Handlers) ImportGuide(w http.ResponseWriter, r *http.Request) {
+	var req ImportGuideRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		writeError(w, http.StatusBadRequest, "invalid request body")
+		return
+	}
+	if req.Slug == "" || req.Title == "" || req.Content == "" {
+		writeError(w, http.StatusBadRequest, "slug, title, and content are required")
+		return
+	}
+	version := req.Version
+	if version == "" {
+		version = "1"
+	}
+	g, err := guide.ParseMarkdown(req.Slug, req.Title, req.BuildName, version, req.Content)
+	if err != nil {
+		writeError(w, http.StatusUnprocessableEntity, err.Error())
+		return
+	}
+	if err := h.guides.Save(r.Context(), g); err != nil {
+		writeError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	writeJSON(w, http.StatusCreated, g)
+}
+
+// ─── Run extended actions ──────────────────────────────────────────────────
+
+// GetRun handles GET /runs/{id}
+func (h *Handlers) GetRun(w http.ResponseWriter, r *http.Request) {
+	id, ok := intPathParam(r, "id")
+	if !ok {
+		writeError(w, http.StatusBadRequest, "invalid run id")
+		return
+	}
+	state, err := h.runs.GetCurrentState(r.Context(), id)
+	if err != nil {
+		writeError(w, http.StatusNotFound, err.Error())
+		return
+	}
+	writeJSON(w, http.StatusOK, state)
+}
+
+// AbandonRun handles POST /runs/{id}/abandon
+func (h *Handlers) AbandonRun(w http.ResponseWriter, r *http.Request) {
+	id, ok := intPathParam(r, "id")
+	if !ok {
+		writeError(w, http.StatusBadRequest, "invalid run id")
+		return
+	}
+	if err := h.runs.AbandonRun(r.Context(), id); err != nil {
+		writeError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+	w.WriteHeader(http.StatusNoContent)
+}
+
+// SkipStep handles POST /runs/{id}/steps/{step_id}/skip
+func (h *Handlers) SkipStep(w http.ResponseWriter, r *http.Request) {
+	runID, ok := intPathParam(r, "id")
+	if !ok {
+		writeError(w, http.StatusBadRequest, "invalid run id")
+		return
+	}
+	stepID, ok := intPathParam(r, "step_id")
+	if !ok {
+		writeError(w, http.StatusBadRequest, "invalid step_id")
+		return
+	}
+	if err := h.runs.SkipStep(r.Context(), runID, stepID); err != nil {
+		writeError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+	w.WriteHeader(http.StatusNoContent)
+}
+
+// UndoStep handles POST /runs/{id}/steps/{step_id}/undo
+func (h *Handlers) UndoStep(w http.ResponseWriter, r *http.Request) {
+	runID, ok := intPathParam(r, "id")
+	if !ok {
+		writeError(w, http.StatusBadRequest, "invalid run id")
+		return
+	}
+	stepID, ok := intPathParam(r, "step_id")
+	if !ok {
+		writeError(w, http.StatusBadRequest, "invalid step_id")
+		return
+	}
+	if err := h.runs.UndoStep(r.Context(), runID, stepID); err != nil {
+		writeError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+	w.WriteHeader(http.StatusNoContent)
+}
+
+// ─── Characters & snapshots ────────────────────────────────────────────────
+
+// GetCharacter handles GET /runs/{id}/character
+func (h *Handlers) GetCharacter(w http.ResponseWriter, r *http.Request) {
+	id, ok := intPathParam(r, "id")
+	if !ok {
+		writeError(w, http.StatusBadRequest, "invalid run id")
+		return
+	}
+	c, err := h.runs.GetCharacter(r.Context(), id)
+	if err != nil {
+		writeError(w, http.StatusNotFound, err.Error())
+		return
+	}
+	writeJSON(w, http.StatusOK, c)
+}
+
+// UpsertCharacter handles PUT /runs/{id}/character
+func (h *Handlers) UpsertCharacter(w http.ResponseWriter, r *http.Request) {
+	id, ok := intPathParam(r, "id")
+	if !ok {
+		writeError(w, http.StatusBadRequest, "invalid run id")
+		return
+	}
+	var req UpsertCharacterRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		writeError(w, http.StatusBadRequest, "invalid request body")
+		return
+	}
+	if req.CharacterName == "" {
+		writeError(w, http.StatusBadRequest, "character_name is required")
+		return
+	}
+	c := &runpkg.Character{
+		RunID:          id,
+		CharacterName:  req.CharacterName,
+		CharacterClass: req.CharacterClass,
+		League:         req.League,
+		LevelAtStart:   req.LevelAtStart,
+		LevelCurrent:   req.LevelAtStart,
+	}
+	if err := h.runs.UpsertCharacter(r.Context(), c); err != nil {
+		writeError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+	writeJSON(w, http.StatusOK, c)
+}
+
+// ListSnapshots handles GET /runs/{id}/snapshots
+func (h *Handlers) ListSnapshots(w http.ResponseWriter, r *http.Request) {
+	id, ok := intPathParam(r, "id")
+	if !ok {
+		writeError(w, http.StatusBadRequest, "invalid run id")
+		return
+	}
+	snaps, err := h.runs.ListSnapshots(r.Context(), id)
+	if err != nil {
+		writeError(w, http.StatusNotFound, err.Error())
+		return
+	}
+	writeJSON(w, http.StatusOK, snaps)
+}
+
+// CreateSnapshot handles POST /runs/{id}/snapshots
+func (h *Handlers) CreateSnapshot(w http.ResponseWriter, r *http.Request) {
+	id, ok := intPathParam(r, "id")
+	if !ok {
+		writeError(w, http.StatusBadRequest, "invalid run id")
+		return
+	}
+	var req CreateSnapshotRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		writeError(w, http.StatusBadRequest, "invalid request body")
+		return
+	}
+	if req.Level <= 0 {
+		writeError(w, http.StatusBadRequest, "level must be > 0")
+		return
+	}
+	snap := &runpkg.CharacterSnapshot{
+		RunID:        id,
+		Level:        req.Level,
+		LifeMax:      req.LifeMax,
+		ManaMax:      req.ManaMax,
+		ResFire:      req.ResFire,
+		ResCold:      req.ResCold,
+		ResLightning: req.ResLightning,
+		ResChaos:     req.ResChaos,
+	}
+	if err := h.runs.CreateSnapshot(r.Context(), snap); err != nil {
+		writeError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+	writeJSON(w, http.StatusCreated, snap)
+}
+
+// ─── Alerts ────────────────────────────────────────────────────────────────
+
+// GetAlerts handles GET /runs/{id}/alerts
+// Returns gem requirements and gear hints relevant to the current step.
+func (h *Handlers) GetAlerts(w http.ResponseWriter, r *http.Request) {
+	id, ok := intPathParam(r, "id")
+	if !ok {
+		writeError(w, http.StatusBadRequest, "invalid run id")
+		return
+	}
+	state, err := h.runs.GetCurrentState(r.Context(), id)
+	if err != nil {
+		writeError(w, http.StatusNotFound, err.Error())
+		return
+	}
+	if state.CurrentStepID == 0 {
+		writeJSON(w, http.StatusOK, AlertsResponse{Alerts: []Alert{}})
+		return
+	}
+
+	g, err := h.guides.GetByID(r.Context(), state.Run.GuideID)
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	var alerts []Alert
+	// Gem alerts from current step's requirements.
+	for _, step := range g.Steps {
+		if step.ID == state.CurrentStepID {
+			for _, gem := range step.GemRequirements {
+				alerts = append(alerts, Alert{
+					Kind:        "gem",
+					Priority:    "high",
+					Description: gem.GemName,
+					StepID:      step.ID,
+					Notes:       gem.Note,
+				})
+			}
+			break
+		}
+	}
+
+	// Gear alerts from gear_hint_rules for current step (+ global hints).
+	hints, err := h.guides.GetGearHints(r.Context(), g.ID, state.CurrentStepID)
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	for _, hint := range hints {
+		stepID := 0
+		if hint.StepID != nil {
+			stepID = *hint.StepID
+		}
+		alerts = append(alerts, Alert{
+			Kind:        "gear",
+			Priority:    string(hint.Priority),
+			Slot:        hint.Slot,
+			Description: hint.Description,
+			StepID:      stepID,
+			Notes:       hint.Notes,
+		})
+	}
+
+	if alerts == nil {
+		alerts = []Alert{}
+	}
+	writeJSON(w, http.StatusOK, AlertsResponse{
+		StepID: state.CurrentStepID,
+		Alerts: alerts,
+	})
+}
+
+// ─── Events ────────────────────────────────────────────────────────────────
+
+// ListEvents handles GET /runs/{id}/events
+func (h *Handlers) ListEvents(w http.ResponseWriter, r *http.Request) {
+	id, ok := intPathParam(r, "id")
+	if !ok {
+		writeError(w, http.StatusBadRequest, "invalid run id")
+		return
+	}
+	events, err := h.runs.ListEvents(r.Context(), id, 100)
+	if err != nil {
+		writeError(w, http.StatusNotFound, err.Error())
+		return
+	}
+	writeJSON(w, http.StatusOK, events)
+}
+
+// RecordEvent handles POST /runs/{id}/events
+func (h *Handlers) RecordEvent(w http.ResponseWriter, r *http.Request) {
+	id, ok := intPathParam(r, "id")
+	if !ok {
+		writeError(w, http.StatusBadRequest, "invalid run id")
+		return
+	}
+	var req RecordEventRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		writeError(w, http.StatusBadRequest, "invalid request body")
+		return
+	}
+	if req.EventType == "" {
+		writeError(w, http.StatusBadRequest, "event_type is required")
+		return
+	}
+	if req.Payload == nil {
+		req.Payload = map[string]string{}
+	}
+	if err := h.runs.HandleAreaEvent(r.Context(), id, runpkg.AreaEvent{AreaName: req.Payload["area"]}); err != nil {
+		writeError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+	w.WriteHeader(http.StatusNoContent)
+}
+
+// ─── Splits ────────────────────────────────────────────────────────────────
+
+// ListSplits handles GET /runs/{id}/splits
+func (h *Handlers) ListSplits(w http.ResponseWriter, r *http.Request) {
+	id, ok := intPathParam(r, "id")
+	if !ok {
+		writeError(w, http.StatusBadRequest, "invalid run id")
+		return
+	}
+	splits, err := h.runs.ListSplits(r.Context(), id)
+	if err != nil {
+		writeError(w, http.StatusNotFound, err.Error())
+		return
+	}
+	writeJSON(w, http.StatusOK, splits)
+}
+
+// RecordSplit handles POST /runs/{id}/steps/{step_id}/split
+func (h *Handlers) RecordSplit(w http.ResponseWriter, r *http.Request) {
+	runID, ok := intPathParam(r, "id")
+	if !ok {
+		writeError(w, http.StatusBadRequest, "invalid run id")
+		return
+	}
+	stepID, ok := intPathParam(r, "step_id")
+	if !ok {
+		writeError(w, http.StatusBadRequest, "invalid step_id")
+		return
+	}
+	var req RecordSplitRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		writeError(w, http.StatusBadRequest, "invalid request body")
+		return
+	}
+	if req.SplitMs <= 0 {
+		writeError(w, http.StatusBadRequest, "split_ms must be > 0")
+		return
+	}
+	if err := h.runs.RecordSplit(r.Context(), runID, stepID, req.SplitMs); err != nil {
+		writeError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+	w.WriteHeader(http.StatusNoContent)
+}
+
+// ─── Manual checks ─────────────────────────────────────────────────────────
+
+// ListPendingChecks handles GET /runs/{id}/checks
+func (h *Handlers) ListPendingChecks(w http.ResponseWriter, r *http.Request) {
+	id, ok := intPathParam(r, "id")
+	if !ok {
+		writeError(w, http.StatusBadRequest, "invalid run id")
+		return
+	}
+	checks, err := h.runs.ListPendingChecks(r.Context(), id)
+	if err != nil {
+		writeError(w, http.StatusNotFound, err.Error())
+		return
+	}
+	writeJSON(w, http.StatusOK, checks)
+}
+
+// AnswerCheck handles POST /runs/{id}/checks/{check_id}/answer
+func (h *Handlers) AnswerCheck(w http.ResponseWriter, r *http.Request) {
+	_, ok := intPathParam(r, "id")
+	if !ok {
+		writeError(w, http.StatusBadRequest, "invalid run id")
+		return
+	}
+	checkID, ok := intPathParam(r, "check_id")
+	if !ok {
+		writeError(w, http.StatusBadRequest, "invalid check_id")
+		return
+	}
+	var req AnswerCheckRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		writeError(w, http.StatusBadRequest, "invalid request body")
+		return
+	}
+	mc, err := h.runs.AnswerCheck(r.Context(), checkID, req.ResponseValue)
+	if err != nil {
+		writeError(w, http.StatusNotFound, err.Error())
+		return
+	}
+	writeJSON(w, http.StatusOK, mc)
 }
