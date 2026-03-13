@@ -153,30 +153,31 @@ Kolejność lokacji:
 7. Wejdź do <span style="color:white;">Catacombs</span>, zrób <span style="color:teal;">Labyrinth Trial</span>, potem zrób logout albo portal do miasta i waypointem wróć do <span style="color:white;">Marketplace</span>.
 8. Znajdź wyjście do <span style="color:white;">Battlefront</span> i złap waypoint mniej więcej w centrum strefy.
 9. Weź <span style="color:green;">Ribbon Spool</span> z <span style="color:green;">Blackguard Chest</span>. To jest część questa Sever the Right Hand.
-10. Z <span style="color:white;">Battlefront</span> skręć w lewo do <span style="color:white;">The Docks</span>, ale tylko jeśli potrzebujesz dofarmienia.
-11. Jeśli jesteś underleveled albo build zaczyna być za słaby, farm <span style="color:white;">Docks</span>.
-12. Resetuj <span style="color:white;">Docks</span> przez `Ctrl + klik` i twórz nowe instancje.
-13. Zrób 2-5 resetów, jeśli potrzebujesz leveli, gearu i expa na gemach.
-14. Z <span style="color:white;">Battlefront</span> wejdź do <span style="color:white;">Solaris Temple Level 1</span>, potem <span style="color:white;">Level 2</span>, złap waypoint i odbierz quest item od <span style="color:green;">Dialli</span> do questa Sever the Right Hand.
-15. Wróć do miasta waypointem po <span style="color:green;">Book of Skill</span>.
-16. Wróć waypointem do <span style="color:white;">Sewers</span>, przepal blokadę bardzo blisko waypointa i wejdź do <span style="color:white;">Ebony Barracks</span>.
-17. Złap waypoint i zabij <span style="color:red;">General Graviciusa</span>.
-18. Wejdź do <span style="color:white;">Lunaris Temple Level 1</span> i <span style="color:white;">Level 2</span>.
-19. W <span style="color:white;">Lunaris Temple</span> trzymaj się strony ze schodami w górę. Przy wózkach pamiętaj, że strona z dwoma wózkami to ślepy zaułek, a strona z jednym wózkiem prowadzi dalej.
-20. Zabij <span style="color:red;">Piety</span> i zabierz <span style="color:green;">Tower Key</span>.
-21. Odbierz <span style="color:green;">Book of Skill</span> i reward gemowy od <span style="color:green;">Maramoa</span>.
-22. Po wykonaniu questa Lost in Love kup od <span style="color:green;">Clarissy</span> <span style="color:#7f7fff;">Conductivity</span> i <span style="color:#7f7fff;">Wrath</span>. To jest najwcześniejszy moment, w którym <span style="color:#7f7fff;">Wrath</span> jest dostępny w kampanii. Jeśli planujesz wersję defensywną, kup też <span style="color:#ff6a2f;">Determination</span> i trzymaj ją na później.
-23. Wróć waypointem do <span style="color:white;">Ebony Barracks</span> i wejdź do <span style="color:white;">Imperial Gardens</span>.
-24. Złap waypoint i trzymaj się tiled path.
-25. Jeśli potrzebujesz konkretnych gemów od <span style="color:green;">Siosy</span>, zrób questa A Fixture of Fate w <span style="color:white;">Library</span>. Jeśli nie potrzebujesz dodatkowych gemów, pomiń.
-26. W <span style="color:white;">Imperial Gardens</span> zrób ostatni <span style="color:teal;">Labyrinth Trial</span> do pierwszego laba.
-27. Wejdź do <span style="color:white;">Sceptre of God</span>, potem <span style="color:white;">Upper Sceptre of God</span> i zabij <span style="color:red;">Dominusa</span>.
-28. Przebiegnij <span style="color:white;">Aqueduct</span> i wejdź do <span style="color:white;">Highgate</span>.
-29. Jeśli trafisz dodatkowy craft po drodze, na przykład fire damage, zgarnij go.
-30. Jeszcze nie rób pełnego switchu tylko dlatego, że setup już się składa. Dociągnij levele gemów i domknij pierwszy lab.
-31. Upewnij się, że <span style="color:#7f7fff;">Storm Burst</span> i <span style="color:#ff6a2f;">Spell Totem Support</span> cały czas levelują się na swapie.
-32. Jeśli masz dostęp, przygotuj miejsce pod <span style="color:#7f7fff;">Lightning Penetration</span>.
-33. Zacznij zbierać quality pod główny setup <span style="color:#7f7fff;">Storm Bursta</span>, bo quality daje bardzo duży wzrost damage.
+
+> Z <span style="color:white;">Battlefront</span> skręć w lewo do <span style="color:white;">The Docks</span>, ale tylko jeśli potrzebujesz dofarmienia.  
+> Jeśli jesteś underleveled albo build zaczyna być za słaby, farm <span style="color:white;">Docks</span>.  
+> Resetuj przez `Ctrl + klik` i twórz nowe instancje — zrób 2-5 resetów, jeśli potrzebujesz leveli, gearu i expa na gemach.
+
+10. Z <span style="color:white;">Battlefront</span> wejdź do <span style="color:white;">Solaris Temple Level 1</span>, potem <span style="color:white;">Level 2</span>, złap waypoint i odbierz quest item od <span style="color:green;">Dialli</span> do questa Sever the Right Hand.
+11. Wróć do miasta waypointem po <span style="color:green;">Book of Skill</span>.
+12. Wróć waypointem do <span style="color:white;">Sewers</span>, przepal blokadę bardzo blisko waypointa i wejdź do <span style="color:white;">Ebony Barracks</span>.
+13. Złap waypoint i zabij <span style="color:red;">General Graviciusa</span>.
+14. Wejdź do <span style="color:white;">Lunaris Temple Level 1</span> i <span style="color:white;">Level 2</span>.
+15. W <span style="color:white;">Lunaris Temple</span> trzymaj się strony ze schodami w górę. Przy wózkach pamiętaj, że strona z dwoma wózkami to ślepy zaułek, a strona z jednym wózkiem prowadzi dalej.
+16. Zabij <span style="color:red;">Piety</span> i zabierz <span style="color:green;">Tower Key</span>.
+17. Odbierz <span style="color:green;">Book of Skill</span> i reward gemowy od <span style="color:green;">Maramoa</span>.
+18. Po wykonaniu questa Lost in Love kup od <span style="color:green;">Clarissy</span> <span style="color:#7f7fff;">Conductivity</span> i <span style="color:#7f7fff;">Wrath</span>. To jest najwcześniejszy moment, w którym <span style="color:#7f7fff;">Wrath</span> jest dostępny w kampanii. Jeśli planujesz wersję defensywną, kup też <span style="color:#ff6a2f;">Determination</span> i trzymaj ją na później.
+19. Wróć waypointem do <span style="color:white;">Ebony Barracks</span> i wejdź do <span style="color:white;">Imperial Gardens</span>.
+20. Złap waypoint i trzymaj się tiled path.
+21. Jeśli potrzebujesz konkretnych gemów od <span style="color:green;">Siosy</span>, zrób questa A Fixture of Fate w <span style="color:white;">Library</span>. Jeśli nie potrzebujesz dodatkowych gemów, pomiń.
+22. W <span style="color:white;">Imperial Gardens</span> zrób ostatni <span style="color:teal;">Labyrinth Trial</span> do pierwszego laba.
+23. Wejdź do <span style="color:white;">Sceptre of God</span>, potem <span style="color:white;">Upper Sceptre of God</span> i zabij <span style="color:red;">Dominusa</span>.
+24. Przebiegnij <span style="color:white;">Aqueduct</span> i wejdź do <span style="color:white;">Highgate</span>.
+25. Jeśli trafisz dodatkowy craft po drodze, na przykład fire damage, zgarnij go.
+26. Jeszcze nie rób pełnego switchu tylko dlatego, że setup już się składa. Dociągnij levele gemów i domknij pierwszy lab.
+27. Upewnij się, że <span style="color:#7f7fff;">Storm Burst</span> i <span style="color:#ff6a2f;">Spell Totem Support</span> cały czas levelują się na swapie.
+28. Jeśli masz dostęp, przygotuj miejsce pod <span style="color:#7f7fff;">Lightning Penetration</span>.
+29. Zacznij zbierać quality pod główny setup <span style="color:#7f7fff;">Storm Bursta</span>, bo quality daje bardzo duży wzrost damage.
 
 ## Akt 4
 
