@@ -5,6 +5,8 @@ Ta wersja jest celowo krótka i proceduralna. Ma służyć jako instrukcja grani
 Kolorystyka nazw jak w PoE Vault:
 - `<span style="color:white;">lokacje</span>`
 - `<span style="color:green;">NPC, itemy i nagrody</span>`
+- zwykłe questy opcjonalne: `<span style="color:#7fa8d6;">nazwy questów</span>`
+- questy opcjonalne systemowe/masterowe: `<span style="color:#d67a1f;">nazwy questów</span>`
 - flaski: `<span style="color:#d7d1c3;">nazwy flasków</span>`
 - gemy: `<span style="color:#ff6a2f;">czerwone</span>`, `<span style="color:#66ff66;">zielone</span>`, `<span style="color:#7f7fff;">niebieskie</span>`
 - `<span style="color:red;">bossowie, bandyci i wrogowie questowi</span>`
@@ -92,10 +94,10 @@ Kolejność lokacji:
 
 Kolejność lokacji:
 
-<span style="color:white;">The Old Fields</span> -> optional <span style="color:white;">The Den</span> -> <span style="color:white;">The Crossroads</span> -> <span style="color:white;">Chamber of Sins Level 1</span> -> <span style="color:white;">Chamber of Sins Level 2</span> -> <span style="color:white;">The Crossroads</span> -> <span style="color:white;">Fellshrine Ruins</span> -> <span style="color:white;">The Crypt Level 1</span> -> <span style="color:white;">The Crypt Level 2</span> -> <span style="color:white;">The Crossroads</span> -> <span style="color:white;">Broken Bridge</span> -> <span style="color:white;">Riverways</span> -> <span style="color:white;">Western Forest</span> -> <span style="color:white;">Weaver's Chambers</span> -> <span style="color:white;">Riverways</span> -> <span style="color:white;">Wetlands</span> -> <span style="color:white;">Western Forest</span> -> <span style="color:white;">Forest Encampment</span> -> <span style="color:white;">Wetlands</span> -> <span style="color:white;">Vaal Ruins</span> -> <span style="color:white;">Northern Forest</span> -> <span style="color:white;">The Caverns</span> -> <span style="color:white;">Ancient Pyramid</span> -> <span style="color:white;">Pyramid Apex</span> -> <span style="color:white;">City of Sarn</span>
+<span style="color:white;">The Old Fields</span> -> optional <span style="color:white;">The Den</span> -> <span style="color:white;">The Crossroads</span> -> <span style="color:white;">Chamber of Sins Level 1</span> -> <span style="color:white;">Chamber of Sins Level 2</span> -> <span style="color:white;">The Crossroads</span> -> <span style="color:white;">Fellshrine Ruins</span> -> <span style="color:white;">The Crypt Level 1</span> -> <span style="color:white;">The Crypt Level 2</span> -> <span style="color:white;">The Crossroads</span> -> <span style="color:white;">Broken Bridge</span> -> <span style="color:white;">Forest Encampment</span> -> <span style="color:white;">Riverways</span> -> <span style="color:white;">Western Forest</span> -> <span style="color:white;">Weaver's Chambers</span> -> <span style="color:white;">Riverways</span> -> <span style="color:white;">Wetlands</span> -> <span style="color:white;">Western Forest</span> -> <span style="color:white;">Forest Encampment</span> -> <span style="color:white;">Wetlands</span> -> <span style="color:white;">Vaal Ruins</span> -> <span style="color:white;">Northern Forest</span> -> <span style="color:white;">The Caverns</span> -> <span style="color:white;">Ancient Pyramid</span> -> <span style="color:white;">Pyramid Apex</span> -> <span style="color:white;">City of Sarn</span>
 
 1. Wyjdź do <span style="color:white;">The Old Fields</span>.
-2. Jeśli nie masz drugiego <span style="color:#d7d1c3;">Quicksilver Flask</span>, zrób questa The Great White Beast: wejdź do <span style="color:white;">The Den</span>, zabij bossa i wyjdź z powrotem do <span style="color:white;">The Old Fields</span>. Jeśli masz już drugi quicksilver, pomiń ten objazd.
+2. Jeśli nie masz drugiego <span style="color:#d7d1c3;">Quicksilver Flask</span>, zrób questa <span style="color:#7fa8d6;">The Great White Beast</span>: wejdź do <span style="color:white;">The Den</span>, zabij bossa i wyjdź z powrotem do <span style="color:white;">The Old Fields</span>. Jeśli masz już drugi quicksilver, pomiń ten objazd.
 3. Wejdź do <span style="color:white;">The Crossroads</span> i złap waypoint, idąc po drodze.
 4. Z waypointa skręć w lewo do <span style="color:white;">Chamber of Sins Level 1</span>.
 5. Wejdź do <span style="color:white;">Chamber of Sins</span> wcześnie, bo tu zaczynasz przygotowanie do późniejszego switchu na totemy.
@@ -108,12 +110,12 @@ Kolejność lokacji:
 12. Wróć waypointem do <span style="color:white;">The Crossroads</span>.
 13. Wejdź do <span style="color:white;">Fellshrine Ruins</span>, a potem do <span style="color:white;">The Crypt Level 1</span>.
 14. Zrób kolejny <span style="color:teal;">Labyrinth Trial</span>.
-15. Zejdź do <span style="color:white;">The Crypt Level 2</span>, znajdź altar, kliknij go i zabierz <span style="color:green;">Golden Hand</span> do questa Through Sacred Ground.
+15. Zejdź do <span style="color:white;">The Crypt Level 2</span>, znajdź altar, kliknij go i zabierz <span style="color:green;">Golden Hand</span> do questa <span style="color:#7fa8d6;">Through Sacred Ground</span>.
 16. Nie czyść niepotrzebnie całej strefy. Weź <span style="color:green;">Golden Hand</span> i wróć waypointem do miasta.
 17. Oddaj <span style="color:green;">Golden Hand</span> <span style="color:green;">Yeenie</span> i odbierz <span style="color:green;">Book of Skill</span>.
 18. Jeśli brakuje ci siły albo dexa do założenia ważnego itemu, tymczasowo weź stat node na drzewku.
 19. Idź prosto z <span style="color:white;">Crossroads</span> do <span style="color:white;">Broken Bridge</span>, złap waypoint i załatw <span style="color:red;">Kraityna</span>.
-20. Po zabiciu <span style="color:red;">Kraityna</span> zrób logout albo portal do miasta, potem waypointem wróć do <span style="color:white;">The Broken Bridge</span> i biegnij dalej wyjściem do <span style="color:white;">Riverways</span>.
+20. Po zabiciu <span style="color:red;">Kraityna</span> zrób logout albo portal do miasta, a potem weź lewe wyjście z <span style="color:white;">Forest Encampment</span> do <span style="color:white;">Riverways</span> i biegnij dalej.
 21. W <span style="color:white;">Riverways</span> trzymaj się drogi i złap waypoint.
 22. Z <span style="color:white;">Riverways</span> najpierw idź do <span style="color:white;">Western Forest</span>, ale traktuj to jako trasę do <span style="color:white;">Weavera</span> i pieczęci, nie jako pierwszą decyzję bandytów.
 23. Złap waypoint w <span style="color:white;">Western Forest</span>.
@@ -123,11 +125,11 @@ Kolejność lokacji:
 27. Wróć waypointem do <span style="color:white;">Riverways</span> i dopiero teraz skręć do <span style="color:white;">Wetlands</span>. To jest miejsce, gdzie stream i Poe Vault się rozjeżdżają. Dla tego buildu trzymaj preferencję streama: ważne jest jak najszybsze załatwienie <span style="color:red;">Aliry</span> dla resistów.
 28. W <span style="color:white;">Wetlands</span> załatw <span style="color:red;">Oak</span>, jeśli nie zrobiłeś tego wcześniej.
 29. Znajdź waypoint w <span style="color:white;">Wetlands</span> i wróć nim do <span style="color:white;">Western Forest</span>.
-30. W obozie <span style="color:red;">Aliry</span> podejmij decyzję z questa Deal with the Bandits: pomóż <span style="color:red;">Alirze</span> i odbierz <span style="color:green;">+15% all res</span>.
+30. W obozie <span style="color:red;">Aliry</span> podejmij decyzję z questa Deal with the Bandits: pomóż <span style="color:red;">Alirze</span> i odbierz `+15% all res`.
 31. Podążaj ścianą mapy, znajdź obóz <span style="color:red;">Blackguardów</span>, zabij lidera, weź <span style="color:green;">Thaumetic Emblem</span> i otwórz <span style="color:green;">Thaumetic Seal</span>. To jest quest The Way Forward.
-32. Zrób logout albo portal do miasta i odbierz rewardy po wykonaniu questa The Way Forward, w tym skill point związany z otwarciem przejścia dalej.
+32. Zrób logout albo portal do miasta, waypointem wróć do <span style="color:white;">Lioneye's Watch</span> z Aktu 1 i odbierz <span style="color:green;">Book of Skill</span> u <span style="color:green;">Bestela</span>. Potem wróć do <span style="color:white;">Forest Encampment</span> i odbierz pozostałe rewardy aktowe.
 33. Wróć waypointem do <span style="color:white;">Wetlands</span>, zatruj korzenie i wejdź do <span style="color:white;">Vaal Ruins</span>.
-34. Przejdź <span style="color:white;">Vaal Ruins</span> do <span style="color:white;">Northern Forest</span>.
+34. W <span style="color:white;">Vaal Ruins</span> kliknij <span style="color:green;">Ancient Seal</span>, otwórz przejście i dopiero potem wyjdź do <span style="color:white;">Northern Forest</span>.
 35. W <span style="color:white;">Northern Forest</span> biegnij w górę do <span style="color:white;">The Caverns</span>. <span style="color:white;">Dread Thicket</span> pomiń na tym etapie.
 36. W <span style="color:white;">The Caverns</span> złap waypoint.
 37. Znajdź <span style="color:white;">Ancient Pyramid</span> i wejdź na <span style="color:white;">Pyramid Apex</span>.
@@ -148,7 +150,7 @@ Kolejność lokacji:
 2. Znajdź <span style="color:white;">Crematorium</span>, złap waypoint i zrób <span style="color:teal;">Labyrinth Trial</span>.
 3. Zabij <span style="color:red;">Piety</span>, weź <span style="color:green;">Tolman's Bracelet</span>, zrób logout albo portal do miasta i odbierz <span style="color:green;">Sewer Keys</span>. To jest quest Lost in Love.
 4. Wróć waypointem do <span style="color:white;">The Slums</span>, znajdź <span style="color:white;">Sewer Grating</span> i wejdź do <span style="color:white;">Sewers</span>.
-5. W <span style="color:white;">Sewers</span> nie pomijaj questa Victario's Secrets z 3 Platinum Busts, bo daje skill point. Jedna jest zwykle przed waypointem, dwie po waypointcie.
+5. W <span style="color:white;">Sewers</span> nie pomijaj questa <span style="color:#7fa8d6;">Victario's Secrets</span> z 3 Platinum Busts, bo daje skill point. Jedna jest zwykle przed waypointem, dwie po waypointcie.
 6. Wyjdź do <span style="color:white;">Marketplace</span> i złap waypoint.
 7. Wejdź do <span style="color:white;">Catacombs</span>, zrób <span style="color:teal;">Labyrinth Trial</span>, potem zrób logout albo portal do miasta i waypointem wróć do <span style="color:white;">Marketplace</span>.
 8. Znajdź wyjście do <span style="color:white;">Battlefront</span> i złap waypoint mniej więcej w centrum strefy.
@@ -169,7 +171,7 @@ Kolejność lokacji:
 18. Po wykonaniu questa Lost in Love kup od <span style="color:green;">Clarissy</span> <span style="color:#7f7fff;">Conductivity</span> i <span style="color:#7f7fff;">Wrath</span>. To jest najwcześniejszy moment, w którym <span style="color:#7f7fff;">Wrath</span> jest dostępny w kampanii. Jeśli planujesz wersję defensywną, kup też <span style="color:#ff6a2f;">Determination</span> i trzymaj ją na później.
 19. Wróć waypointem do <span style="color:white;">Ebony Barracks</span> i wejdź do <span style="color:white;">Imperial Gardens</span>.
 20. Złap waypoint i trzymaj się tiled path.
-21. Jeśli potrzebujesz konkretnych gemów od <span style="color:green;">Siosy</span>, zrób questa A Fixture of Fate w <span style="color:white;">Library</span>. Jeśli nie potrzebujesz dodatkowych gemów, pomiń.
+21. Jeśli potrzebujesz konkretnych gemów od <span style="color:green;">Siosy</span>, zrób questa <span style="color:#7fa8d6;">A Fixture of Fate</span> w <span style="color:white;">Library</span>. Jeśli nie potrzebujesz dodatkowych gemów, pomiń.
 22. W <span style="color:white;">Imperial Gardens</span> zrób ostatni <span style="color:teal;">Labyrinth Trial</span> do pierwszego laba.
 23. Wejdź do <span style="color:white;">Sceptre of God</span>, potem <span style="color:white;">Upper Sceptre of God</span> i zabij <span style="color:red;">Dominusa</span>.
 24. Przebiegnij <span style="color:white;">Aqueduct</span> i wejdź do <span style="color:white;">Highgate</span>.
