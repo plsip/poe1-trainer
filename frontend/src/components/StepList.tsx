@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import type { GuideStep, CurrentState, StepFilter, StepProgressStatus } from '../api/types'
 import { StatusBadge } from './StatusBadge'
 
@@ -32,7 +32,13 @@ export function StepList({
   onSkip,
   onUndo,
 }: Props) {
-  const [expandedId, setExpandedId] = useState<number | null>(null)
+  const [expandedId, setExpandedId] = useState<number | null>(state?.current_step_id ?? null)
+
+  // Auto-expand whenever the current step changes
+  useEffect(() => {
+    if (state?.current_step_id) setExpandedId(state.current_step_id)
+  }, [state?.current_step_id])
+
   const acts = [...new Set(steps.map((s) => s.act))].sort((a, b) => a - b)
 
   const filtered = steps.filter((s) => {
@@ -157,22 +163,26 @@ export function StepList({
                     >
                       {step.step_number}
                     </span>
-
-                    <StatusBadge status={status} small />
-
-                    <span
-                      style={{
-                        flex: 1,
-                        fontSize: '0.875rem',
-                        color: status === 'completed' ? '#6ee7b7' : isCurrent ? '#ffd166' : '#e0e0e0',
-                        fontWeight: isCurrent ? 600 : 400,
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        whiteSpace: 'nowrap',
-                      }}
-                    >
-                      {step.title || `Krok ${step.step_number}`}
-                    </span>
+                    {!isExpanded ? (
+                      <span
+                        style={{
+                          flex: 1,
+                          fontSize: '0.875rem',
+                          color: status === 'completed' ? '#6ee7b7' : isCurrent ? '#ffd166' : '#e0e0e0',
+                          fontWeight: isCurrent ? 600 : 400,
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        {step.title || `Krok ${step.step_number}`}
+                      </span>
+                    ) : (
+                      <span
+                        style={{ flex: 1, fontSize: '0.875rem', fontWeight: 600 }}
+                        dangerouslySetInnerHTML={{ __html: step.description }}
+                      />
+                    )}
 
                     {step.is_checkpoint && (
                       <span
@@ -205,36 +215,6 @@ export function StepList({
                         borderTop: '1px solid #2a2a2a',
                       }}
                     >
-                      <div
-                        style={{ fontSize: '0.85rem', color: '#ccc', margin: '0.5rem 0' }}
-                        dangerouslySetInnerHTML={{ __html: step.description }}
-                      />
-
-                      {step.gem_requirements && step.gem_requirements.length > 0 && (
-                        <div style={{ marginTop: '0.5rem' }}>
-                          <div style={{ fontSize: '0.75rem', color: '#a8dadc', marginBottom: '0.25rem' }}>
-                            💎 Wymagane gemy:
-                          </div>
-                          <ul style={{ margin: 0, paddingLeft: '1rem' }}>
-                            {step.gem_requirements.map((g) => (
-                              <li key={g.id} style={{ fontSize: '0.8rem', color: '#ccc' }}>
-                                <strong>{g.gem_name}</strong>
-                                {g.color && (
-                                  <span style={{ marginLeft: '0.3rem', color: '#888' }}>
-                                    [{g.color}]
-                                  </span>
-                                )}
-                                {g.note && (
-                                  <span style={{ marginLeft: '0.3rem', color: '#999' }}>
-                                    — {g.note}
-                                  </span>
-                                )}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-
                       {isActive && (
                         <div style={{ display: 'flex', gap: '0.4rem', marginTop: '0.6rem' }}>
                           {isCurrent && (
