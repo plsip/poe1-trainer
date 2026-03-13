@@ -22,6 +22,9 @@ services:
     environment:
       DATABASE_URL: "postgres://poe:poe@db:5432/poetrainer?sslmode=disable"
       PORT: "8080"
+      # LOG_PATH przekazywany z hosta (.env lub shell).
+      # Zostaw puste aby wyłączyć obserwację loga — aplikacja działa bez tego.
+      LOG_PATH: "${LOG_PATH:-}"
     ports:
       - "8080:8080"
     depends_on:

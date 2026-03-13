@@ -49,6 +49,26 @@ func (r *Repository) CreateRun(ctx context.Context, guideID int, characterName, 
 	return run, nil
 }
 
+// GetActiveRun returns the most recently started active run, or nil when no run is active.
+// Used by the logtail event dispatcher to route area/level events.
+func (r *Repository) GetActiveRun(ctx context.Context) (*RunSession, error) {
+	run := &RunSession{}
+	err := r.db.QueryRow(ctx, `
+		SELECT id, guide_id, character_name, league, status, notes, started_at, finished_at,
+		       is_active, timer_started_at, paused_at, total_paused_ms
+		FROM runs WHERE is_active = TRUE ORDER BY started_at DESC LIMIT 1`,
+	).Scan(&run.ID, &run.GuideID, &run.CharacterName, &run.League, &run.Status, &run.Notes,
+		&run.StartedAt, &run.FinishedAt, &run.IsActive,
+		&run.TimerStartedAt, &run.PausedAt, &run.TotalPausedMs)
+	if err != nil {
+		if err == pgx.ErrNoRows {
+			return nil, nil
+		}
+		return nil, fmt.Errorf("run: get active: %w", err)
+	}
+	return run, nil
+}
+
 // GetRun fetches a single run by ID.
 func (r *Repository) GetRun(ctx context.Context, runID int) (*RunSession, error) {
 	run := &RunSession{}

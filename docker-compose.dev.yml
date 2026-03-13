@@ -31,10 +31,10 @@ services:
       - ./backend:/app
       - go_pkg:/go/pkg/mod
       - go_build_cache:/root/.cache/go-build
-      # Aby obserwować Client.txt hosta, odmontuj katalog logu read-only.
-      # Przykład dla Windows/Steam (ścieżka musi być dostępna z WSL2 lub Windows Docker):
-      #   - ${POE_LOG_DIR:-./tmp/poe-logs}:/mnt/poe-logs:ro
-      # Następnie ustaw LOG_PATH=/mnt/poe-logs/Client.txt w pliku .env.
+      # Montuje katalog logów gry z hosta jako read-only.
+      # POE_LOG_DIR musi wskazywać na katalog zawierający Client.txt.
+      # Zostaw nieustawione jeśli nie chcesz obserwować pliku logów.
+      - ${POE_LOG_DIR:-./tmp/poe-logs}:/mnt/poe-logs:ro
     depends_on:
       db:
         condition: service_healthy

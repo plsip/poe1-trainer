@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"log/slog"
 	"net/http"
 	"os"
 	"os/signal"
@@ -15,6 +16,8 @@ import (
 	"github.com/poe1-trainer/internal/db"
 	"github.com/poe1-trainer/internal/guide"
 	"github.com/poe1-trainer/internal/integration/ggg"
+	"github.com/poe1-trainer/internal/integration/logtail"
+	"github.com/poe1-trainer/internal/progress"
 	"github.com/poe1-trainer/internal/recommendation"
 	"github.com/poe1-trainer/internal/rule"
 	runpkg "github.com/poe1-trainer/internal/run"
@@ -65,6 +68,37 @@ func main() {
 	h := api.NewHandlers(buildRepo, guideRepo, runService, runRepo, engine, ruleEngine, gggProvider, gggClient)
 	router := api.NewRouter(h)
 
+	// Konfiguracja logtail watchera (opcjonalna).
+	// Ustaw LOG_PATH w .env lub docker-compose, aby włączyć nasłuchiwanie Client.txt.
+	if logPath := os.Getenv("LOG_PATH"); logPath != "" {
+		ltCfg := logtail.DefaultConfig()
+		ltCfg.LogPath = logPath
+
+		ch := make(chan progress.DomainEvent, 64)
+		watcher := logtail.New(ltCfg, logtail.NewChannelSink(ch), func(s logtail.Status, err error) {
+			if err != nil {
+				slog.Warn("logtail: zmiana stanu", "status", string(s), "err", err)
+			} else {
+				slog.Info("logtail: zmiana stanu", "status", string(s))
+			}
+		})
+		watcher.Start(ctx)
+		log.Printf("logtail: nasłuchiwanie pliku %s", logPath)
+
+		go func() {
+			for {
+				select {
+				case <-ctx.Done():
+					return
+				case ev := <-ch:
+					dispatchLogtailEvent(ctx, runRepo, runService, ev)
+				}
+			}
+		}()
+	} else {
+		log.Println("logtail: LOG_PATH nie ustawiony — nasłuchiwanie Client.txt wyłączone")
+	}
+
 	srv := &http.Server{
 		Addr:         fmt.Sprintf(":%s", port),
 		Handler:      router,
@@ -94,5 +128,33 @@ func envOrDefault(key, def string) string {
 		return v
 	}
 	return def
+}
+
+// dispatchLogtailEvent odnajduje aktywny run i przekazuje zdarzenie do run.Service.
+// Eventy bez aktywnego runa są po cichu odrzucane — gracz nie ma otwartego przebiegu.
+func dispatchLogtailEvent(ctx context.Context, repo *runpkg.Repository, svc *runpkg.Service, ev progress.DomainEvent) {
+	active, err := repo.GetActiveRun(ctx)
+	if err != nil {
+		slog.Warn("logtail: błąd pobierania aktywnego runa", "err", err)
+		return
+	}
+	if active == nil {
+		return
+	}
+
+	switch ev.Kind {
+	case progress.KindAreaEntered:
+		if ev.Area == nil {
+			return
+		}
+		if err := svc.HandleAreaEvent(ctx, active.ID, runpkg.AreaEvent{AreaName: ev.Area.AreaName}); err != nil {
+			slog.Warn("logtail: HandleAreaEvent error", "run_id", active.ID, "area", ev.Area.AreaName, "err", err)
+		}
+	case progress.KindLevelUp:
+		if ev.Level == nil {
+			return
+		}
+		slog.Info("logtail: level up", "run_id", active.ID, "level", ev.Level.Level)
+	}
 }
 
