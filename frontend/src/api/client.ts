@@ -5,6 +5,10 @@ import type {
   Recommendation,
   Checkpoint,
   RankingEntry,
+  AlertsResponse,
+  Split,
+  ManualCheck,
+  RunEvent,
 } from './types'
 
 const BASE = '/api'
@@ -62,4 +66,49 @@ export function listRuns(guideSlug: string): Promise<RunSession[]> {
 
 export function getRanking(guideSlug: string): Promise<RankingEntry[]> {
   return request(`/guides/${guideSlug}/ranking`)
+}
+
+// ─── extended run actions ──────────────────────────────────────────────────
+
+export function skipStep(runId: number, stepId: number): Promise<void> {
+  return request(`/runs/${runId}/steps/${stepId}/skip`, { method: 'POST' })
+}
+
+export function undoStep(runId: number, stepId: number): Promise<void> {
+  return request(`/runs/${runId}/steps/${stepId}/undo`, { method: 'POST' })
+}
+
+export function abandonRun(runId: number): Promise<void> {
+  return request(`/runs/${runId}/abandon`, { method: 'POST' })
+}
+
+// ─── alerts ────────────────────────────────────────────────────────────────
+
+export function getAlerts(runId: number): Promise<AlertsResponse> {
+  return request(`/runs/${runId}/alerts`)
+}
+
+// ─── splits ────────────────────────────────────────────────────────────────
+
+export function getSplits(runId: number): Promise<Split[]> {
+  return request(`/runs/${runId}/splits`)
+}
+
+// ─── manual checks ─────────────────────────────────────────────────────────
+
+export function getChecks(runId: number): Promise<ManualCheck[]> {
+  return request(`/runs/${runId}/checks`)
+}
+
+export function answerCheck(runId: number, checkId: number, value: string): Promise<void> {
+  return request(`/runs/${runId}/checks/${checkId}/answer`, {
+    method: 'POST',
+    body: JSON.stringify({ response_value: value }),
+  })
+}
+
+// ─── events ────────────────────────────────────────────────────────────────
+
+export function listEvents(runId: number): Promise<RunEvent[]> {
+  return request(`/runs/${runId}/events`)
 }

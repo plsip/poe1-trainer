@@ -10,6 +10,13 @@ export interface Guide {
   steps?: GuideStep[]
 }
 
+export type StepProgressStatus =
+  | 'pending'
+  | 'in_progress'
+  | 'needs_confirmation'
+  | 'completed'
+  | 'skipped'
+
 export interface GemRequirement {
   id: number
   step_id: number
@@ -36,6 +43,8 @@ export interface RunSession {
   id: number
   guide_id: number
   character_name: string
+  league?: string
+  status: 'active' | 'finished' | 'abandoned'
   started_at: string
   finished_at?: string
   is_active: boolean
@@ -55,6 +64,55 @@ export interface CurrentState {
   confirmed_step_ids: number[]
   elapsed_ms: number
 }
+
+export interface Alert {
+  kind: 'gem' | 'gear'
+  priority: 'high' | 'medium' | 'low'
+  slot?: string
+  description: string
+  step_id?: number
+  notes?: string
+}
+
+export interface AlertsResponse {
+  step_id: number
+  alerts: Alert[]
+}
+
+export interface Split {
+  id: number
+  run_id: number
+  step_id: number
+  split_ms: number
+  recorded_at: string
+}
+
+export interface ManualCheck {
+  id: number
+  run_id: number
+  step_id?: number
+  check_type: string
+  prompt: string
+  is_confirmed: boolean
+  response_value?: string
+  confirmed_at?: string
+  created_at: string
+}
+
+export interface StepFilter {
+  act: number | null
+  status: 'all' | 'completed' | 'pending' | 'current'
+  type: 'all' | 'checkpoint' | 'regular'
+}
+
+export interface RunEvent {
+  id: number
+  run_id: number
+  event_type: string
+  payload: Record<string, string>
+  occurred_at: string
+}
+
 
 export interface Recommendation {
   id: string

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useAppStore } from '../../store/appStore'
-import type { GuideStep } from '../../api/types'
 
 export function GuidePage() {
   const { slug } = useParams<{ slug: string }>()
@@ -16,8 +15,6 @@ export function GuidePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug])
 
-  const confirmedSet = new Set(runState?.confirmed_step_ids ?? [])
-
   const handleStartRun = async () => {
     if (!activeGuide) return
     setStarting(true)
@@ -27,87 +24,123 @@ export function GuidePage() {
     if (newRunId) navigate(`/runs/${newRunId}`)
   }
 
-  const groupedByAct = (steps: GuideStep[]) =>
-    steps.reduce<Record<number, GuideStep[]>>((acc, s) => {
-      ;(acc[s.act] = acc[s.act] ?? []).push(s)
-      return acc
-    }, {})
-
   if (!activeGuide) {
-    return <p>Ładowanie poradnika…{error && <span style={{ color: 'red' }}> {error}</span>}</p>
+    return (
+      <div style={{ padding: '2rem', color: '#888' }}>
+        Ładowanie poradnika…
+        {error && <span style={{ color: '#ff6b35', marginLeft: '0.5rem' }}>{error}</span>}
+      </div>
+    )
   }
 
-  const acts = groupedByAct(activeGuide.steps ?? [])
+  const steps = activeGuide.steps ?? []
+  const acts = [...new Set(steps.map((s) => s.act))].sort((a, b) => a - b)
 
   return (
-    <div style={{ maxWidth: 860, margin: '0 auto', padding: '1.5rem' }}>
+    <div style={{ maxWidth: 900, margin: '0 auto', padding: '1.5rem' }}>
+      {/* Guide header */}
       <h1 style={{ marginBottom: 4 }}>{activeGuide.title}</h1>
-      <p style={{ color: '#888', marginTop: 0 }}>
+      <p style={{ color: '#888', marginTop: 0, marginBottom: '1.5rem' }}>
         {activeGuide.build_name} · v{activeGuide.version}
       </p>
 
       {/* Start run form */}
-      <section style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', marginBottom: '2rem', flexWrap: 'wrap' }}>
+      <section
+        style={{
+          display: 'flex',
+          gap: '0.75rem',
+          alignItems: 'center',
+          marginBottom: '2rem',
+          flexWrap: 'wrap',
+          padding: '1rem',
+          background: 'rgba(255,209,102,0.05)',
+          border: '1px solid rgba(255,209,102,0.15)',
+          borderRadius: 6,
+        }}
+      >
         <input
           type="text"
           placeholder="Nazwa postaci (opcjonalnie)"
           value={charName}
           onChange={(e) => setCharName(e.target.value)}
-          style={{ padding: '0.5rem 0.75rem', minWidth: 220 }}
+          style={{ minWidth: 220 }}
+          onKeyDown={(e) => e.key === 'Enter' && handleStartRun()}
         />
         <button
+          className="btn-primary"
           onClick={handleStartRun}
           disabled={starting}
-          style={{ padding: '0.5rem 1rem', cursor: 'pointer', fontWeight: 'bold' }}
         >
           {starting ? 'Startuję…' : '▶ Rozpocznij run'}
         </button>
         {runState && (
-          <button
-            onClick={() => navigate(`/runs/${runState.run.id}`)}
-            style={{ padding: '0.5rem 1rem', cursor: 'pointer' }}
-          >
+          <button onClick={() => navigate(`/runs/${runState.run.id}`)}>
             Wróć do aktywnego runu #{runState.run.id}
           </button>
         )}
       </section>
 
-      {/* Steps by act */}
-      {Object.entries(acts).map(([act, steps]) => (
-        <section key={act} style={{ marginBottom: '2rem' }}>
-          <h2 style={{ color: '#ffd166', marginBottom: '0.5rem' }}>Akt {act}</h2>
-          <ol style={{ paddingLeft: '1.2rem', margin: 0 }}>
-            {steps.map((s) => {
-              const done = confirmedSet.has(s.id)
-              const isCurrent = s.id === runState?.current_step_id
-              return (
-                <li
-                  key={s.id}
-                  style={{
-                    marginBottom: '0.35rem',
-                    color: done ? '#6ee7b7' : isCurrent ? '#ffd166' : 'inherit',
-                    fontWeight: isCurrent ? 'bold' : 'normal',
-                  }}
-                >
-                  {done && '✓ '}
-                  {isCurrent && '→ '}
-                  <span dangerouslySetInnerHTML={{ __html: s.description }} />
+      {/* Overview: acts summary */}
+      <section style={{ marginBottom: '2rem' }}>
+        <div
+          style={{
+            display: 'flex',
+            gap: '0.5rem',
+            flexWrap: 'wrap',
+          }}
+        >
+          {acts.map((act) => {
+            const actSteps = steps.filter((s) => s.act === act)
+            const checkpoints = actSteps.filter((s) => s.is_checkpoint).length
+            return (
+              <div
+                key={act}
+                style={{
+                  padding: '0.5rem 0.85rem',
+                  background: 'rgba(255,255,255,0.04)',
+                  border: '1px solid #2a2a2a',
+                  borderRadius: 5,
+                  fontSize: '0.82rem',
+                }}
+              >
+                <div style={{ color: '#ffd166', fontWeight: 600 }}>Akt {act}</div>
+                <div style={{ color: '#888' }}>
+                  {actSteps.length} kroków · {checkpoints} ★
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      </section>
+
+      {/* Steps grouped by act */}
+      {acts.map((act) => {
+        const actSteps = steps.filter((s) => s.act === act)
+        return (
+          <section key={act} style={{ marginBottom: '2rem' }}>
+            <h2 style={{ color: '#ffd166', marginBottom: '0.5rem', fontSize: '1rem' }}>
+              Akt {act}
+            </h2>
+            <ol style={{ paddingLeft: '1.2rem', margin: 0 }}>
+              {actSteps.map((s) => (
+                <li key={s.id} style={{ marginBottom: '0.3rem', fontSize: '0.87rem' }}>
+                  <span style={{ color: '#ccc' }}>{s.title || s.description}</span>
                   {s.is_checkpoint && (
-                    <span style={{ marginLeft: '0.4rem', fontSize: '0.75rem', color: '#ff6b35' }}>
-                      [milestone]
+                    <span style={{ marginLeft: '0.4rem', color: '#ff6b35', fontSize: '0.75rem' }}>
+                      ★ milestone
                     </span>
                   )}
                   {s.gem_requirements && s.gem_requirements.length > 0 && (
-                    <span style={{ marginLeft: '0.4rem', fontSize: '0.75rem', color: '#a8dadc' }}>
+                    <span style={{ marginLeft: '0.4rem', color: '#a8dadc', fontSize: '0.75rem' }}>
                       💎 {s.gem_requirements.map((g) => g.gem_name).join(', ')}
                     </span>
                   )}
                 </li>
-              )
-            })}
-          </ol>
-        </section>
-      ))}
+              ))}
+            </ol>
+          </section>
+        )
+      })}
     </div>
   )
 }

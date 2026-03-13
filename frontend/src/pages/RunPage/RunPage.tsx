@@ -1,124 +1,259 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useAppStore } from '../../store/appStore'
 import { RecommendationList } from '../../components/RecommendationList'
 import { RunTimer } from '../../components/RunTimer'
-import type { GuideStep } from '../../api/types'
+import { AlertPanel } from '../../components/AlertPanel'
+import { StepList } from '../../components/StepList'
+import { SplitsPanel } from '../../components/SplitsPanel'
+import { IntegrationStatus } from '../../components/IntegrationStatus'
+import { ChecksPanel } from '../../components/ChecksPanel'
+import type { GuideStep, RankingEntry } from '../../api/types'
+import * as api from '../../api/client'
 
 export function RunPage() {
   const { runId } = useParams<{ runId: string }>()
   const navigate = useNavigate()
-  const { runState, recommendations, stateLoading, error, loadRunState, confirmStep, finishRun, activeGuide } =
-    useAppStore()
 
-  const [confirming, setConfirming] = useState(false)
+  const {
+    runState,
+    recommendations,
+    stateLoading,
+    error,
+    alerts,
+    alertsLoading,
+    splits,
+    checks,
+    stepFilter,
+    activeGuide,
+    loadRunState,
+    loadAlerts,
+    loadSplits,
+    loadChecks,
+    confirmStep,
+    skipStep,
+    undoStep,
+    finishRun,
+    abandonRun,
+    answerCheck,
+    setStepFilter,
+  } = useAppStore()
+
+  const [ranking, setRanking] = useState<RankingEntry[]>([])
+  const [lastArea, setLastArea] = useState<string | undefined>()
+  const [lastAreaAt, setLastAreaAt] = useState<string | undefined>()
 
   const id = Number(runId)
+  const isActive = runState?.run.is_active ?? false
+  const steps: GuideStep[] = activeGuide?.steps ?? []
 
+  // Initial load
   useEffect(() => {
-    if (id) loadRunState(id)
-    // Refresh state every 10 seconds when active.
-    const interval = setInterval(() => {
-      if (id && runState?.run.is_active) loadRunState(id)
-    }, 10_000)
-    return () => clearInterval(interval)
+    if (!id) return
+    loadRunState(id)
+    loadAlerts(id)
+    loadSplits(id)
+    loadChecks(id)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id])
 
-  const currentStep: GuideStep | undefined = activeGuide?.steps?.find(
-    (s) => s.id === runState?.current_step_id,
-  )
+  // Load ranking and events once we have the guide slug
+  const guideSlug = activeGuide?.slug
+  useEffect(() => {
+    if (!guideSlug) return
+    api
+      .getRanking(guideSlug)
+      .then((r) => setRanking(r ?? []))
+      .catch(() => {})
+  }, [guideSlug])
 
-  const handleConfirm = async () => {
-    if (!runState?.current_step_id) return
-    setConfirming(true)
-    await confirmStep(id, runState.current_step_id)
-    setConfirming(false)
-  }
+  useEffect(() => {
+    if (!id) return
+    api
+      .listEvents(id)
+      .then((events) => {
+        const areaEvents = events
+          .filter((e) => e.event_type === 'area_entered')
+          .sort((a, b) => new Date(b.occurred_at).getTime() - new Date(a.occurred_at).getTime())
+        if (areaEvents.length > 0) {
+          setLastArea(areaEvents[0].payload?.area)
+          setLastAreaAt(areaEvents[0].occurred_at)
+        }
+      })
+      .catch(() => {})
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id])
+
+  // Periodic refresh when active
+  const pollingRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  useEffect(() => {
+    if (pollingRef.current) clearInterval(pollingRef.current)
+    if (!id || !isActive) return
+    pollingRef.current = setInterval(() => {
+      loadRunState(id)
+      loadAlerts(id)
+      loadChecks(id)
+    }, 10_000)
+    return () => {
+      if (pollingRef.current) clearInterval(pollingRef.current)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, isActive])
+
+  // ─── Action handlers ─────────────────────────────────────────────────────
+
+  const handleConfirm = (stepId: number) => confirmStep(id, stepId)
+  const handleSkip = (stepId: number) => skipStep(id, stepId)
+  const handleUndo = (stepId: number) => undoStep(id, stepId)
+  const handleAnswer = (checkId: number, value: string) => answerCheck(id, checkId, value)
 
   const handleFinish = async () => {
-    if (!confirm('Zakończyć run?')) return
+    if (!confirm('Zakończyć run? Zostaną zapisane finalne splity.')) return
     await finishRun(id)
+    loadSplits(id)
   }
 
+  const handleAbandon = async () => {
+    if (!confirm('Porzucić run? Tego nie można cofnąć.')) return
+    await abandonRun(id)
+    navigate(-1)
+  }
+
+  // ─── Loading / error states ───────────────────────────────────────────────
+
   if (stateLoading && !runState) {
-    return <p>Ładowanie stanu runu…</p>
+    return (
+      <div style={{ padding: '2rem', color: '#888' }}>
+        Ładowanie stanu runu…
+      </div>
+    )
   }
   if (error) {
-    return <p style={{ color: 'red' }}>{error}</p>
+    return (
+      <div style={{ padding: '2rem' }}>
+        <p style={{ color: '#ff6b35' }}>{error}</p>
+        <button onClick={() => loadRunState(id)}>Ponów</button>
+      </div>
+    )
   }
   if (!runState) {
-    return <p>Nie znaleziono runu.</p>
+    return (
+      <div style={{ padding: '2rem', color: '#888' }}>
+        Nie znaleziono runu #{id}.
+      </div>
+    )
   }
 
   const confirmedCount = runState.confirmed_step_ids.length
-  const totalSteps = activeGuide?.steps?.length ?? 0
+  const totalSteps = steps.length
+
+  // ─── Render ───────────────────────────────────────────────────────────────
 
   return (
-    <div style={{ maxWidth: 760, margin: '0 auto', padding: '1.5rem' }}>
-      {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+    <div className="run-dashboard">
+      {/* ── Top bar ── */}
+      <header className="run-header">
         <div>
-          <h1 style={{ margin: 0, fontSize: '1.4rem' }}>
-            {runState.run.character_name || 'Bez nazwy'} — Run #{runState.run.id}
+          <h1 className="run-title">
+            {runState.run.character_name || 'Bez nazwy'}
+            <span className="run-id"> · Run #{runState.run.id}</span>
           </h1>
-          <small style={{ color: '#888' }}>
-            {confirmedCount}/{totalSteps} kroków · {runState.run.is_active ? 'aktywny' : 'zakończony'}
-          </small>
-        </div>
-        <RunTimer
-          startedAt={runState.run.started_at}
-          isActive={runState.run.is_active}
-          serverElapsedMs={runState.elapsed_ms}
-        />
-      </div>
-
-      {/* Current step */}
-      {currentStep ? (
-        <section style={{ background: 'rgba(255,200,100,0.08)', border: '1px solid #8a6a20', borderRadius: 6, padding: '1rem', marginBottom: '1.2rem' }}>
-          <h2 style={{ margin: '0 0 0.4rem', fontSize: '1.1rem', color: '#ffd166' }}>
-            Bieżący krok — Akt {currentStep.act}, krok {currentStep.step_number}
-          </h2>
-          <p style={{ margin: 0 }} dangerouslySetInnerHTML={{ __html: currentStep.description }} />
-          {currentStep.is_checkpoint && (
-            <span style={{ display: 'inline-block', marginTop: '0.5rem', background: '#ff6b35', color: '#fff', borderRadius: 4, padding: '0.15rem 0.5rem', fontSize: '0.8rem' }}>
-              Kamień milowy — wymagane potwierdzenie
+          <div className="run-meta">
+            {confirmedCount}/{totalSteps} kroków
+            {' · '}
+            <span
+              style={{ color: isActive ? '#6ee7b7' : '#888' }}
+            >
+              {isActive ? 'aktywny' : runState.run.status}
             </span>
-          )}
-        </section>
-      ) : (
-        <section style={{ marginBottom: '1.2rem' }}>
-          <p style={{ color: '#6ee7b7' }}>✓ Wszystkie kroki potwierdzone!</p>
-        </section>
-      )}
-
-      {/* Actions */}
-      {runState.run.is_active && (
-        <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.5rem' }}>
-          <button
-            onClick={handleConfirm}
-            disabled={confirming || !runState.current_step_id}
-            style={{ padding: '0.6rem 1.2rem', cursor: 'pointer', fontWeight: 'bold' }}
-          >
-            {confirming ? 'Potwierdzanie…' : '✓ Potwierdź krok'}
-          </button>
-          <button
-            onClick={handleFinish}
-            style={{ padding: '0.6rem 1.2rem', cursor: 'pointer', color: '#ff6b35', border: '1px solid #ff6b35', background: 'transparent' }}
-          >
-            Zakończ run
-          </button>
-          <button onClick={() => navigate(-1)} style={{ padding: '0.6rem 1.2rem', cursor: 'pointer' }}>
-            ← Poradnik
-          </button>
+            {activeGuide && (
+              <>
+                {' · '}
+                <span style={{ color: '#ffd166' }}>{activeGuide.title}</span>
+              </>
+            )}
+          </div>
         </div>
-      )}
 
-      {/* Recommendations */}
-      <section>
-        <h2 style={{ fontSize: '1rem', marginBottom: '0.6rem', color: '#a8dadc' }}>Rekomendacje</h2>
-        <RecommendationList recommendations={recommendations} />
-      </section>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <RunTimer
+            startedAt={runState.run.started_at}
+            isActive={isActive}
+            serverElapsedMs={runState.elapsed_ms}
+          />
+
+          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+            {isActive && (
+              <>
+                <button
+                  className="btn-primary btn-sm"
+                  onClick={() => runState.current_step_id && handleConfirm(runState.current_step_id)}
+                  disabled={!runState.current_step_id}
+                >
+                  ✓ Potwierdź bieżący krok
+                </button>
+                <button
+                  className="btn-sm"
+                  onClick={handleFinish}
+                >
+                  Zakończ run
+                </button>
+                <button
+                  className="btn-sm btn-danger"
+                  onClick={handleAbandon}
+                >
+                  Porzuć
+                </button>
+              </>
+            )}
+            {!isActive && (
+              <button className="btn-sm" onClick={() => navigate(-1)}>
+                ← Wróć
+              </button>
+            )}
+          </div>
+        </div>
+      </header>
+
+      {/* ── 2-column layout ── */}
+      <div className="run-columns">
+        {/* Left: step list */}
+        <div className="run-col-main">
+          <StepList
+            steps={steps}
+            state={runState}
+            filter={stepFilter}
+            isActive={isActive}
+            onFilterChange={setStepFilter}
+            onConfirm={handleConfirm}
+            onSkip={handleSkip}
+            onUndo={handleUndo}
+          />
+        </div>
+
+        {/* Right: sidebar panels */}
+        <div className="run-col-sidebar">
+          <AlertPanel alerts={alerts} loading={alertsLoading} />
+
+          {checks.some((c) => !c.is_confirmed) && (
+            <ChecksPanel checks={checks} onAnswer={handleAnswer} />
+          )}
+
+          <section className="panel">
+            <h3 className="panel-title">Rekomendacje</h3>
+            <RecommendationList recommendations={recommendations} />
+          </section>
+
+          <SplitsPanel
+            splits={splits}
+            steps={steps}
+            elapsedMs={runState.elapsed_ms}
+            ranking={ranking}
+          />
+
+          <IntegrationStatus lastArea={lastArea} lastAreaAt={lastAreaAt} />
+        </div>
+      </div>
     </div>
   )
 }
