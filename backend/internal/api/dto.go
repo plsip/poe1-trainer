@@ -88,7 +88,7 @@ type AnswerCheckRequest struct {
 
 // ─── Alerts ───────────────────────────────────────────────────────────────────
 
-// Alert aggregates a single gem or gear suggestion for the current step.
+// Alert aggregates a single gem or gear suggestion for the current step or campaign phase.
 type Alert struct {
 	Kind        string `json:"kind"`              // "gem" | "gear"
 	Priority    string `json:"priority"`          // "high" | "medium" | "low"
@@ -96,6 +96,11 @@ type Alert struct {
 	Description string `json:"description"`
 	StepID      int    `json:"step_id,omitempty"`
 	Notes       string `json:"notes,omitempty"`
+	// Extended fields (Prompt 07): fine-grained classification and explanation.
+	GemName    string `json:"gem_name,omitempty"`    // gem name (gem alerts only)
+	ActionType string `json:"action_type,omitempty"` // fine-grained sub-type (vendor | weapon_swap | full_switch | …)
+	Reason     string `json:"reason,omitempty"`      // explanation of why this alert matters now
+	Source     string `json:"source,omitempty"`      // "step" = step-specific | "rule" = campaign-phase rule
 }
 
 // AlertsResponse is the response body for GET /runs/{id}/alerts.

@@ -54,6 +54,13 @@ const (
 	ActionVaal    ActionType = "vaal"
 	ActionSwap    ActionType = "swap"
 	ActionBuy     ActionType = "buy"
+
+	// Setup transition actions (Prompt 07).
+	ActionStartLevel  ActionType = "start_level"   // Begin leveling a gem (typically on weapon swap).
+	ActionWeaponSwap  ActionType = "weapon_swap"   // Place gem on weapon swap for passive leveling.
+	ActionFullSwitch  ActionType = "full_switch"   // Perform a full setup switch to this gem/skill.
+	ActionQuestReward ActionType = "quest_reward"  // Receive gem as a quest reward.
+	ActionVendorFallback ActionType = "vendor_fallback" // Acquire from a fallback vendor in a later act.
 )
 
 // UpgradeRule defines a gem-related action required at a specific guide step.

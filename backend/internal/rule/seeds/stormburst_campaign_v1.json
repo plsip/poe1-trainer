@@ -1,0 +1,163 @@
+{
+  "guide_slug": "stormburst_campaign_v1",
+  "rules": [
+    {
+      "condition": { "min_act": 1, "max_act": 1 },
+      "alert": {
+        "kind": "gem_vendor",
+        "priority": "high",
+        "gem_name": "Holy Flame Totem",
+        "action_type": "vendor",
+        "description": "Kup Holy Flame Totem od Tarkleigha lub Nessy (Akt 1).",
+        "reason": "Główny skill do levelu ~32. Po ukończeniu Breaking Some Eggs kup i wrzuć do socketu natychmiast."
+      }
+    },
+    {
+      "condition": { "min_act": 1, "max_act": 1 },
+      "alert": {
+        "kind": "gem_vendor",
+        "priority": "high",
+        "gem_name": "Flame Wall",
+        "action_type": "vendor",
+        "description": "Kup Flame Wall od Nessy (Akt 1).",
+        "reason": "Standardowy setup: Holy Flame Totem + Flame Wall. Flame Wall wzmacnia pociski totemów."
+      }
+    },
+    {
+      "condition": { "min_act": 1, "max_act": 1 },
+      "alert": {
+        "kind": "gem_vendor",
+        "priority": "medium",
+        "gem_name": "Frostblink",
+        "action_type": "vendor",
+        "description": "Kup Frostblink od Nessy (movement skill).",
+        "reason": "Trzymaj movement skill przez całą kampanię. Możesz przejść na Flame Dash na dalszych etapach jeśli wolisz."
+      }
+    },
+    {
+      "condition": { "min_act": 1, "max_act": 1, "min_level": 15 },
+      "alert": {
+        "kind": "gem_vendor",
+        "priority": "high",
+        "gem_name": "Spell Totem Support",
+        "action_type": "vendor",
+        "description": "Kup Spell Totem Support od Nessy po zabiciu Brutusa (The Caged Brute).",
+        "reason": "Natychmiast wrzuć na weapon swap do levelowania. Potrzebujesz go z odpowiednimi levelami przed pełnym switchem w Akcie 3."
+      }
+    },
+    {
+      "condition": { "min_act": 1, "max_act": 1, "min_level": 18 },
+      "alert": {
+        "kind": "gem_vendor",
+        "priority": "high",
+        "gem_name": "Storm Burst",
+        "action_type": "vendor",
+        "description": "Kup Storm Burst od Nessy po ukończeniu The Siren's Cadence (Akt 1).",
+        "reason": "Docelowy main skill buildu. Natychmiast wrzuć na weapon swap razem ze Spell Totem Support do levelowania."
+      }
+    },
+    {
+      "condition": { "min_act": 1, "max_act": 2 },
+      "alert": {
+        "kind": "gem_vendor",
+        "priority": "medium",
+        "gem_name": "Infused Channelling Support",
+        "action_type": "vendor",
+        "description": "Kup Infused Channelling Support od Nessy po Mercy Mission (opcjonalnie).",
+        "reason": "Poziomuj wcześniej jeśli chcesz mieć go gotowego na pełny switch. Nie jest krytyczny na Akt 1."
+      }
+    },
+    {
+      "condition": { "min_act": 1, "max_act": 2, "min_level": 18 },
+      "alert": {
+        "kind": "gem_weapon_swap",
+        "priority": "high",
+        "gem_name": "Storm Burst",
+        "action_type": "weapon_swap",
+        "description": "Leveluj Storm Burst + Spell Totem Support na weapon swap.",
+        "reason": "Nie rób pełnego switchu — Holy Flame Totem jest silniejszy do poziomu ~32. Weapon swap służy wyłącznie do levelowania gemów na przyszłość."
+      }
+    },
+    {
+      "condition": { "min_act": 3, "min_level": 32 },
+      "alert": {
+        "kind": "gem_full_switch",
+        "priority": "high",
+        "gem_name": "Storm Burst",
+        "action_type": "full_switch",
+        "description": "Po pierwszym Labyrinth zrób pełny switch na Storm Burst Totemy.",
+        "reason": "Po labie 1 Storm Burst i Spell Totem Support mają odpowiednie levele. To jest właściwy moment na zmianę buildu — przed tym jesteś zbyt słaby."
+      }
+    },
+    {
+      "condition": { "min_act": 4 },
+      "alert": {
+        "kind": "gem_vendor_fallback",
+        "priority": "medium",
+        "gem_name": "Multiple Totems Support",
+        "action_type": "vendor_fallback",
+        "description": "Kup Multiple Totems Support od Lilly Roth (Akt 6) lub wcześniej jako nagrodę z questa.",
+        "reason": "Multiple Totems Support pozwala stawiać więcej totemów naraz — kluczowy DPS upgrade dla buildu."
+      }
+    },
+    {
+      "condition": {},
+      "alert": {
+        "kind": "gear_movement_speed",
+        "priority": "high",
+        "slot": "boots",
+        "description": "Sprawdź buty pod movement speed (minimum 20%).",
+        "reason": "MS to jeden z najważniejszych statystyk kampanii. Upgraujuj buty przy każdej okazji — każda para bez MS to strata czasu."
+      }
+    },
+    {
+      "condition": { "min_act": 1, "max_act": 1, "max_level": 22 },
+      "alert": {
+        "kind": "gear_checkpoint",
+        "priority": "high",
+        "slot": "ring",
+        "description": "Zdobądź Sapphire Ring przed walką z Merveil.",
+        "reason": "Merveil i Cavern of Anger zadają głównie cold damage. Brak odporności na mróz = duże obrażenia. Minimum 30% cold res przed wejściem."
+      }
+    },
+    {
+      "condition": { "min_act": 2 },
+      "alert": {
+        "kind": "gear_4link",
+        "priority": "high",
+        "slot": "chest",
+        "description": "Szukaj chesty lub broni z 4 linkami na aktywny setup.",
+        "reason": "4-link znacząco zwiększa DPS. W Akcie 2 i dalej jest realny do znalezienia lub kupienia od vendora."
+      }
+    },
+    {
+      "condition": { "min_level": 12 },
+      "alert": {
+        "kind": "gear_resistance",
+        "priority": "medium",
+        "description": "Używaj crafting bencha do dodawania resistów na biżuterii i zbroi.",
+        "reason": "Od levelu 12 crafting bench jest dostępny. Utrzymuj resistancje na przyzwoitym poziomie — w późniejszych aktach every jest kara za resysty."
+      }
+    },
+    {
+      "condition": { "min_act": 2 },
+      "alert": {
+        "kind": "gear_weapon",
+        "priority": "medium",
+        "slot": "weapon",
+        "description": "Sprawdzaj vendor pod upgrade broni przy każdym nowym akcie.",
+        "reason": "Lepsza broń = więcej DPS. W każdym akcie vendor oferuje mocniejsze opcje — warto sprawdzić przy każdej wizycie w mieście."
+      }
+    },
+    {
+      "condition": {},
+      "alert": {
+        "kind": "gear_general",
+        "priority": "low",
+        "slot": "flask",
+        "description": "Miej Quicksilver Flask i używaj go aktywnie w każdej strefie.",
+        "reason": "Quicksilver Flask skraca czas kampanii. Używaj go regularnie przy przebieganiu stref — to jeden z darmowych sposobów na przyśpieszenie runu."
+      }
+    }
+  ]
+}

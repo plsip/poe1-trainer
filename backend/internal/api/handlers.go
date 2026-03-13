@@ -13,21 +13,23 @@ import (
 	"github.com/poe1-trainer/internal/guide"
 	"github.com/poe1-trainer/internal/integration/ggg"
 	"github.com/poe1-trainer/internal/recommendation"
+	"github.com/poe1-trainer/internal/rule"
 	runpkg "github.com/poe1-trainer/internal/run"
 )
 
 // Handlers holds all HTTP handler dependencies.
 type Handlers struct {
-	builds  *buildpkg.Repository
-	guides  *guide.Repository
-	runs    *runpkg.Service
-	runRepo *runpkg.Repository
-	engine  *recommendation.Engine
+	builds     *buildpkg.Repository
+	guides     *guide.Repository
+	runs       *runpkg.Service
+	runRepo    *runpkg.Repository
+	engine     *recommendation.Engine
+	ruleEngine *rule.Engine
 	// gggProvider is always non-nil: either *ggg.Client or ggg.NoopProvider.
 	gggProvider ggg.CharacterProvider
 	// gggClient is non-nil only when GGG OAuth is configured.
 	// Provides AuthorizeURL and HandleCallback beyond the CharacterProvider interface.
-	gggClient   *ggg.Client
+	gggClient *ggg.Client
 	// oauthStates stores in-flight OAuth state nonces for CSRF protection.
 	// map[state string]expiresAt time.Time
 	oauthStates sync.Map
@@ -40,6 +42,7 @@ func NewHandlers(
 	runs *runpkg.Service,
 	runRepo *runpkg.Repository,
 	engine *recommendation.Engine,
+	ruleEngine *rule.Engine,
 	gggProvider ggg.CharacterProvider,
 	gggClient *ggg.Client,
 ) *Handlers {
@@ -49,6 +52,7 @@ func NewHandlers(
 		runs:        runs,
 		runRepo:     runRepo,
 		engine:      engine,
+		ruleEngine:  ruleEngine,
 		gggProvider: gggProvider,
 		gggClient:   gggClient,
 	}
@@ -604,7 +608,8 @@ func (h *Handlers) CreateSnapshot(w http.ResponseWriter, r *http.Request) {
 // ─── Alerts ────────────────────────────────────────────────────────────────
 
 // GetAlerts handles GET /runs/{id}/alerts
-// Returns gem requirements and gear hints relevant to the current step.
+// Returns step-specific gem requirements, gear hints from DB, and campaign-phase
+// rule alerts evaluated against the current act, character level, and step type.
 func (h *Handlers) GetAlerts(w http.ResponseWriter, r *http.Request) {
 	id, ok := intPathParam(r, "id")
 	if !ok {
@@ -627,24 +632,41 @@ func (h *Handlers) GetAlerts(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var alerts []Alert
-	// Gem alerts from current step's requirements.
-	for _, step := range g.Steps {
-		if step.ID == state.CurrentStepID {
-			for _, gem := range step.GemRequirements {
-				alerts = append(alerts, Alert{
-					Kind:        "gem",
-					Priority:    "high",
-					Description: gem.GemName,
-					StepID:      step.ID,
-					Notes:       gem.Note,
-				})
-			}
+	// Locate the current step.
+	var currentStep *guide.Step
+	for i := range g.Steps {
+		if g.Steps[i].ID == state.CurrentStepID {
+			currentStep = &g.Steps[i]
 			break
 		}
 	}
 
-	// Gear alerts from gear_hint_rules for current step (+ global hints).
+	var alerts []Alert
+
+	// 1. Step-specific gem requirement alerts ("do this right now").
+	if currentStep != nil {
+		for _, gem := range currentStep.GemRequirements {
+			verb := "Kup gem"
+			actionType := "vendor"
+			if currentStep.StepType == guide.StepTypeQuestReward {
+				verb = "Odbierz gem z nagrody questa"
+				actionType = "quest_reward"
+			}
+			alerts = append(alerts, Alert{
+				Kind:        "gem",
+				Priority:    "high",
+				Description: verb + ": " + gem.GemName,
+				GemName:     gem.GemName,
+				ActionType:  actionType,
+				Notes:       gem.Note,
+				Reason:      gem.Note,
+				StepID:      currentStep.ID,
+				Source:      "step",
+			})
+		}
+	}
+
+	// 2. Gear hints from gear_hint_rules table (step-specific + global).
 	hints, err := h.guides.GetGearHints(r.Context(), g.ID, state.CurrentStepID)
 	if err != nil {
 		writeError(w, http.StatusInternalServerError, err.Error())
@@ -660,9 +682,36 @@ func (h *Handlers) GetAlerts(w http.ResponseWriter, r *http.Request) {
 			Priority:    string(hint.Priority),
 			Slot:        hint.Slot,
 			Description: hint.Description,
-			StepID:      stepID,
 			Notes:       hint.Notes,
+			StepID:      stepID,
+			Source:      "step",
 		})
+	}
+
+	// 3. Campaign-phase rule alerts from embedded rule engine.
+	if h.ruleEngine != nil && currentStep != nil {
+		// Resolve character level from the cached run_characters row.
+		charLevel := 0
+		if char, err := h.runs.GetCharacter(r.Context(), id); err == nil && char != nil {
+			charLevel = char.LevelCurrent
+		}
+		ctx := rule.EvalContext{
+			Act:      currentStep.Act,
+			Level:    charLevel,
+			StepType: string(currentStep.StepType),
+		}
+		for _, ra := range h.ruleEngine.Evaluate(g.Slug, ctx) {
+			alerts = append(alerts, Alert{
+				Kind:        ra.Kind.Category(),
+				Priority:    ra.Priority,
+				Slot:        ra.Slot,
+				Description: ra.Description,
+				GemName:     ra.GemName,
+				ActionType:  string(ra.Kind),
+				Reason:      ra.Reason,
+				Source:      "rule",
+			})
+		}
 	}
 
 	if alerts == nil {

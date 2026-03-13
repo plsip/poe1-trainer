@@ -12,9 +12,18 @@ const priorityLabel: Record<Alert['priority'], string> = {
   low: 'niskie',
 }
 
-const kindIcon: Record<Alert['kind'], string> = {
-  gem: '💎',
-  gear: '⚔️',
+function kindIcon(alert: Alert): string {
+  if (alert.kind === 'gear') return '⚔️'
+  // Gem sub-types
+  if (alert.action_type === 'weapon_swap' || alert.action_type === 'gem_weapon_swap') return '🔄'
+  if (alert.action_type === 'full_switch' || alert.action_type === 'gem_full_switch') return '⚡'
+  if (alert.action_type === 'quest_reward' || alert.action_type === 'gem_quest_reward') return '🎁'
+  return '💎'
+}
+
+const sectionLabel: Record<'step' | 'rule' | string, string> = {
+  step: 'Bieżący krok',
+  rule: 'Kontekst kampanii',
 }
 
 interface Props {
@@ -32,8 +41,8 @@ export function AlertPanel({ alerts, loading }: Props) {
     )
   }
 
-  const gems = alerts.filter((a) => a.kind === 'gem')
-  const gear = alerts.filter((a) => a.kind === 'gear')
+  const stepAlerts = alerts.filter((a) => !a.source || a.source === 'step')
+  const ruleAlerts = alerts.filter((a) => a.source === 'rule')
 
   if (alerts.length === 0) {
     return (
@@ -48,22 +57,22 @@ export function AlertPanel({ alerts, loading }: Props) {
     <div className="panel">
       <h3 className="panel-title">Alerty</h3>
 
-      {gems.length > 0 && (
+      {stepAlerts.length > 0 && (
         <section style={{ marginBottom: '0.75rem' }}>
-          <div className="panel-section-label">💎 Gemy</div>
+          <div className="panel-section-label">📍 {sectionLabel['step']}</div>
           <ul className="alert-list">
-            {gems.map((a, i) => (
+            {stepAlerts.map((a, i) => (
               <AlertItem key={i} alert={a} />
             ))}
           </ul>
         </section>
       )}
 
-      {gear.length > 0 && (
+      {ruleAlerts.length > 0 && (
         <section>
-          <div className="panel-section-label">⚔️ Ekwipunek</div>
+          <div className="panel-section-label">🗺️ {sectionLabel['rule']}</div>
           <ul className="alert-list">
-            {gear.map((a, i) => (
+            {ruleAlerts.map((a, i) => (
               <AlertItem key={i} alert={a} />
             ))}
           </ul>
@@ -75,6 +84,7 @@ export function AlertPanel({ alerts, loading }: Props) {
 
 function AlertItem({ alert }: { alert: Alert }) {
   const color = priorityColor[alert.priority]
+  const label = alert.gem_name ?? (alert.slot ? `[${alert.slot}]` : '')
   return (
     <li
       style={{
@@ -87,13 +97,18 @@ function AlertItem({ alert }: { alert: Alert }) {
     >
       <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem' }}>
         <span style={{ fontWeight: 600, fontSize: '0.9rem' }}>
-          {kindIcon[alert.kind]} {alert.slot ? `[${alert.slot}] ` : ''}{alert.description}
+          {kindIcon(alert)} {label ? `${label} — ` : ''}{alert.description}
         </span>
         <span style={{ fontSize: '0.7rem', color, flexShrink: 0 }}>
           {priorityLabel[alert.priority]}
         </span>
       </div>
-      {alert.notes && (
+      {alert.reason && (
+        <div style={{ fontSize: '0.8rem', color: '#bbb', marginTop: '0.15rem' }}>
+          {alert.reason}
+        </div>
+      )}
+      {alert.notes && !alert.reason && (
         <div style={{ fontSize: '0.8rem', color: '#999', marginTop: '0.15rem' }}>
           {alert.notes}
         </div>

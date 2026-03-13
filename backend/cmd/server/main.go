@@ -16,6 +16,7 @@ import (
 	"github.com/poe1-trainer/internal/guide"
 	"github.com/poe1-trainer/internal/integration/ggg"
 	"github.com/poe1-trainer/internal/recommendation"
+	"github.com/poe1-trainer/internal/rule"
 	runpkg "github.com/poe1-trainer/internal/run"
 )
 
@@ -38,6 +39,7 @@ func main() {
 	runRepo := runpkg.NewRepository(store.Pool)
 	runService := runpkg.NewService(runRepo, guideRepo)
 	engine := recommendation.NewEngine()
+	ruleEngine := rule.NewEngine()
 
 	// Konfiguracja integracji GGG API (opcjonalna).
 	// Bez ustawienia GGG_CLIENT_ID i GGG_CLIENT_SECRET aplikacja działa normalnie.
@@ -60,7 +62,7 @@ func main() {
 		gggProvider = ggg.NoopProvider{}
 	}
 
-	h := api.NewHandlers(buildRepo, guideRepo, runService, runRepo, engine, gggProvider, gggClient)
+	h := api.NewHandlers(buildRepo, guideRepo, runService, runRepo, engine, ruleEngine, gggProvider, gggClient)
 	router := api.NewRouter(h)
 
 	srv := &http.Server{

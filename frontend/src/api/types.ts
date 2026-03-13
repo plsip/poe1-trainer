@@ -75,6 +75,11 @@ export interface Alert {
   description: string
   step_id?: number
   notes?: string
+  // Extended fields (Prompt 07)
+  gem_name?: string     // gem name (gem alerts only)
+  action_type?: string  // sub-type: vendor | quest_reward | weapon_swap | full_switch | gear_4link | …
+  reason?: string       // explanation of why this alert matters now
+  source?: 'step' | 'rule' // "step" = step-specific | "rule" = campaign-phase rule
 }
 
 export interface AlertsResponse {
