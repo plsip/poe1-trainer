@@ -81,14 +81,26 @@ func ParseMarkdown(slug, title, buildName, version, content string) (*Guide, err
 			stepNumber++
 			sortOrder++
 
+			area := ExtractArea(rawText)
+			questName := ExtractQuestName(plain)
+			stepType := ClassifyStepType(plain, rawText)
+			completionMode := InferCompletionMode(stepType, area)
+			conditions := BuildConditions(stepType, area)
+
 			step := Step{
 				StepNumber:     stepNumber,
 				Act:            currentAct,
+				Section:        ActSection(currentAct),
 				Title:          truncate(plain, 100),
 				Description:    rawText,
+				Area:           area,
+				QuestName:      questName,
+				StepType:       stepType,
 				IsCheckpoint:   isCheckpointLine(plain),
-				RequiresManual: true,
+				RequiresManual: completionMode != CompletionLogtail,
+				CompletionMode: completionMode,
 				SortOrder:      sortOrder,
+				Conditions:     conditions,
 			}
 
 			// Extract gem requirements from the raw HTML line.

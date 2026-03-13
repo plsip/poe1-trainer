@@ -2,6 +2,7 @@ package guide
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"github.com/jackc/pgx/v5"
@@ -54,12 +55,15 @@ func (r *Repository) Save(ctx context.Context, g *Guide) error {
 		var stepID int
 		err = tx.QueryRow(ctx, `
 			INSERT INTO guide_steps
-				(guide_id, step_number, act, title, description, area,
+				(guide_id, step_number, act, section, title, description, area,
+				 quest_name, step_type, completion_mode,
 				 is_checkpoint, requires_manual, sort_order)
-			VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
+			VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)
 			RETURNING id`,
-			id, step.StepNumber, step.Act, step.Title, step.Description,
-			step.Area, step.IsCheckpoint, step.RequiresManual, step.SortOrder,
+			id, step.StepNumber, step.Act, step.Section,
+			step.Title, step.Description, step.Area,
+			step.QuestName, string(step.StepType), string(step.CompletionMode),
+			step.IsCheckpoint, step.RequiresManual, step.SortOrder,
 		).Scan(&stepID)
 		if err != nil {
 			return fmt.Errorf("guide: insert step %d: %w", step.StepNumber, err)
@@ -79,6 +83,27 @@ func (r *Repository) Save(ctx context.Context, g *Guide) error {
 				return fmt.Errorf("guide: insert gem req for step %d: %w", step.StepNumber, err)
 			}
 			gem.ID = gemID
+		}
+
+		for k := range step.Conditions {
+			cond := &step.Conditions[k]
+			cond.StepID = stepID
+			payloadJSON, err := json.Marshal(cond.Payload)
+			if err != nil {
+				return fmt.Errorf("guide: marshal condition payload for step %d: %w", step.StepNumber, err)
+			}
+			var condID int
+			err = tx.QueryRow(ctx, `
+				INSERT INTO guide_step_conditions
+					(step_id, condition_type, payload, priority, notes)
+				VALUES ($1,$2,$3,$4,$5) RETURNING id`,
+				stepID, string(cond.ConditionType), payloadJSON,
+				cond.Priority, cond.Notes,
+			).Scan(&condID)
+			if err != nil {
+				return fmt.Errorf("guide: insert condition for step %d: %w", step.StepNumber, err)
+			}
+			cond.ID = condID
 		}
 	}
 
@@ -142,7 +167,8 @@ func (r *Repository) List(ctx context.Context) ([]Guide, error) {
 
 func (r *Repository) loadSteps(ctx context.Context, guideID int) ([]Step, error) {
 	rows, err := r.db.Query(ctx, `
-		SELECT id, guide_id, step_number, act, title, description, area,
+		SELECT id, guide_id, step_number, act, section, title, description, area,
+		       quest_name, step_type, completion_mode,
 		       is_checkpoint, requires_manual, sort_order
 		FROM guide_steps WHERE guide_id = $1 ORDER BY sort_order`, guideID)
 	if err != nil {
@@ -154,11 +180,17 @@ func (r *Repository) loadSteps(ctx context.Context, guideID int) ([]Step, error)
 	var stepIDs []int
 	for rows.Next() {
 		var s Step
-		if err := rows.Scan(&s.ID, &s.GuideID, &s.StepNumber, &s.Act,
-			&s.Title, &s.Description, &s.Area, &s.IsCheckpoint,
-			&s.RequiresManual, &s.SortOrder); err != nil {
+		var stepType, completionMode string
+		if err := rows.Scan(
+			&s.ID, &s.GuideID, &s.StepNumber, &s.Act, &s.Section,
+			&s.Title, &s.Description, &s.Area,
+			&s.QuestName, &stepType, &completionMode,
+			&s.IsCheckpoint, &s.RequiresManual, &s.SortOrder,
+		); err != nil {
 			return nil, err
 		}
+		s.StepType = StepType(stepType)
+		s.CompletionMode = CompletionMode(completionMode)
 		steps = append(steps, s)
 		stepIDs = append(stepIDs, s.ID)
 	}
@@ -194,23 +226,63 @@ func (r *Repository) loadSteps(ctx context.Context, guideID int) ([]Step, error)
 	for i := range steps {
 		steps[i].GemRequirements = gemsByStep[steps[i].ID]
 	}
+
+	// Load step conditions in bulk.
+	condRows, err := r.db.Query(ctx, `
+		SELECT id, step_id, condition_type, payload, priority, notes
+		FROM guide_step_conditions
+		WHERE step_id = ANY($1)
+		ORDER BY step_id, priority`, stepIDs)
+	if err != nil {
+		return nil, fmt.Errorf("guide: load conditions: %w", err)
+	}
+	defer condRows.Close()
+
+	condsByStep := map[int][]StepCondition{}
+	for condRows.Next() {
+		var c StepCondition
+		var condType string
+		var payloadRaw []byte
+		if err := condRows.Scan(&c.ID, &c.StepID, &condType, &payloadRaw, &c.Priority, &c.Notes); err != nil {
+			return nil, err
+		}
+		c.ConditionType = ConditionType(condType)
+		if err := json.Unmarshal(payloadRaw, &c.Payload); err != nil {
+			c.Payload = map[string]string{}
+		}
+		condsByStep[c.StepID] = append(condsByStep[c.StepID], c)
+	}
+	if err := condRows.Err(); err != nil {
+		return nil, err
+	}
+
+	for i := range steps {
+		steps[i].Conditions = condsByStep[steps[i].ID]
+	}
 	return steps, nil
 }
 
 // GetStepByID returns a single step.
 func (r *Repository) GetStepByID(ctx context.Context, stepID int) (*Step, error) {
 	row := r.db.QueryRow(ctx, `
-		SELECT id, guide_id, step_number, act, title, description, area,
+		SELECT id, guide_id, step_number, act, section, title, description, area,
+		       quest_name, step_type, completion_mode,
 		       is_checkpoint, requires_manual, sort_order
 		FROM guide_steps WHERE id = $1`, stepID)
 	var s Step
-	if err := row.Scan(&s.ID, &s.GuideID, &s.StepNumber, &s.Act,
-		&s.Title, &s.Description, &s.Area, &s.IsCheckpoint,
-		&s.RequiresManual, &s.SortOrder); err != nil {
+	var stepType, completionMode string
+	if err := row.Scan(
+		&s.ID, &s.GuideID, &s.StepNumber, &s.Act, &s.Section,
+		&s.Title, &s.Description, &s.Area,
+		&s.QuestName, &stepType, &completionMode,
+		&s.IsCheckpoint, &s.RequiresManual, &s.SortOrder,
+	); err != nil {
 		if err == pgx.ErrNoRows {
 			return nil, fmt.Errorf("guide: step %d not found", stepID)
 		}
 		return nil, fmt.Errorf("guide: get step: %w", err)
 	}
+	s.StepType = StepType(stepType)
+	s.CompletionMode = CompletionMode(completionMode)
 	return &s, nil
 }
