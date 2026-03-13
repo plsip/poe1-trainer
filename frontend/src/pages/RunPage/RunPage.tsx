@@ -3,12 +3,12 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useAppStore } from '../../store/appStore'
 import { RecommendationList } from '../../components/RecommendationList'
 import { RunTimer } from '../../components/RunTimer'
-import { AlertPanel } from '../../components/AlertPanel'
 import { StepList } from '../../components/StepList'
 import { SplitsPanel } from '../../components/SplitsPanel'
 import { IntegrationStatus } from '../../components/IntegrationStatus'
 import { ChecksPanel } from '../../components/ChecksPanel'
-import type { GuideStep, DetailedRankingEntry, RunDeltasResponse } from '../../api/types'
+import { LogTailPanel } from '../../components/LogTailPanel'
+import type { GuideStep, CurrentState, DetailedRankingEntry, RunDeltasResponse } from '../../api/types'
 import * as api from '../../api/client'
 
 export function RunPage() {
@@ -20,14 +20,11 @@ export function RunPage() {
     recommendations,
     stateLoading,
     error,
-    alerts,
-    alertsLoading,
     splits,
     checks,
     stepFilter,
     activeGuide,
     loadRunState,
-    loadAlerts,
     loadSplits,
     loadChecks,
     confirmStep,
@@ -51,13 +48,12 @@ export function RunPage() {
   useEffect(() => {
     if (!id) return
     loadRunState(id)
-    loadAlerts(id)
     loadSplits(id)
     loadChecks(id)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id])
 
-  // Load ranking and events once we have the guide slug
+  // Load ranking once we have the guide slug
   const guideSlug = activeGuide?.slug
   useEffect(() => {
     if (!guideSlug) return
@@ -67,7 +63,7 @@ export function RunPage() {
       .catch(() => {})
   }, [guideSlug])
 
-  // Load split deltas whenever splits or run changes
+  // Load split deltas on mount
   useEffect(() => {
     if (!id) return
     api
@@ -76,22 +72,35 @@ export function RunPage() {
       .catch(() => {})
   }, [id])
 
-
-  // Periodic refresh when active
-  const pollingRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  // SSE stream — replaces polling; backend pushes run state updates
+  const sseRef = useRef<EventSource | null>(null)
   useEffect(() => {
-    if (pollingRef.current) clearInterval(pollingRef.current)
-    if (!id || !isActive) return
-    pollingRef.current = setInterval(() => {
-      loadRunState(id)
-      loadAlerts(id)
-      loadChecks(id)
-    }, 10_000)
+    if (!id) return
+    sseRef.current?.close()
+    const es = api.subscribeToRunStream(id)
+    sseRef.current = es
+
+    es.addEventListener('state', (e) => {
+      try {
+        const state: CurrentState = JSON.parse((e as MessageEvent).data)
+        useAppStore.setState({ runState: state })
+        // Reload checks when the step changes
+        loadChecks(id)
+      } catch {
+        // ignore malformed events
+      }
+    })
+
+    es.onerror = () => {
+      // EventSource reconnects automatically; nothing to do here
+    }
+
     return () => {
-      if (pollingRef.current) clearInterval(pollingRef.current)
+      es.close()
+      sseRef.current = null
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, isActive])
+  }, [id])
 
   // ─── Action handlers ─────────────────────────────────────────────────────
 
@@ -227,10 +236,10 @@ export function RunPage() {
         </div>
       </header>
 
-      {/* ── 2-column layout ── */}
+      {/* ── 3-column layout: steps | logtail | sidebar ── */}
       <div className="run-columns">
-        {/* Left: step list */}
-        <div className="run-col-main">
+        {/* Left: step list (narrower) */}
+        <div className="run-col-steps">
           <StepList
             steps={steps}
             state={runState}
@@ -243,30 +252,15 @@ export function RunPage() {
           />
         </div>
 
-        {/* Right: sidebar panels */}
-        <div className="run-col-sidebar">
-          <AlertPanel alerts={alerts} loading={alertsLoading} />
-
+        {/* Right: Client.txt log + checks */}
+        <div className="run-col-logtail">
           {checks.some((c) => !c.is_confirmed) && (
             <ChecksPanel checks={checks} onAnswer={handleAnswer} />
           )}
-
-          <section className="panel">
-            <h3 className="panel-title">Rekomendacje</h3>
-            <RecommendationList recommendations={recommendations} />
-          </section>
-
-          <SplitsPanel
-            splits={splits}
-            steps={steps}
-            elapsedMs={runState.elapsed_ms}
-            ranking={ranking}
-            deltas={deltas}
-          />
-
-          <IntegrationStatus />
+          <LogTailPanel isActive={isActive} />
         </div>
       </div>
     </div>
   )
 }
+

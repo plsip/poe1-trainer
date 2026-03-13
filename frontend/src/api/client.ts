@@ -139,3 +139,21 @@ export function getIntegrationStatus(): Promise<IntegrationStatus> {
 export function listEvents(runId: number): Promise<RunEvent[]> {
   return request(`/runs/${runId}/events`)
 }
+
+// ─── SSE streams ───────────────────────────────────────────────────────────
+
+/**
+ * Opens an SSE stream that pushes raw Client.txt lines as they are read by the
+ * backend watcher.  Events: "status" (initial watcher status), "log_line".
+ */
+export function subscribeToLogTail(): EventSource {
+  return new EventSource(`${BASE}/integration/logtail/stream`)
+}
+
+/**
+ * Opens an SSE stream that pushes run state updates for the given run.
+ * Events: "state" (CurrentState JSON).  A keep-alive comment is sent every 30 s.
+ */
+export function subscribeToRunStream(runId: number): EventSource {
+  return new EventSource(`${BASE}/runs/${runId}/stream`)
+}

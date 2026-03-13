@@ -172,23 +172,52 @@ input[type="text"]:focus {
 
 .run-columns {
   display: grid;
-  grid-template-columns: 1fr 340px;
+  grid-template-columns: 3fr 2fr;
   gap: 1rem;
   padding: 1rem 1.5rem;
   align-items: start;
   flex: 1;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 700px) {
   .run-columns {
     grid-template-columns: 1fr;
   }
 }
 
-.run-col-main {
+.run-col-steps {
   min-width: 0;
 }
 
-.run-col-sidebar {
+.run-col-logtail {
   min-width: 0;
+}
+
+/* ── LogTail panel ───────────────────────────────────────────────────────── */
+
+.logtail-panel {
+  display: flex;
+  flex-direction: column;
+  /* Fill most of the viewport height so plenty of lines are visible. */
+  max-height: calc(100vh - 120px);
+}
+
+.logtail-scroll {
+  flex: 1;
+  overflow-y: auto;
+  max-height: calc(100vh - 200px);
+  font-family: 'Consolas', 'Menlo', monospace;
+  font-size: 0.72rem;
+  line-height: 1.45;
+  color: #b0b0b0;
+  word-break: break-all;
+}
+
+.logtail-line {
+  padding: 0.05rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.logtail-line:last-child {
+  border-bottom: none;
 }

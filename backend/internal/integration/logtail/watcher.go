@@ -81,11 +81,12 @@ type checkpoint struct {
 //   - Obserwowalność: zmiany stanu raportowane przez StatusObserver.
 //   - Separacja: produkuje progress.DomainEvent konsumowane przez EventSink.
 type Watcher struct {
-	cfg      Config
-	sink     EventSink
-	observer StatusObserver
-	status   atomic.Value // stores Status
-	done     chan struct{}
+	cfg             Config
+	sink            EventSink
+	observer        StatusObserver
+	rawLineObserver func(string)
+	status          atomic.Value // stores Status
+	done            chan struct{}
 }
 
 // New tworzy nowy Watcher.
@@ -107,6 +108,12 @@ func New(cfg Config, sink EventSink, observer StatusObserver) *Watcher {
 // Status zwraca bieżący stan Watchera. Bezpieczne wielowątkowo.
 func (w *Watcher) Status() Status {
 	return w.status.Load().(Status)
+}
+
+// SetRawLineObserver rejestruje callback wywoływany dla każdej surowej linii odczytanej z pliku.
+// Musi być ustawiony przed wywołaniem Start. Nil wyłącza obserwację.
+func (w *Watcher) SetRawLineObserver(fn func(line string)) {
+	w.rawLineObserver = fn
 }
 
 // Start uruchamia goroutine Watchera. Wraca natychmiast.
@@ -197,6 +204,9 @@ func (w *Watcher) run(ctx context.Context) {
 			full = strings.TrimRight(full, "\r\n")
 			gotData = true
 			lastLine = time.Now()
+			if w.rawLineObserver != nil {
+				w.rawLineObserver(full)
+			}
 
 			parsed, parseErr := ParseLine(full)
 			if parseErr != nil {

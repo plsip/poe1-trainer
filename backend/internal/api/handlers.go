@@ -1,9 +1,11 @@
 package api
 
 import (
+	"context"
 	"crypto/rand"
 	"encoding/hex"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 	"sync"
@@ -36,6 +38,11 @@ type Handlers struct {
 	// watcherStatus returns the current logtail status string.
 	// Nil when LOG_PATH is not configured.
 	watcherStatus func() string
+
+	// logLines broadcasts raw Client.txt lines to logtail SSE subscribers.
+	logLines lineBroadcaster
+	// runNotify broadcasts state-change signals to per-run SSE subscribers.
+	runNotify signalBroadcaster
 }
 
 // SetWatcherStatusFunc registers a callback that returns the current logtail status.
@@ -43,6 +50,12 @@ type Handlers struct {
 func (h *Handlers) SetWatcherStatusFunc(fn func() string) {
 	h.watcherStatus = fn
 }
+
+// EmitLogLine broadcasts a raw log line to all logtail SSE subscribers.
+func (h *Handlers) EmitLogLine(line string) { h.logLines.emit(line) }
+
+// NotifyRunUpdate signals all run-state SSE subscribers for the given run.
+func (h *Handlers) NotifyRunUpdate(runID int64) { h.runNotify.emit(runID) }
 
 // NewHandlers creates a new Handlers instance.
 func NewHandlers(
@@ -76,6 +89,95 @@ func (h *Handlers) GetIntegrationStatus(w http.ResponseWriter, r *http.Request) 
 		status = h.watcherStatus()
 	}
 	writeJSON(w, http.StatusOK, IntegrationStatusResponse{LogWatcher: status})
+}
+
+// StreamLogTail handles GET /integration/logtail/stream
+// Streams raw Client.txt lines as Server-Sent Events.
+func (h *Handlers) StreamLogTail(w http.ResponseWriter, r *http.Request) {
+	flusher, ok := w.(http.Flusher)
+	if !ok {
+		writeError(w, http.StatusInternalServerError, "streaming not supported")
+		return
+	}
+	sseHeaders(w)
+
+	status := "disabled"
+	if h.watcherStatus != nil {
+		status = h.watcherStatus()
+	}
+	sseEvent(w, flusher, "status", fmt.Sprintf(`{"status":%q}`, status))
+
+	ch := h.logLines.subscribe()
+	defer h.logLines.unsubscribe(ch)
+
+	for {
+		select {
+		case <-r.Context().Done():
+			return
+		case line, ok := <-ch:
+			if !ok {
+				return
+			}
+			b, _ := json.Marshal(line)
+			sseEvent(w, flusher, "log_line", fmt.Sprintf(`{"line":%s}`, b))
+		}
+	}
+}
+
+// StreamRunState handles GET /runs/{id}/stream
+// Streams run state as Server-Sent Events; pushes on every state change
+// and sends a heartbeat comment every 30 s to keep the connection alive.
+func (h *Handlers) StreamRunState(w http.ResponseWriter, r *http.Request) {
+	flusher, ok := w.(http.Flusher)
+	if !ok {
+		writeError(w, http.StatusInternalServerError, "streaming not supported")
+		return
+	}
+	id, ok := intPathParam(r, "id")
+	if !ok {
+		writeError(w, http.StatusBadRequest, "invalid run id")
+		return
+	}
+	sseHeaders(w)
+
+	// Send the current state immediately so the client doesn't wait.
+	if err := h.writeRunStateSSE(r.Context(), w, flusher, id); err != nil {
+		return
+	}
+
+	notify := h.runNotify.subscribe(int64(id))
+	defer h.runNotify.unsubscribe(int64(id), notify)
+
+	ticker := time.NewTicker(30 * time.Second)
+	defer ticker.Stop()
+
+	for {
+		select {
+		case <-r.Context().Done():
+			return
+		case <-notify:
+			if err := h.writeRunStateSSE(r.Context(), w, flusher, id); err != nil {
+				return
+			}
+		case <-ticker.C:
+			fmt.Fprintf(w, ": heartbeat\n\n")
+			flusher.Flush()
+		}
+	}
+}
+
+// writeRunStateSSE fetches the current run state and sends it as an SSE event.
+func (h *Handlers) writeRunStateSSE(ctx context.Context, w http.ResponseWriter, flusher http.Flusher, id int) error {
+	state, err := h.runs.GetCurrentState(ctx, id)
+	if err != nil {
+		return err
+	}
+	b, err := json.Marshal(state)
+	if err != nil {
+		return err
+	}
+	sseEvent(w, flusher, "state", string(b))
+	return nil
 }
 
 // ─── Guides ────────────────────────────────────────────────────────────────

@@ -83,6 +83,7 @@ func main() {
 			}
 		})
 		watcher.Start(ctx)
+		watcher.SetRawLineObserver(h.EmitLogLine)
 		h.SetWatcherStatusFunc(func() string { return string(watcher.Status()) })
 		log.Printf("logtail: nasłuchiwanie pliku %s", logPath)
 
@@ -92,7 +93,9 @@ func main() {
 				case <-ctx.Done():
 					return
 				case ev := <-ch:
-					dispatchLogtailEvent(ctx, runRepo, runService, ev)
+					if runID := dispatchLogtailEvent(ctx, runRepo, runService, ev); runID != 0 {
+						h.NotifyRunUpdate(int64(runID))
+					}
 				}
 			}
 		}()
@@ -101,11 +104,12 @@ func main() {
 	}
 
 	srv := &http.Server{
-		Addr:         fmt.Sprintf(":%s", port),
-		Handler:      router,
-		ReadTimeout:  10 * time.Second,
-		WriteTimeout: 10 * time.Second,
-		IdleTimeout:  60 * time.Second,
+		Addr:        fmt.Sprintf(":%s", port),
+		Handler:     router,
+		ReadTimeout: 10 * time.Second,
+		// WriteTimeout is intentionally omitted: SSE connections stream
+		// indefinitely and would be killed by a hard write deadline.
+		IdleTimeout: 60 * time.Second,
 	}
 
 	go func() {
@@ -133,29 +137,31 @@ func envOrDefault(key, def string) string {
 
 // dispatchLogtailEvent odnajduje aktywny run i przekazuje zdarzenie do run.Service.
 // Eventy bez aktywnego runa są po cichu odrzucane — gracz nie ma otwartego przebiegu.
-func dispatchLogtailEvent(ctx context.Context, repo *runpkg.Repository, svc *runpkg.Service, ev progress.DomainEvent) {
+// Zwraca ID przetworzonego runa lub 0 gdy nie było aktywnego runa / błąd.
+func dispatchLogtailEvent(ctx context.Context, repo *runpkg.Repository, svc *runpkg.Service, ev progress.DomainEvent) int {
 	active, err := repo.GetActiveRun(ctx)
 	if err != nil {
 		slog.Warn("logtail: błąd pobierania aktywnego runa", "err", err)
-		return
+		return 0
 	}
 	if active == nil {
-		return
+		return 0
 	}
 
 	switch ev.Kind {
 	case progress.KindAreaEntered:
 		if ev.Area == nil {
-			return
+			return active.ID
 		}
 		if err := svc.HandleAreaEvent(ctx, active.ID, runpkg.AreaEvent{AreaName: ev.Area.AreaName}); err != nil {
 			slog.Warn("logtail: HandleAreaEvent error", "run_id", active.ID, "area", ev.Area.AreaName, "err", err)
 		}
 	case progress.KindLevelUp:
 		if ev.Level == nil {
-			return
+			return active.ID
 		}
 		slog.Info("logtail: level up", "run_id", active.ID, "level", ev.Level.Level)
 	}
+	return active.ID
 }
 

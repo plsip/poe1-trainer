@@ -63,6 +63,10 @@ func NewRouter(h *Handlers) http.Handler {
 
 	// --- integration status ---
 	mux.HandleFunc("GET /integration/status", h.GetIntegrationStatus)
+	mux.HandleFunc("GET /integration/logtail/stream", h.StreamLogTail)
+
+	// --- SSE run state stream ---
+	mux.HandleFunc("GET /runs/{id}/stream", h.StreamRunState)
 
 	// --- GGG integration (optional, gracefully disabled when not configured) ---
 	mux.HandleFunc("GET /ggg/status", h.GGGStatus)
