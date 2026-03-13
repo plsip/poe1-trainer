@@ -49,6 +49,99 @@ The system should suggest decisions, highlight important moments, and explain wh
 - [docs/decisions/0001-trainer-not-agent.md](docs/decisions/0001-trainer-not-agent.md)
 - [docs/next-steps.md](docs/next-steps.md)
 
+## Uruchamianie lokalnie
+
+### Wymagania
+
+- [Docker](https://docs.docker.com/get-docker/) + Docker Compose v2
+- Go 1.24+ (tylko jeśli chcesz uruchamiać backend poza Dockerem)
+- Node.js 22+ (tylko jeśli chcesz uruchamiać frontend poza Dockerem)
+
+### Konfiguracja środowiska
+
+```bash
+cp .env.example .env
+# Edytuj .env jeśli chcesz zmienić domyślne wartości.
+```
+
+### Tryb deweloperski (hot-reload)
+
+Uruchamia bazę danych, backend z `air` (hot-reload Go) i frontend z Vite (HMR):
+
+```bash
+docker compose -f docker-compose.dev.yml up --build
+```
+
+Aplikacja dostępna pod adresem:
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:8080
+
+### Zasilanie danymi (seed)
+
+Po pierwszym uruchomieniu baza jest pusta. Zaimportuj przykładowy przewodnik jedną z dwóch metod:
+
+**Opcja A — przez Docker (zalecane):**
+
+```bash
+docker compose -f docker-compose.dev.yml --profile seed up seed
+```
+
+**Opcja B — przez skrypt hosta (wymaga Go i działającej bazy):**
+
+```bash
+bash scripts/seed-dev.sh
+```
+
+Po imporcie przewodnik Storm Burst Totemy jest widoczny w aplikacji pod `/guides`.
+
+### Pełny stack produkcyjny
+
+```bash
+docker compose up --build
+```
+
+Frontend serwowany przez nginx na porcie 3000, backend na 8080.
+
+### Tylko baza danych (praca ręczna)
+
+```bash
+docker compose -f docker-compose.dev.yml up -d db
+```
+
+Następnie uruchom backend i frontend lokalnie zgodnie z [docs/next-steps.md](docs/next-steps.md).
+
+### Konfiguracja ścieżki do Client.txt
+
+Obserwator `Client.txt` jest opcjonalny — aplikacja działa bez niego.
+Kiedy zdecydujesz się go włączyć:
+
+1. Ustal ścieżkę do `Client.txt` na swoim hoście:
+   - Windows/Steam: `C:\Program Files (x86)\Steam\steamapps\common\Path of Exile\logs\Client.txt`
+
+2. W pliku `.env` ustaw:
+   ```
+   LOG_PATH=/mnt/poe-logs/Client.txt
+   ```
+
+3. W `docker-compose.dev.yml` odkomentuj wolumen `poe-logs` w sekcji `backend.volumes`:
+   ```yaml
+   - ${POE_LOG_DIR}:/mnt/poe-logs:ro
+   ```
+   Ustaw `POE_LOG_DIR` w `.env` na katalog zawierający `Client.txt`:
+   ```
+   POE_LOG_DIR=C:/Program Files (x86)/Steam/steamapps/common/Path of Exile/logs
+   ```
+
+> **Uwaga bezpieczeństwa:** wolumen montowany jest zawsze jako read-only (`:ro`).
+> Backend nigdy nie zapisuje do katalogu logów gry.
+> Na Windows z Docker Desktop upewnij się, że dysk `C:` jest udostępniony w ustawieniach Docker Desktop → Resources → File Sharing.
+
+### Bez integracji z GGG OAuth
+
+Aplikacja działa w pełni bez konfiguracji klienta OAuth GGG.
+Pola `GGG_CLIENT_ID` i `GGG_CLIENT_SECRET` w `.env` można pozostawić puste.
+Integracja z GGG API jest zaplanowana na fazę 2 i nie jest wymagana do nauki rozgrywki.
+
 ## Working Prompts
 
 The `prompts/` directory contains the working prompt pack for continuing development with Copilot in the new repository.

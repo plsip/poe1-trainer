@@ -22,12 +22,19 @@ services:
     environment:
       DATABASE_URL: "postgres://poe:poe@db:5432/poetrainer?sslmode=disable"
       PORT: "8080"
+      # LOG_PATH przekazywany z hosta (.env lub shell).
+      # Zostaw puste aby wyłączyć obserwację loga — aplikacja działa bez tego.
+      LOG_PATH: "${LOG_PATH:-}"
     ports:
       - "8080:8080"
     volumes:
       - ./backend:/app
       - go_pkg:/go/pkg/mod
       - go_build_cache:/root/.cache/go-build
+      # Aby obserwować Client.txt hosta, odmontuj katalog logu read-only.
+      # Przykład dla Windows/Steam (ścieżka musi być dostępna z WSL2 lub Windows Docker):
+      #   - ${POE_LOG_DIR:-./tmp/poe-logs}:/mnt/poe-logs:ro
+      # Następnie ustaw LOG_PATH=/mnt/poe-logs/Client.txt w pliku .env.
     depends_on:
       db:
         condition: service_healthy
@@ -46,6 +53,33 @@ services:
       - frontend_node_modules:/app/node_modules
     depends_on:
       - backend
+
+  # Jednorazowy import przewodnika do bazy danych.
+  # Uruchom: docker compose -f docker-compose.dev.yml --profile seed up seed
+  seed:
+    profiles: [seed]
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    environment:
+      DATABASE_URL: "postgres://poe:poe@db:5432/poetrainer?sslmode=disable"
+    volumes:
+      - ./backend:/app
+      - ./guides:/guides:ro
+      - go_pkg:/go/pkg/mod
+      - go_build_cache:/root/.cache/go-build
+    depends_on:
+      db:
+        condition: service_healthy
+    command:
+      - go
+      - run
+      - ./cmd/import
+      - -file=/guides/stormburst_campaign_v1.md
+      - -slug=stormburst_campaign_v1
+      - -title=Stormburst Totemy — Kampania
+      - -build=Storm Burst Totemy
+    restart: "no"
 
 volumes:
   pgdata_dev:
