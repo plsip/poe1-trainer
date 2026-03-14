@@ -17,6 +17,8 @@
         },
         "git add": true,
         "git commit": true,
-        "git push": true
+        "git push": true,
+        "git -C .": true,
+        "git -C \"C:/Workspace/github.com/poe1-trainer\"": true
     }
 }
