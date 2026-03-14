@@ -15,7 +15,7 @@ func main() {
 	var (
 		dsn       = flag.String("db", envOrDefault("DATABASE_URL", "postgres://poe:poe@localhost:5432/poetrainer?sslmode=disable"), "PostgreSQL DSN")
 		file      = flag.String("file", "", "Path to markdown guide file (required)")
-		slug      = flag.String("slug", "", "Guide slug, e.g. stormburst_campaign_v1 (required)")
+		slug      = flag.String("slug", "", "Guide slug, e.g. stormburst_campaign (required)")
 		title     = flag.String("title", "", "Guide title (required)")
 		buildName = flag.String("build", "", "Build name, e.g. Storm Burst Totemy (required)")
 		version   = flag.String("version", "", "Guide version; defaults to current git commit hash or GUIDE_VERSION")

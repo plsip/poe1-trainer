@@ -7,7 +7,7 @@ BEGIN;
 
 CREATE TABLE IF NOT EXISTS guides (
     id          SERIAL PRIMARY KEY,
-    slug        TEXT        NOT NULL UNIQUE,       -- np. "stormburst_campaign_v1"
+    slug        TEXT        NOT NULL UNIQUE,       -- np. "stormburst_campaign"
     title       TEXT        NOT NULL,
     build_name  TEXT        NOT NULL,
     version     TEXT        NOT NULL DEFAULT '1',

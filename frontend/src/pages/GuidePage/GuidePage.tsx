@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useAppStore } from '../../store/appStore'
 import { formatGuideVersion } from '../../utils/guideVersion'
-import { getCanonicalGuideSlug } from '../../utils/guideSlug'
 
 export function GuidePage() {
   const { slug } = useParams<{ slug: string }>()
@@ -11,17 +10,12 @@ export function GuidePage() {
 
   const [charName, setCharName] = useState('')
   const [starting, setStarting] = useState(false)
-  const canonicalSlug = getCanonicalGuideSlug(slug)
 
   useEffect(() => {
-    if (!slug || !canonicalSlug) return
-    if (canonicalSlug !== slug) {
-      navigate(`/guides/${canonicalSlug}`, { replace: true })
-      return
-    }
-    loadGuide(canonicalSlug)
+    if (!slug) return
+    loadGuide(slug)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [slug, canonicalSlug])
+  }, [slug])
 
   const handleStartRun = async () => {
     if (!activeGuide) return

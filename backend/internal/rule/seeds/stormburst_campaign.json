@@ -1,5 +1,5 @@
 {
-  "guide_slug": "stormburst_campaign_v1",
+  "guide_slug": "stormburst_campaign",
   "rules": [
     {
       "condition": { "min_act": 1, "max_act": 1 },
