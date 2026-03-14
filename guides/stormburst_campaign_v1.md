@@ -135,36 +135,37 @@ Kolejność lokacji:
 
 1. Wyjdź do <span style="color:white;">The Slums</span>.
 2. Znajdź <span style="color:white;">Crematorium</span>, złap waypoint i zrób <span style="color:teal;">Labyrinth Trial</span>.
-3. Zabij <span style="color:red;">Piety</span>, weź <span style="color:green;">Tolman's Bracelet</span>, zrób logout albo portal do miasta i odbierz <span style="color:green;">Sewer Keys</span>. To jest quest Lost in Love.
+3. Zabij <span style="color:red;">Piety</span>, weź <span style="color:green;">Tolman's Bracelet</span>, wróć do miasta portalem albo logoutem i odbierz <span style="color:green;">Sewer Keys</span> od <span style="color:green;">Clarissy</span>.
 4. Wróć waypointem do <span style="color:white;">The Slums</span>, znajdź <span style="color:white;">Sewer Grating</span> i wejdź do <span style="color:white;">Sewers</span>.
-5. W <span style="color:white;">Sewers</span> nie pomijaj questa <span style="color:#7fa8d6;">Victario's Secrets</span> z 3 Platinum Busts, bo daje skill point. Jedna jest zwykle przed waypointem, dwie po waypointcie.
-6. Wyjdź do <span style="color:white;">Marketplace</span> i złap waypoint.
-7. Wejdź do <span style="color:white;">Catacombs</span>, zrób <span style="color:teal;">Labyrinth Trial</span>, potem zrób logout albo portal do miasta i waypointem wróć do <span style="color:white;">Marketplace</span>.
-8. Znajdź wyjście do <span style="color:white;">Battlefront</span> i złap waypoint mniej więcej w centrum strefy.
+5. W <span style="color:white;">Sewers</span> zabierz <span style="color:green;">Platinum Bust</span> do questa <span style="color:#7fa8d6;">Victario's Secrets</span>.
+6. Wejdź do <span style="color:white;">Marketplace</span>, złap waypoint i zabierz kolejny <span style="color:green;">Platinum Bust</span> do questa <span style="color:#7fa8d6;">Victario's Secrets</span>.
+7. Wejdź do <span style="color:white;">Catacombs</span>, zabierz ostatni <span style="color:green;">Platinum Bust</span>, zrób <span style="color:teal;">Labyrinth Trial</span>, potem wróć do miasta portalem albo logoutem, odbierz <span style="color:green;">Book of Skill</span> od <span style="color:green;">Hargana</span> i waypointem wróć do <span style="color:white;">Marketplace</span>.
+8. Wejdź do <span style="color:white;">Battlefront</span> i złap waypoint mniej więcej w centrum strefy.
 9. Weź <span style="color:green;">Ribbon Spool</span> z <span style="color:green;">Blackguard Chest</span>. To jest część questa Sever the Right Hand.
 
 > Z <span style="color:white;">Battlefront</span> skręć w lewo do <span style="color:white;">The Docks</span>, ale tylko jeśli potrzebujesz dofarmienia.  
 > Jeśli jesteś underleveled albo build zaczyna być za słaby, farm <span style="color:white;">Docks</span>.  
 > Resetuj przez `Ctrl + klik` i twórz nowe instancje — zrób 2-5 resetów, jeśli potrzebujesz leveli, gearu i expa na gemach.
 
-10. Z <span style="color:white;">Battlefront</span> wejdź do <span style="color:white;">Solaris Temple Level 1</span>, potem <span style="color:white;">Level 2</span>, złap waypoint i odbierz quest item od <span style="color:green;">Dialli</span> do questa Sever the Right Hand.
-11. Wróć do miasta waypointem po <span style="color:green;">Book of Skill</span>.
-12. Wróć waypointem do <span style="color:white;">Sewers</span>, przepal blokadę bardzo blisko waypointa, wejdź do <span style="color:white;">Ebony Barracks</span>, złap waypoint i zabij <span style="color:red;">General Graviciusa</span>.
-13. Wejdź do <span style="color:white;">Lunaris Temple Level 1</span> i <span style="color:white;">Level 2</span>.
-14. W <span style="color:white;">Lunaris Temple</span> trzymaj się strony ze schodami w górę. Przy wózkach pamiętaj, że strona z dwoma wózkami to ślepy zaułek, a strona z jednym wózkiem prowadzi dalej.
-15. Zabij <span style="color:red;">Piety</span> i zabierz <span style="color:green;">Tower Key</span>.
-16. Odbierz <span style="color:green;">Book of Skill</span> i reward gemowy od <span style="color:green;">Maramoa</span>.
-17. Po wykonaniu questa Lost in Love kup od <span style="color:green;">Clarissy</span> <span style="color:#7f7fff;">Conductivity</span> i <span style="color:#7f7fff;">Wrath</span>. To jest najwcześniejszy moment, w którym <span style="color:#7f7fff;">Wrath</span> jest dostępny w kampanii. Jeśli planujesz wersję defensywną, kup też <span style="color:#ff6a2f;">Determination</span> i trzymaj ją na później.
-18. Wróć waypointem do <span style="color:white;">Ebony Barracks</span>, wejdź do <span style="color:white;">Imperial Gardens</span>, złap waypoint i trzymaj się tiled path.
-19. Jeśli potrzebujesz konkretnych gemów od <span style="color:green;">Siosy</span>, zrób questa <span style="color:#7fa8d6;">A Fixture of Fate</span> w <span style="color:white;">Library</span>. Jeśli nie potrzebujesz dodatkowych gemów, pomiń.
-20. W <span style="color:white;">Imperial Gardens</span> zrób ostatni <span style="color:teal;">Labyrinth Trial</span> do pierwszego laba.
-21. Wejdź do <span style="color:white;">Sceptre of God</span>, potem <span style="color:white;">Upper Sceptre of God</span> i zabij <span style="color:red;">Dominusa</span>.
-22. Przebiegnij <span style="color:white;">Aqueduct</span> i wejdź do <span style="color:white;">Highgate</span>.
-23. Jeśli trafisz dodatkowy craft po drodze, na przykład fire damage, zgarnij go.
-24. Jeszcze nie rób pełnego switchu tylko dlatego, że setup już się składa. Dociągnij levele gemów i domknij pierwszy lab.
-25. Upewnij się, że <span style="color:#7f7fff;">Storm Burst</span> i <span style="color:#ff6a2f;">Spell Totem Support</span> cały czas levelują się na swapie.
-26. Jeśli masz dostęp, przygotuj miejsce pod <span style="color:#7f7fff;">Lightning Penetration</span>.
-27. Zacznij zbierać quality pod główny setup <span style="color:#7f7fff;">Storm Bursta</span>, bo quality daje bardzo duży wzrost damage.
+10. Wejdź do <span style="color:white;">Solaris Temple Level 1</span>.
+11. Wejdź do <span style="color:white;">Solaris Temple Level 2</span>, złap waypoint i odbierz <span style="color:green;">Thaumetic Sulphite</span> od <span style="color:green;">Dialli</span>.
+12. Wróć do miasta waypointem i odbierz <span style="color:green;">Book of Skill</span> od <span style="color:green;">Hargana</span>.
+13. Wróć waypointem do <span style="color:white;">Sewers</span>, przepal blokadę bardzo blisko waypointa i wejdź do <span style="color:white;">Ebony Barracks</span>.
+14. Złap waypoint w <span style="color:white;">Ebony Barracks</span> i zabij <span style="color:red;">General Graviciusa</span>.
+15. Wejdź do <span style="color:white;">Lunaris Temple Level 1</span>.
+16. Wejdź do <span style="color:white;">Lunaris Temple Level 2</span>.
+17. W <span style="color:white;">Lunaris Temple</span> trzymaj się strony ze schodami w górę; przy wózkach idź stroną z jednym wózkiem.
+18. Zabij <span style="color:red;">Piety</span>, zabierz <span style="color:green;">Tower Key</span> i wróć do miasta portalem albo logoutem.
+19. Odbierz <span style="color:green;">Book of Skill</span> od <span style="color:green;">Grigora</span>.
+20. Kup u <span style="color:green;">Clarissy</span> <span style="color:#7f7fff;">Conductivity</span> i <span style="color:#7f7fff;">Wrath</span>. Jeśli planujesz wersję defensywną, kup też <span style="color:#ff6a2f;">Determination</span> i odłóż ją na później.
+21. Wróć waypointem do <span style="color:white;">Ebony Barracks</span> i wejdź do <span style="color:white;">Imperial Gardens</span>.
+22. Złap waypoint w <span style="color:white;">Imperial Gardens</span> i trzymaj się tiled path.
+23. Jeśli potrzebujesz konkretnych gemów od <span style="color:green;">Siosy</span>, wejdź do <span style="color:white;">Library</span> i zrób quest <span style="color:#7fa8d6;">A Fixture of Fate</span>; jeśli nie, pomiń ten objazd.
+24. W <span style="color:white;">Imperial Gardens</span> zrób ostatni <span style="color:teal;">Labyrinth Trial</span> do pierwszego laba.
+25. Wejdź do <span style="color:white;">Sceptre of God</span>.
+26. Wejdź do <span style="color:white;">Upper Sceptre of God</span> i zabij <span style="color:red;">Dominusa</span>.
+27. Wejdź do <span style="color:white;">The Aqueduct</span>.
+28. Przebiegnij <span style="color:white;">The Aqueduct</span> i wejdź do <span style="color:white;">Highgate</span>.
 
 ## Akt 4
 
