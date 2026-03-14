@@ -345,24 +345,23 @@ Kolejność lokacji:
 
 1. Z <span style="color:white;">The Descent</span> trzymaj się prawej strony, zjedź <span style="color:green;">Supply Hoists</span> do <span style="color:white;">Vastiri Desert</span> i złap waypoint.
 2. Znajdź <span style="color:green;">Storm Weathered Chest</span>, przeżyj fale mumi i weź <span style="color:green;">Storm Blade</span>.
-3. Wróć waypointem do miasta, oddaj questa i waypointem wróć do <span style="color:white;">Vastiri Desert</span>.
-4. Wejdź do <span style="color:white;">The Oasis</span> i dalej do <span style="color:white;">The Sand Pit</span>.
-5. Zabij <span style="color:red;">Shakari</span>, zrób logout albo portal do miasta i odbierz skill book.
-6. Wróć waypointem do <span style="color:white;">Vastiri Desert</span>, wejdź do <span style="color:white;">The Foothills</span> i złap waypoint, zwykle w górnej prawej części strefy.
-7. Wejdź do <span style="color:white;">Boiling Lake</span>, zabij <span style="color:red;">Basiliska</span> i zabierz <span style="color:green;">Basilisk Acid</span>.
-8. Zrób logout albo portal do miasta, potem waypointem wróć do <span style="color:white;">The Foothills</span>.
-9. Wejdź do <span style="color:white;">The Tunnel</span>, złap waypoint i zrób <span style="color:teal;">Labyrinth Trial</span>.
-10. Wejdź do <span style="color:white;">The Quarry</span> i złap waypoint na środku strefy.
-11. Z <span style="color:white;">Quarry</span> zrób dwa cele w kolejności, którą spotkasz szybciej: <span style="color:white;">The Refinery</span> i <span style="color:white;">Shrine of the Winds</span>.
-12. W <span style="color:white;">The Refinery</span> zabij <span style="color:red;">General Adusa</span>, użyj maszyny i weź <span style="color:green;">Trarthan Powder</span>.
-13. W <span style="color:white;">Shrine of the Winds</span> zabij <span style="color:red;">Garukhan</span> i odbierz skill book.
-14. Porozmawiaj z <span style="color:green;">Sinem</span> i wejdź do <span style="color:white;">Belly of the Beast</span>.
-15. Przejdź <span style="color:white;">Rotting Core</span>, wejdź do <span style="color:white;">Black Core</span> i zabij trzech guardianów, a potem <span style="color:red;">Depraved Trinity</span>.
-16. Pogadaj z <span style="color:green;">Lilly</span> i płyń do <span style="color:white;">Oriath</span>.
-17. Trzymaj tempo tylko wtedy, gdy build realnie dowozi.
-18. Jeśli biżuteria z life, resistami albo statami odblokowuje ci lepsze itemy, wymieniaj ją natychmiast.
-19. Jeśli masz złą <span style="color:#d7d1c3;">Life Flask</span>, próbuj dojść do instanta i bleed removal.
-20. Jeśli broń jest stara, wymień ją nawet na prosty upgrade bez idealnych modów.
+3. Wróć waypointem do miasta, oddaj <span style="color:green;">Storm Blade</span> i waypointem wróć do <span style="color:white;">Vastiri Desert</span>.
+4. Wejdź do <span style="color:white;">The Oasis</span>.
+5. Wejdź do <span style="color:white;">The Sand Pit</span>.
+6. Zabij <span style="color:red;">Shakari</span>, wróć do miasta portalem albo logoutem i odbierz <span style="color:green;">Book of Skill</span>.
+7. Wróć waypointem do <span style="color:white;">Vastiri Desert</span>, wejdź do <span style="color:white;">The Foothills</span> i złap waypoint, zwykle w górnej prawej części strefy.
+8. Wejdź do <span style="color:white;">Boiling Lake</span>, zabij <span style="color:red;">Basiliska</span> i zabierz <span style="color:green;">Basilisk Acid</span>.
+9. Zrób logout albo portal do miasta, potem waypointem wróć do <span style="color:white;">The Foothills</span>.
+10. Wejdź do <span style="color:white;">The Tunnel</span>, złap waypoint i zrób <span style="color:teal;">Labyrinth Trial</span>.
+11. Wejdź do <span style="color:white;">The Quarry</span> i złap waypoint na środku strefy.
+12. Z <span style="color:white;">The Quarry</span> idź najpierw do bliższej z dwóch lokacji: <span style="color:white;">The Refinery</span> albo <span style="color:white;">Shrine of the Winds</span>.
+13. Wejdź do <span style="color:white;">The Refinery</span>, zabij <span style="color:red;">General Adusa</span>, użyj maszyny, weź <span style="color:green;">Trarthan Powder</span> i wróć do <span style="color:white;">The Quarry</span>.
+14. Wejdź do <span style="color:white;">Shrine of the Winds</span>, zabij <span style="color:red;">Garukhan</span>, wróć do <span style="color:white;">The Quarry</span> i odbierz <span style="color:green;">Book of Skill</span>.
+15. Porozmawiaj z <span style="color:green;">Sinem</span> i wejdź do <span style="color:white;">Belly of the Beast</span>.
+16. Przejdź do <span style="color:white;">Rotting Core</span>.
+17. Wejdź do <span style="color:white;">The Black Core</span>.
+18. Zabij trzech guardianów, potem <span style="color:red;">Depraved Trinity</span>.
+19. Porozmawiaj z <span style="color:green;">Lilly</span> i płyń do <span style="color:white;">Oriath</span>.
 
 ## Akt 10
 
