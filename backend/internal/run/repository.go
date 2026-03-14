@@ -179,6 +179,31 @@ func (r *Repository) RecordSplit(ctx context.Context, runID, stepID int, splitMs
 	return err
 }
 
+// HasSplitForStep reports whether a split already exists for the given run step.
+func (r *Repository) HasSplitForStep(ctx context.Context, runID, stepID int) (bool, error) {
+	var exists bool
+	err := r.db.QueryRow(ctx, `
+		SELECT EXISTS(
+			SELECT 1 FROM run_splits WHERE run_id = $1 AND step_id = $2
+		)`, runID, stepID).Scan(&exists)
+	if err != nil {
+		return false, fmt.Errorf("run: check split exists: %w", err)
+	}
+	return exists, nil
+}
+
+// DeleteSplit removes a recorded split from a run.
+func (r *Repository) DeleteSplit(ctx context.Context, runID, splitID int) error {
+	_, err := r.db.Exec(ctx, `
+		DELETE FROM run_splits
+		WHERE id = $1 AND run_id = $2`,
+		splitID, runID)
+	if err != nil {
+		return fmt.Errorf("run: delete split: %w", err)
+	}
+	return nil
+}
+
 // GetDetailedRanking returns up to limit entries from local_rankings for a guide,
 // ordered by rank ascending. Returns an empty slice if no runs have been computed yet.
 func (r *Repository) GetDetailedRanking(ctx context.Context, guideID, limit int) ([]DetailedRankingEntry, error) {

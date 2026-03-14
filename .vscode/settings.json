@@ -29,6 +29,7 @@
             "matchCommandLine": true
         },
         "git remote": true,
-        "git rev-parse": true
+        "git rev-parse": true,
+        "docker exec": true
     }
 }

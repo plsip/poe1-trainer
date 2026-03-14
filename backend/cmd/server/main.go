@@ -162,11 +162,7 @@ func dispatchLogtailEvent(ctx context.Context, repo *runpkg.Repository, svc *run
 		if ev.AreaGenerated == nil {
 			return active.ID
 		}
-		if err := svc.RecordLogEvent(ctx, active.ID, runpkg.EventAreaGenerated, map[string]string{
-			"area_code":  ev.AreaGenerated.AreaCode,
-			"area_level": fmt.Sprint(ev.AreaGenerated.AreaLevel),
-			"seed":       fmt.Sprint(ev.AreaGenerated.Seed),
-		}); err != nil {
+		if err := svc.HandleAreaGenerated(ctx, active.ID, ev.AreaGenerated.AreaCode, ev.AreaGenerated.AreaLevel, ev.OccurredAt); err != nil {
 			slog.Warn("logtail: RecordLogEvent area_generated error", "run_id", active.ID, "area_code", ev.AreaGenerated.AreaCode, "err", err)
 		}
 	case progress.KindLevelUp:

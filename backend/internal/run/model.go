@@ -72,6 +72,8 @@ type Event struct {
 // AreaEvent is emitted by the logtail watcher when the player enters an area.
 type AreaEvent struct {
 	AreaName   string
+	AreaCode   string
+	AreaLevel  int
 	OccurredAt time.Time
 }
 

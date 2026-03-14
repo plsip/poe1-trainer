@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/poe1-trainer/internal/guide"
@@ -13,11 +14,19 @@ import (
 type Service struct {
 	repo      *Repository
 	guideRepo *guide.Repository
+	mu        sync.Mutex
+	areaHints map[int]areaHint
+}
+
+type areaHint struct {
+	areaCode   string
+	areaLevel  int
+	occurredAt time.Time
 }
 
 // NewService creates a new Service.
 func NewService(repo *Repository, guideRepo *guide.Repository) *Service {
-	return &Service{repo: repo, guideRepo: guideRepo}
+	return &Service{repo: repo, guideRepo: guideRepo, areaHints: map[int]areaHint{}}
 }
 
 // CreateRun starts a new run for the given guide.
@@ -153,7 +162,16 @@ func (s *Service) HandleAreaEvent(ctx context.Context, runID int, ev AreaEvent) 
 	if !run.IsActive {
 		return nil // silently drop events for finished runs
 	}
-	processedAt := time.Now()
+	processedAt := ev.OccurredAt
+	if processedAt.IsZero() {
+		processedAt = time.Now()
+	}
+	if ev.AreaCode == "" {
+		if hint, ok := s.takeAreaHint(runID, processedAt); ok {
+			ev.AreaCode = hint.areaCode
+			ev.AreaLevel = hint.areaLevel
+		}
+	}
 	// Auto-start: first area event starts the timer.
 	if run.TimerStartedAt == nil {
 		if err := s.repo.SetTimerStartedAt(ctx, runID, processedAt); err != nil {
@@ -179,12 +197,36 @@ func (s *Service) HandleAreaEvent(ctx context.Context, runID int, ev AreaEvent) 
 	for _, split := range splits {
 		recorded[split.StepID] = true
 	}
-	step := firstAreaStepForArea(g.Steps, ev.AreaName, recorded, lastRecordedSortOrder(g.Steps, recorded))
+	step := firstAreaStepForArea(g.Steps, ev.AreaName, actFromAreaCode(ev.AreaCode), recorded, lastRecordedSortOrder(g.Steps, recorded))
 	if step == nil {
 		return nil
 	}
 
-	return s.repo.RecordSplit(ctx, runID, step.ID, elapsedAt(run, processedAt))
+	if err := s.repo.RecordSplit(ctx, runID, step.ID, elapsedAt(run, processedAt)); err != nil {
+		return err
+	}
+
+	for _, splitID := range staleAreaSplitIDs(g.Steps, splits, step, ev.AreaName) {
+		if err := s.repo.DeleteSplit(ctx, runID, splitID); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// HandleAreaGenerated stores the latest generated area context for the run.
+func (s *Service) HandleAreaGenerated(ctx context.Context, runID int, areaCode string, areaLevel int, occurredAt time.Time) error {
+	if err := s.RecordLogEvent(ctx, runID, EventAreaGenerated, map[string]string{
+		"area_code":  areaCode,
+		"area_level": fmt.Sprint(areaLevel),
+	}); err != nil {
+		return err
+	}
+	s.mu.Lock()
+	s.areaHints[runID] = areaHint{areaCode: areaCode, areaLevel: areaLevel, occurredAt: occurredAt}
+	s.mu.Unlock()
+	return nil
 }
 
 // RecordLogEvent stores a non-authoritative logtail event for later analysis.
@@ -479,11 +521,14 @@ func (s *Service) loadGuideForRun(ctx context.Context, run *RunSession) (*guide.
 	return s.guideRepo.GetByID(ctx, run.GuideID)
 }
 
-func firstAreaStepForArea(steps []guide.Step, areaName string, recorded map[int]bool, minSortOrder int) *guide.Step {
+func firstAreaStepForArea(steps []guide.Step, areaName string, act int, recorded map[int]bool, minSortOrder int) *guide.Step {
 	entered := normalizeAreaName(areaName)
 	for i := range steps {
 		step := &steps[i]
 		if recorded[step.ID] {
+			continue
+		}
+		if act > 0 && step.Act != act {
 			continue
 		}
 		if step.SortOrder < minSortOrder {
@@ -494,6 +539,71 @@ func firstAreaStepForArea(steps []guide.Step, areaName string, recorded map[int]
 		}
 	}
 	return nil
+}
+
+func (s *Service) takeAreaHint(runID int, occurredAt time.Time) (areaHint, bool) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	hint, ok := s.areaHints[runID]
+	if !ok {
+		return areaHint{}, false
+	}
+	if !occurredAt.IsZero() {
+		delta := occurredAt.Sub(hint.occurredAt)
+		if delta < 0 || delta > 10*time.Second {
+			return areaHint{}, false
+		}
+	}
+	delete(s.areaHints, runID)
+	return hint, true
+}
+
+func actFromAreaCode(areaCode string) int {
+	parts := strings.Split(strings.TrimSpace(areaCode), "_")
+	if len(parts) < 2 {
+		return 0
+	}
+	act := 0
+	_, _ = fmt.Sscanf(parts[1], "%d", &act)
+	if act < 1 || act > 10 {
+		return 0
+	}
+	return act
+}
+
+func staleAreaSplitIDs(steps []guide.Step, splits []Split, selected *guide.Step, areaName string) []int {
+	if selected == nil {
+		return nil
+	}
+
+	entered := normalizeAreaName(areaName)
+	stepByID := make(map[int]guide.Step, len(steps))
+	for _, step := range steps {
+		stepByID[step.ID] = step
+	}
+
+	staleIDs := make([]int, 0)
+	for _, split := range splits {
+		step, ok := stepByID[split.StepID]
+		if !ok {
+			continue
+		}
+		if step.ID == selected.ID {
+			continue
+		}
+		if step.Act == selected.Act {
+			continue
+		}
+		if step.SortOrder >= selected.SortOrder {
+			continue
+		}
+		if !stepMatchesArea(&step, entered) {
+			continue
+		}
+		staleIDs = append(staleIDs, split.ID)
+	}
+
+	return staleIDs
 }
 
 func lastRecordedSortOrder(steps []guide.Step, recorded map[int]bool) int {
