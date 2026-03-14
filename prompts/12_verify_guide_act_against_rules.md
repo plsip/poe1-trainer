@@ -4,7 +4,7 @@
 I want you to verify one specific act of the campaign guide against the editorial rules we established while refining Act 1, and then apply the necessary edits directly in that act.
 
 Context files to use as source of truth:
-- guide source: `guides/stormburst_campaign_v1.md`
+- guide source: `guides/stormburst_campaign.md`
 - editorial rules: `docs/zasady_redakcji_poradnika.md`
 
 Act to verify:
@@ -27,7 +27,7 @@ Your task:
    - optionality should be used only when it reflects a real branch or decision.
 
 Execution requirements:
-- Edit only the requested act in `guides/stormburst_campaign_v1.md`.
+- Edit only the requested act in `guides/stormburst_campaign.md`.
 - Do not rewrite other acts.
 - Preserve existing formatting, colors, and numbering style used by the guide.
 - Prefer the smallest set of edits that brings the act in line with the rules.

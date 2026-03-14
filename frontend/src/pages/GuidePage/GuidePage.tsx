@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useAppStore } from '../../store/appStore'
+import { formatGuideVersion } from '../../utils/guideVersion'
 
 export function GuidePage() {
   const { slug } = useParams<{ slug: string }>()
@@ -41,7 +42,7 @@ export function GuidePage() {
       {/* Guide header */}
       <h1 style={{ marginBottom: 4 }}>{activeGuide.title}</h1>
       <p style={{ color: '#888', marginTop: 0, marginBottom: '1.5rem' }}>
-        {activeGuide.build_name} · v{activeGuide.version}
+        {activeGuide.build_name} · rev: {formatGuideVersion(activeGuide.version)}
       </p>
 
       {/* Start run form */}

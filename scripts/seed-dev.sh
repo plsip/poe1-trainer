@@ -13,7 +13,8 @@ set -euo pipefail
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 DB_URL="${DATABASE_URL:-postgres://poe:poe@localhost:5432/poetrainer?sslmode=disable}"
-GUIDE_FILE="$REPO_ROOT/guides/stormburst_campaign_v1.md"
+GUIDE_FILE="$REPO_ROOT/guides/stormburst_campaign.md"
+GUIDE_VERSION="${GUIDE_VERSION:-$(git -C "$REPO_ROOT" rev-parse HEAD)}"
 
 if [[ ! -f "$GUIDE_FILE" ]]; then
   echo "Błąd: nie znaleziono pliku przewodnika: $GUIDE_FILE" >&2
@@ -28,6 +29,7 @@ go run ./cmd/import \
   -file "$GUIDE_FILE" \
   -slug stormburst_campaign_v1 \
   -title "Stormburst Totemy — Kampania" \
-  -build "Storm Burst Totemy"
+  -build "Storm Burst Totemy" \
+  -version "$GUIDE_VERSION"
 
 echo "Gotowe. Przewodnik zaimportowany do bazy danych."

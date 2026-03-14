@@ -576,9 +576,10 @@ func (h *Handlers) ImportGuide(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusBadRequest, "slug, title, and content are required")
 		return
 	}
-	version := req.Version
-	if version == "" {
-		version = "1"
+	version, err := guide.ResolveVersion(req.Version)
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, err.Error())
+		return
 	}
 	g, err := guide.ParseMarkdown(req.Slug, req.Title, req.BuildName, version, req.Content)
 	if err != nil {

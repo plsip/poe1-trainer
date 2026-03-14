@@ -6,7 +6,7 @@ import (
 	"sync"
 )
 
-//go:embed seeds/stormburst_campaign_v1.json
+//go:embed seeds/stormburst_campaign.json
 var storeburst1JSON []byte
 
 var (

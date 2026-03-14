@@ -71,6 +71,7 @@ Kolejność lokacji:
 31. Wejdź do <span style="color:white;">Prisoner's Gate</span>.
 32. Wejdź do <span style="color:white;">Ship Graveyard</span> i złap waypoint przy wejściu.
 33. Wejdź do <span style="color:white;">Cavern of Wrath</span> i złap waypoint.
+34. Wróć waypointem do <span style="color:white;">Lioneye's Watch</span>, kup <span style="color:#7f7fff;">Storm Burst</span> u <span style="color:green;">Nessy</span> i wrzuć go na weapon swap do levelowania.
 35. Wróć do Ship Graveyard i znajdź wejście do Ship Graveyard Cave.
 36. Wejdź do <span style="color:white;">Ship Graveyard Cave</span>, zabierz <span style="color:green;">Allflame</span> i wyjdź skrótem z powrotem do <span style="color:white;">Ship Graveyard</span>.
 37. Zabij <span style="color:red;">Fairgravesa</span> i wróć do miasta portalem albo logoutem.
@@ -82,7 +83,6 @@ Kolejność lokacji:
 43. Zabij <span style="color:red;">Merveil</span>.
 44. Wejdź do <span style="color:white;">Southern Forest</span>.
 45. Wejdź do <span style="color:white;">Forest Encampment</span>.
-46. Wróć waypointem do <span style="color:white;">Lioneye's Watch</span>, kup <span style="color:#7f7fff;">Storm Burst</span> u <span style="color:green;">Nessy</span> i wrzuć go na weapon swap do levelowania.
 
 ## Akt 2
 

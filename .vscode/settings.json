@@ -19,6 +19,15 @@
         "git commit": true,
         "git push": true,
         "git -C .": true,
-        "git -C \"C:/Workspace/github.com/poe1-trainer\"": true
+        "git -C \"C:/Workspace/github.com/poe1-trainer\"": true,
+        "/^bash scripts/seed-dev\\.sh$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd /c/Workspace/github\\.com/poe1-trainer && bash scripts/seed-dev\\.sh$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "git remote": true
     }
 }

@@ -65,6 +65,7 @@ services:
       DATABASE_URL: "postgres://poe:poe@db:5432/poetrainer?sslmode=disable"
     volumes:
       - ./backend:/app
+      - ./.git:/app/.git:ro
       - ./guides:/guides:ro
       - go_pkg:/go/pkg/mod
       - go_build_cache:/root/.cache/go-build
@@ -75,7 +76,7 @@ services:
       - go
       - run
       - ./cmd/import
-      - -file=/guides/stormburst_campaign_v1.md
+      - -file=/guides/stormburst_campaign.md
       - -slug=stormburst_campaign_v1
       - -title=Stormburst Totemy — Kampania
       - -build=Storm Burst Totemy

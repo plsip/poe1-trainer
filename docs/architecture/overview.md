@@ -52,7 +52,7 @@ poe1-trainer/
 │   └── product/
 │
 ├── guides/                         # surowe markdown guide, źródło treści
-│   └── stormburst_campaign_v1.md
+│   └── stormburst_campaign.md
 │
 ├── prompts/                        # zestawy promptów dla Copilota
 │

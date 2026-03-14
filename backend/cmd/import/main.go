@@ -18,7 +18,7 @@ func main() {
 		slug      = flag.String("slug", "", "Guide slug, e.g. stormburst_campaign_v1 (required)")
 		title     = flag.String("title", "", "Guide title (required)")
 		buildName = flag.String("build", "", "Build name, e.g. Storm Burst Totemy (required)")
-		version   = flag.String("version", "1", "Guide version")
+		version   = flag.String("version", "", "Guide version; defaults to current git commit hash or GUIDE_VERSION")
 	)
 	flag.Parse()
 
@@ -32,7 +32,12 @@ func main() {
 		log.Fatalf("read file: %v", err)
 	}
 
-	g, err := guide.ParseMarkdown(*slug, *title, *buildName, *version, string(data))
+	resolvedVersion, err := guide.ResolveVersion(*version)
+	if err != nil {
+		log.Fatalf("resolve version: %v", err)
+	}
+
+	g, err := guide.ParseMarkdown(*slug, *title, *buildName, resolvedVersion, string(data))
 	if err != nil {
 		log.Fatalf("parse: %v", err)
 	}

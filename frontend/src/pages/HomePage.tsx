@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useAppStore } from '../store/appStore'
+import { formatGuideVersion } from '../utils/guideVersion'
 
 export function HomePage() {
   const { guides, guidesLoading, error, loadGuides } = useAppStore()
@@ -28,7 +29,7 @@ export function HomePage() {
               {g.title}
             </Link>
             <div style={{ fontSize: '0.85rem', color: '#888', marginTop: 2 }}>
-              {g.build_name} · v{g.version}
+              {g.build_name} · rev: {formatGuideVersion(g.version)}
               {' · '}
               <Link to={`/guides/${g.slug}/history`} style={{ color: '#a8dadc' }}>
                 historia i ranking

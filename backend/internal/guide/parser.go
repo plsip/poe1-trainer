@@ -9,7 +9,7 @@ import (
 )
 
 // ParseMarkdown parses a guide markdown file into a Guide struct.
-// It supports the concrete format used in guides/stormburst_campaign_v1.md.
+// It supports the concrete format used in guides/stormburst_campaign.md.
 func ParseMarkdown(slug, title, buildName, version, content string) (*Guide, error) {
 	g := &Guide{
 		Slug:      slug,

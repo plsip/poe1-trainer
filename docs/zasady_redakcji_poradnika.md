@@ -1,6 +1,6 @@
 # Zasady redakcji poradnika kampanii
 
-Ten dokument zbiera zasady wypracowane przy redakcji Aktu 1 dla `guides/stormburst_campaign_v1.md`.
+Ten dokument zbiera zasady wypracowane przy redakcji Aktu 1 dla `guides/stormburst_campaign.md`.
 Jego celem jest ujednolicenie dalszej pracy nad kolejnymi aktami tak, żeby poradnik był jednocześnie:
 
 - czytelny dla gracza,
@@ -10,7 +10,7 @@ Jego celem jest ujednolicenie dalszej pracy nad kolejnymi aktami tak, żeby pora
 ## 1. Źródło prawdy
 
 - Kanonicznym źródłem treści jest plik w `guides/`, a nie kopia w `docs/` ani seed JSON.
-- Redagujemy bezpośrednio `guides/stormburst_campaign_v1.md`.
+- Redagujemy bezpośrednio `guides/stormburst_campaign.md`.
 - Dokumenty w `docs/` mogą opisywać zasady i decyzje, ale nie powinny być traktowane jako runtime source of truth.
 
 ## 2. Twarde ograniczenia formatu
