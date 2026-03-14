@@ -204,25 +204,24 @@ Kolejność lokacji:
 
 <span style="color:white;">Slave Pens</span> -> <span style="color:white;">Overseer's Tower</span> -> <span style="color:white;">Control Blocks</span> -> <span style="color:white;">Oriath Square</span> -> <span style="color:white;">Templar Courts</span> -> <span style="color:white;">Chamber of Innocence</span> -> <span style="color:white;">Sanctum of Innocence</span> -> <span style="color:white;">Torched Courts</span> -> <span style="color:white;">Ruined Square</span> -> <span style="color:white;">Ossuary</span> -> <span style="color:white;">Reliquary</span> -> <span style="color:white;">Ruined Square</span> -> <span style="color:white;">Cathedral Rooftop</span> -> <span style="color:white;">Cathedral Apex</span> -> Act 6
 
-1. Kontynuuj kampanię bez robienia długich objazdów po rzeczy, które nie przyspieszają przejścia.
-2. Wejdź do <span style="color:white;">Slave Pens</span>, zabij <span style="color:red;">Overseer Crow</span> i wejdź do <span style="color:white;">Overseer's Tower</span>.
+1. Wejdź do <span style="color:white;">Slave Pens</span> i zabij <span style="color:red;">Overseer Crow</span>.
+2. Wejdź do <span style="color:white;">Overseer's Tower</span>.
 3. Odbierz reward u Lani.
-4. Wejdź do <span style="color:white;">Control Blocks</span>, znajdź <span style="color:green;">Miasmeter</span>, zabij <span style="color:red;">Justicara Casticusa</span> i zabierz quest item.
+4. Wejdź do <span style="color:white;">Control Blocks</span>, znajdź <span style="color:green;">Miasmeter</span>, zabij <span style="color:red;">Justicara Casticusa</span> i zabierz <span style="color:green;">Miasmeter</span>.
 5. Wejdź do <span style="color:white;">Oriath Square</span> i złap waypoint.
-6. Wejdź do <span style="color:white;">Templar Courts</span>, potem do <span style="color:white;">Chamber of Innocence</span> i złap waypoint od razu przy wejściu.
-7. Dojdź do <span style="color:white;">Sanctum of Innocence</span> i zabij <span style="color:red;">Avariusa/Innocence</span>.
-8. Wyjdź drugim wyjściem z <span style="color:white;">Chamber of Innocence</span> do <span style="color:white;">Torched Courts</span>.
-9. Wejdź do <span style="color:white;">Ruined Square</span>.
-10. Z <span style="color:white;">Ruined Square</span> wejdź najpierw do <span style="color:white;">Ossuary</span>, weź <span style="color:green;">Sign of Purity</span>, potem zrób logout albo portal do miasta i waypointem wróć do <span style="color:white;">Ruined Square</span>.
-11. Potem wejdź do <span style="color:white;">Reliquary</span>, zbierz <span style="color:green;">Kitava's Torments</span> w ramach questa In Service to Science i zrób logout albo portal do miasta.
-12. Odbierz rewardy.
-13. Priorytetem są: lepsza broń, resisty, flaski, sockety i poziomy gemów.
-14. Jeśli wypada dobra biżuteria z life, resistami i statami, wymieniaj ją od razu.
-15. Jeśli flaski są słabe, podmieniaj je bez sentymentu.
-16. Przed Kitavą dopnij około 30% overcap elemental res, bo zaraz dostaniesz karę `-30% all res`.
-17. Wróć waypointem do <span style="color:white;">Ruined Square</span> i wejdź na <span style="color:white;">Cathedral Rooftop</span>.
-18. Wejdź do <span style="color:white;">Cathedral Apex</span> i zabij <span style="color:red;">Kitavę</span>.
-19. Pogadaj z <span style="color:green;">Lilly Roth</span> i popłyń do aktu 6.
+6. Wejdź do <span style="color:white;">Templar Courts</span>.
+7. Wejdź do <span style="color:white;">Chamber of Innocence</span> i złap waypoint przy wejściu.
+8. Wejdź do <span style="color:white;">Sanctum of Innocence</span>.
+9. Zabij <span style="color:red;">Avariusa/Innocence</span>.
+10. Wyjdź drugim wyjściem z <span style="color:white;">Chamber of Innocence</span> do <span style="color:white;">Torched Courts</span>.
+11. Wejdź do <span style="color:white;">Ruined Square</span>.
+12. Wejdź do <span style="color:white;">Ossuary</span>, weź <span style="color:green;">Sign of Purity</span>, zrób logout albo portal do miasta i waypointem wróć do <span style="color:white;">Ruined Square</span>.
+13. Wejdź do <span style="color:white;">Reliquary</span>, zbierz <span style="color:green;">Kitava's Torments</span> w ramach questa In Service to Science i zrób logout albo portal do miasta.
+14. Oddaj <span style="color:green;">Sign of Purity</span> i <span style="color:green;">Kitava's Torments</span>, dopnij około 30% overcap elemental res przed karą <span style="color:red;">Kitavy</span> i wróć waypointem do <span style="color:white;">Ruined Square</span>.
+15. Wejdź na <span style="color:white;">Cathedral Rooftop</span>.
+16. Wejdź do <span style="color:white;">Cathedral Apex</span>.
+17. Zabij <span style="color:red;">Kitavę</span>.
+18. Pogadaj z <span style="color:green;">Lilly Roth</span> i popłyń do aktu 6.
 
 ## Akt 6
 
