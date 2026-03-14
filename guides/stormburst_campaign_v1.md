@@ -173,30 +173,30 @@ Kolejność lokacji:
 
 <span style="color:white;">The Dried Lake</span> -> <span style="color:white;">The Mines Level 1</span> -> <span style="color:white;">The Mines Level 2</span> -> <span style="color:white;">Crystal Veins</span> -> <span style="color:white;">Kaom's Dream</span> -> <span style="color:white;">Kaom's Stronghold</span> -> <span style="color:white;">Caldera of the King</span> -> <span style="color:white;">Crystal Veins</span> -> <span style="color:white;">Daresso's Dream</span> -> <span style="color:white;">Grand Arena</span> -> <span style="color:white;">Ring of Blades</span> -> <span style="color:white;">Crystal Veins</span> -> <span style="color:white;">Belly of the Beast Level 1</span> -> <span style="color:white;">Belly of the Beast Level 2</span> -> <span style="color:white;">Bowels of the Beast</span> -> <span style="color:white;">The Harvest</span> -> <span style="color:white;">The Black Core</span> -> <span style="color:white;">Highgate</span> -> <span style="color:white;">The Ascent</span>
 
-1. Traktuj ten akt jako etap stabilizacji po switchu na totemy.
-2. Wejdź do <span style="color:white;">The Dried Lake</span>, zabij <span style="color:red;">Volla</span> i zabierz <span style="color:green;">Deshret's Banner</span>. To jest quest Breaking the Seal.
-3. Otwórz przejście do <span style="color:white;">The Mines Level 1</span> i przejdź do <span style="color:white;">The Mines Level 2</span>.
-4. Uwolnij spirit <span style="color:green;">Deshret</span>, wejdź do <span style="color:white;">Crystal Veins</span>, złap waypoint na końcu strefy, wróć waypointem do miasta i odbierz <span style="color:green;">Book of Skill</span> oraz gem reward za wcześniejsze questy aktowe.
-5. To jest dobry moment na pierwszy lab i ascend do <span style="color:green;">Hierophanta</span>.
-6. Po pierwszym labie i okolicach levelu 32 zrób pełny switch na <span style="color:#7f7fff;">Storm Burst Totemy</span>.
-7. Główny link po switchu: <span style="color:#7f7fff;">Storm Burst</span> + <span style="color:#ff6a2f;">Spell Totem Support</span>. Potem dokładane utility i damage według socketów.
-8. Wyrzuć <span style="color:#7f7fff;">Rolling Magmę</span> z głównego setupu, ale jeśli czegoś brakuje w obrażeniach albo manie, nie bój się chwilowo wrócić do starego układu.
-9. Wróć waypointem do <span style="color:white;">Crystal Veins</span>.
-10. Zrób najpierw <span style="color:white;">Kaom's Dream</span> -> <span style="color:white;">Kaom's Stronghold</span> -> <span style="color:white;">Caldera of the King</span>, zabij <span style="color:red;">Kaoma</span>, potem zrób logout albo portal do miasta i waypointem wróć do <span style="color:white;">Crystal Veins</span>.
-11. Potem zrób <span style="color:white;">Daresso's Dream</span> -> <span style="color:white;">Grand Arena</span> -> <span style="color:white;">Ring of Blades</span>, zabij <span style="color:red;">Daresso</span>, potem zrób logout albo portal do miasta i waypointem wróć do <span style="color:white;">Crystal Veins</span>.
-12. Najpierw popraw broń, jeśli damage jest przeciętny.
-13. Jeśli wpada lepsza baza pod dużo niebieskich socketów, zachowaj ją pod setup.
-14. Jeśli nie masz jeszcze sensownego 4-linka, szukaj go aktywnie.
-15. Wejdź do <span style="color:white;">Belly of the Beast Level 1</span> i <span style="color:white;">Level 2</span>, potem do <span style="color:white;">Bowels of the Beast</span>.
-16. Zabij <span style="color:red;">Piety</span>.
+1. Wejdź do <span style="color:white;">The Dried Lake</span>, zabij <span style="color:red;">Volla</span> i zabierz <span style="color:green;">Deshret's Banner</span>.
+2. Wejdź do <span style="color:white;">The Mines Level 1</span>.
+3. Wejdź do <span style="color:white;">The Mines Level 2</span> i uwolnij spirit <span style="color:green;">Deshret</span>.
+4. Wejdź do <span style="color:white;">Crystal Veins</span> i złap waypoint.
+5. Wróć waypointem do <span style="color:white;">Highgate</span>.
+6. Zrób teraz pierwszy lab, weź ascend do <span style="color:green;">Hierophanta</span> i po labie przełącz główny setup na <span style="color:#7f7fff;">Storm Burst</span> + <span style="color:#ff6a2f;">Spell Totem Support</span> zamiast <span style="color:#7f7fff;">Rolling Magmy</span>.
+7. Wróć waypointem do <span style="color:white;">Crystal Veins</span>.
+8. Wejdź do <span style="color:white;">Kaom's Dream</span>.
+9. Wejdź do <span style="color:white;">Kaom's Stronghold</span>.
+10. Wejdź do <span style="color:white;">Caldera of the King</span>, zabij <span style="color:red;">Kaoma</span>, zrób logout albo portal do miasta i wróć waypointem do <span style="color:white;">Crystal Veins</span>.
+11. Wejdź do <span style="color:white;">Daresso's Dream</span>.
+12. Wejdź do <span style="color:white;">Grand Arena</span>.
+13. Wejdź do <span style="color:white;">Ring of Blades</span>, zabij <span style="color:red;">Daresso</span>, zrób logout albo portal do miasta i wróć waypointem do <span style="color:white;">Crystal Veins</span>.
+14. Wejdź do <span style="color:white;">Belly of the Beast Level 1</span>.
+15. Wejdź do <span style="color:white;">Belly of the Beast Level 2</span>.
+16. Wejdź do <span style="color:white;">Bowels of the Beast</span> i zabij <span style="color:red;">Piety</span>.
 17. Wejdź do <span style="color:white;">The Harvest</span> i złap waypoint.
-18. Zabij trzech guardianów <span style="color:red;">Malachaia</span>, wejdź do <span style="color:white;">The Black Core</span> i zabij <span style="color:red;">Malachaia</span>.
-19. Odbierz gem reward od <span style="color:green;">Dialli</span>.
-20. Po The Eternal Nightmare kup od <span style="color:green;">Petarusa</span> i <span style="color:green;">Vanji</span> <span style="color:#ff6a2f;">Cast when Damage Taken</span> i <span style="color:#ff6a2f;">Multiple Totems Support</span>, jeśli jeszcze ich nie masz.
-21. Jeśli grasz wersją defensywną, ustaw <span style="color:#ff6a2f;">Cast when Damage Taken</span> na levelu 1 i pilnuj, żeby <span style="color:#ff6a2f;">Molten Shell</span> nie przekroczył levelu 8.
-23. Wyjdź przez <span style="color:white;">The Ascent</span> i weź portal do <span style="color:white;">Oriath</span>.
-24. Nie ciśnij bossów na słabej broni tylko dlatego, że teoretycznie build już działa.
-25. Jeśli czegoś brakuje w survivie, domykaj to bench craftem albo prostym upgradem slotów.
+18. Zabij trzech guardianów <span style="color:red;">Malachaia</span>.
+19. Wejdź do <span style="color:white;">The Black Core</span>.
+20. Zabij <span style="color:red;">Malachaia</span>.
+21. W <span style="color:white;">Highgate</span> odbierz gem reward od <span style="color:green;">Dialli</span>.
+22. Kup u <span style="color:green;">Petarusa</span> i <span style="color:green;">Vanji</span> <span style="color:#ff6a2f;">Cast when Damage Taken</span> oraz <span style="color:#ff6a2f;">Multiple Totems Support</span>, jeśli jeszcze ich nie masz.
+23. Jeśli grasz wersją defensywną, ustaw <span style="color:#ff6a2f;">Cast when Damage Taken</span> na levelu 1 i dopilnuj, żeby <span style="color:#ff6a2f;">Molten Shell</span> nie przekroczył levelu 8.
+24. Wejdź do <span style="color:white;">The Ascent</span> i weź portal do <span style="color:white;">Oriath</span>.
 
 ## Akt 5
 
