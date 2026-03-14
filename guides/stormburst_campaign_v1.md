@@ -94,44 +94,38 @@ Kolejność lokacji:
 1. Wyjdź do <span style="color:white;">The Old Fields</span>.
 2. Jeśli nie masz drugiego <span style="color:#d7d1c3;">Quicksilver Flask</span>, zrób questa <span style="color:#7fa8d6;">The Great White Beast</span>: wejdź do <span style="color:white;">The Den</span>, zabij bossa i wyjdź z powrotem do <span style="color:white;">The Old Fields</span>. Jeśli masz już drugi quicksilver, pomiń ten objazd.
 3. Wejdź do <span style="color:white;">The Crossroads</span> i złap waypoint, idąc po drodze.
-4. Z waypointa skręć w lewo do <span style="color:white;">Chamber of Sins Level 1</span>.
-5. Wejdź do <span style="color:white;">Chamber of Sins</span> wcześnie, bo tu zaczynasz przygotowanie do późniejszego switchu na totemy.
-6. Zejdź do <span style="color:white;">Chamber of Sins Level 2</span>, najlepiej łapiąc waypoint po drodze.
-7. W <span style="color:white;">Chamber of Sins Level 2</span> zrób <span style="color:teal;">Labyrinth Trial</span>, nie zostawiaj go na później.
-8. Zabij <span style="color:red;">Fidelitasa</span>, porozmawiaj z <span style="color:green;">Heleną</span> i zabierz <span style="color:green;">Baleful Gem</span> ze <span style="color:green;">Strange Device</span>.
-9. Wróć waypointem do <span style="color:white;">Forest Encampment</span>, porozmawiaj najpierw z <span style="color:green;">Heleną</span>, potem z <span style="color:green;">Greustem</span> i odbierz nagrodę za questa Intruders in Black.
-10. Po odebraniu nagrody odbierz albo kup od <span style="color:green;">Yeeny</span> <span style="color:#7f7fff;">Wave of Conviction</span>. To jest dobry skill pomocniczy do exposure i dociągania rare'ów podczas levelowania.
-11. Po odebraniu nagrody możesz też kupić od <span style="color:green;">Yeeny</span> <span style="color:#7f7fff;">Arcane Cloak</span> i <span style="color:#ff6a2f;">Molten Shell</span>. Na kampanii zwykle nie są jeszcze priorytetem, ale warto wiedzieć, że od tego momentu są dostępne.
-12. Wróć waypointem do <span style="color:white;">The Crossroads</span>.
-13. Wejdź do <span style="color:white;">Fellshrine Ruins</span>, a potem do <span style="color:white;">The Crypt Level 1</span>.
-14. Zrób kolejny <span style="color:teal;">Labyrinth Trial</span>.
-15. Zejdź do <span style="color:white;">The Crypt Level 2</span>, znajdź altar, kliknij go i zabierz <span style="color:green;">Golden Hand</span> do questa <span style="color:#7fa8d6;">Through Sacred Ground</span>.
-16. Nie czyść niepotrzebnie całej strefy. Weź <span style="color:green;">Golden Hand</span> i wróć waypointem do miasta.
-17. Oddaj <span style="color:green;">Golden Hand</span> <span style="color:green;">Yeenie</span> i odbierz <span style="color:green;">Book of Skill</span>.
-18. Jeśli brakuje ci siły albo dexa do założenia ważnego itemu, tymczasowo weź stat node na drzewku.
-19. Idź prosto z <span style="color:white;">Crossroads</span> do <span style="color:white;">Broken Bridge</span>, złap waypoint i załatw <span style="color:red;">Kraityna</span>.
-20. Po zabiciu <span style="color:red;">Kraityna</span> zrób logout albo portal do miasta, a potem weź lewe wyjście z <span style="color:white;">Forest Encampment</span> do <span style="color:white;">Riverways</span> i biegnij dalej.
-21. W <span style="color:white;">Riverways</span> trzymaj się drogi i złap waypoint.
-22. Z <span style="color:white;">Riverways</span> najpierw idź do <span style="color:white;">Western Forest</span> i złap waypoint, ale traktuj to jako trasę do <span style="color:white;">Weavera</span> i pieczęci, nie jako pierwszą decyzję bandytów.
-23. Przy waypointcie odbij od drogi, znajdź ścianę pokrytą pajęczyną i wejdź do <span style="color:white;">Weaver's Chambers</span>.
-24. Zabij <span style="color:red;">Weavera</span>, zabierz <span style="color:green;">Maligaro's Spike</span> i wróć logoutem do miasta. To jest główna część questa Sharp and Cruel.
-25. Odbierz reward gemowy od <span style="color:green;">Silka</span> po wykonaniu questa Sharp and Cruel.
-26. Wróć waypointem do <span style="color:white;">Riverways</span> i dopiero teraz skręć do <span style="color:white;">Wetlands</span>. To jest miejsce, gdzie stream i Poe Vault się rozjeżdżają. Dla tego buildu trzymaj preferencję streama: ważne jest jak najszybsze załatwienie <span style="color:red;">Aliry</span> dla resistów.
-27. W <span style="color:white;">Wetlands</span> załatw <span style="color:red;">Oak</span>, jeśli nie zrobiłeś tego wcześniej.
-28. Znajdź waypoint w <span style="color:white;">Wetlands</span> i wróć nim do <span style="color:white;">Western Forest</span>.
-29. W obozie <span style="color:red;">Aliry</span> podejmij decyzję z questa Deal with the Bandits: pomóż <span style="color:red;">Alirze</span> i odbierz `+15% all res`.
-30. Podążaj ścianą mapy, znajdź obóz <span style="color:red;">Blackguardów</span>, zabij lidera, weź <span style="color:green;">Thaumetic Emblem</span> i otwórz <span style="color:green;">Thaumetic Seal</span>. To jest quest The Way Forward.
-31. Zrób logout albo portal do miasta, waypointem wróć do <span style="color:white;">Lioneye's Watch</span> z Aktu 1 i odbierz <span style="color:green;">Book of Skill</span> u <span style="color:green;">Bestela</span>. Potem wróć do <span style="color:white;">Forest Encampment</span> i odbierz pozostałe rewardy aktowe.
-32. Wróć waypointem do <span style="color:white;">Wetlands</span>, zatruj korzenie i wejdź do <span style="color:white;">Vaal Ruins</span>.
-33. W <span style="color:white;">Vaal Ruins</span> kliknij <span style="color:green;">Ancient Seal</span>, otwórz przejście i dopiero potem wyjdź do <span style="color:white;">Northern Forest</span>.
-34. W <span style="color:white;">Northern Forest</span> biegnij w górę do <span style="color:white;">The Caverns</span> i złap waypoint. <span style="color:white;">Dread Thicket</span> pomiń na tym etapie.
-35. Znajdź <span style="color:white;">Ancient Pyramid</span> i wejdź na <span style="color:white;">Pyramid Apex</span>.
-36. Zabij <span style="color:red;">Vaal Oversoula</span> w ramach questa The Root of the Problem i wejdź do <span style="color:white;">City of Sarn</span>.
-37. Po drodze cały czas sprawdzaj, czy masz sensowne sockety pod przyszły setup.
-38. Od około levelu 12 zacznij realnie używać crafting bencha.
-39. Najpierw craftuj resisty i damage na broni, nie rzeczy luksusowe.
-40. Jeśli masz za słabą broń, regularnie sprawdzaj vendorów pod lepszą różdżkę albo sceptre.
-41. Przed końcem aktu miej już levelowany <span style="color:#7f7fff;">Storm Burst</span> i levelowany <span style="color:#ff6a2f;">Spell Totem Support</span> na swapie.
+4. Z waypointa skręć w lewo i wejdź do <span style="color:white;">Chamber of Sins Level 1</span>.
+5. Zejdź do <span style="color:white;">Chamber of Sins Level 2</span>, łapiąc waypoint po drodze.
+6. W <span style="color:white;">Chamber of Sins Level 2</span> zrób <span style="color:teal;">Labyrinth Trial</span>.
+7. Zabij <span style="color:red;">Fidelitasa</span>, porozmawiaj z <span style="color:green;">Heleną</span> i zabierz <span style="color:green;">Baleful Gem</span> ze <span style="color:green;">Strange Device</span>.
+8. Wróć waypointem do <span style="color:white;">Forest Encampment</span>, porozmawiaj z <span style="color:green;">Heleną</span>, potem z <span style="color:green;">Greustem</span> i odbierz nagrodę za questa Intruders in Black.
+9. Po oddaniu questa Intruders in Black weź u <span style="color:green;">Yeeny</span> <span style="color:#7f7fff;">Wave of Conviction</span>.
+10. Wróć waypointem do <span style="color:white;">The Crossroads</span>.
+11. Wejdź do <span style="color:white;">Fellshrine Ruins</span>.
+12. Wejdź do <span style="color:white;">The Crypt Level 1</span>.
+13. W <span style="color:white;">The Crypt Level 1</span> zrób <span style="color:teal;">Labyrinth Trial</span>.
+14. Zejdź do <span style="color:white;">The Crypt Level 2</span>, znajdź altar, kliknij go i zabierz <span style="color:green;">Golden Hand</span> do questa <span style="color:#7fa8d6;">Through Sacred Ground</span>.
+15. Zabierz <span style="color:green;">Golden Hand</span> i wróć waypointem do <span style="color:white;">Forest Encampment</span>.
+16. Oddaj <span style="color:green;">Golden Hand</span> <span style="color:green;">Yeenie</span> i odbierz <span style="color:green;">Book of Skill</span>.
+17. Idź prosto z <span style="color:white;">The Crossroads</span> do <span style="color:white;">Broken Bridge</span>, złap waypoint i zabij <span style="color:red;">Kraityna</span>.
+18. Po zabiciu <span style="color:red;">Kraityna</span> zrób logout albo portal do miasta, a potem wyjdź z <span style="color:white;">Forest Encampment</span> do <span style="color:white;">Riverways</span>.
+19. W <span style="color:white;">Riverways</span> trzymaj się drogi i złap waypoint.
+20. Z <span style="color:white;">Riverways</span> wejdź do <span style="color:white;">Western Forest</span> i złap waypoint.
+21. Przy waypointcie odbij od drogi, znajdź ścianę pokrytą pajęczyną i wejdź do <span style="color:white;">Weaver's Chambers</span>.
+22. Zabij <span style="color:red;">Weavera</span>, zabierz <span style="color:green;">Maligaro's Spike</span> i wróć logoutem do miasta.
+23. Wróć waypointem do <span style="color:white;">Riverways</span> i skręć do <span style="color:white;">Wetlands</span>.
+24. W <span style="color:white;">Wetlands</span> zabij <span style="color:red;">Oaka</span>.
+25. Znajdź waypoint w <span style="color:white;">Wetlands</span> i wróć nim do <span style="color:white;">Western Forest</span>.
+26. W obozie <span style="color:red;">Aliry</span> podejmij decyzję z questa Deal with the Bandits: pomóż <span style="color:red;">Alirze</span> i odbierz +15% all res.
+27. Podążaj ścianą mapy, znajdź obóz <span style="color:red;">Blackguardów</span>, zabij lidera, weź <span style="color:green;">Thaumetic Emblem</span> i otwórz <span style="color:green;">Thaumetic Seal</span>.
+28. Zrób logout albo portal do miasta, waypointem wróć do <span style="color:white;">Lioneye's Watch</span> z Aktu 1 i odbierz u <span style="color:green;">Bestela</span> <span style="color:green;">Book of Skill</span>.
+29. Wróć waypointem do <span style="color:white;">Wetlands</span>, zatruj korzenie i wejdź do <span style="color:white;">Vaal Ruins</span>.
+30. W <span style="color:white;">Vaal Ruins</span> kliknij <span style="color:green;">Ancient Seal</span> i wyjdź do <span style="color:white;">Northern Forest</span>.
+31. W <span style="color:white;">Northern Forest</span> biegnij do <span style="color:white;">The Caverns</span> i złap waypoint. <span style="color:white;">Dread Thicket</span> pomiń na tym etapie.
+32. Znajdź <span style="color:white;">Ancient Pyramid</span> i wejdź do niej.
+33. Wejdź na <span style="color:white;">Pyramid Apex</span>.
+34. Zabij <span style="color:red;">Vaal Oversoula</span>.
+35. Wejdź do <span style="color:white;">City of Sarn</span>.
 
 ## Akt 3
 

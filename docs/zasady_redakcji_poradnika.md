@@ -106,16 +106,23 @@ Preferowane sformułowania:
 - Warunki zostawiamy tylko wtedy, gdy są naprawdę potrzebne i dotyczą realnej decyzji gracza.
 - Jeśli coś jest częścią standardowej trasy builda, zapisujemy to bez warunku.
 - Jeśli coś jest opcjonalne, zaznaczamy to jasno i krótko.
+- Każdy krok musi jednoznacznie odpowiadać na pytanie: `zrób to teraz`, `pomiń to` albo `zrób to tylko jeśli zachodzi konkretny warunek`.
+- Krok nie może zostawiać gracza z niepewnością typu `czy mam to w końcu robić, czy tylko wiedzieć, że opcja istnieje`.
+- Jeśli zdanie mówi tylko, że coś `możesz kupić`, `warto wiedzieć`, `od tego momentu jest dostępne`, ale nie daje jasnej decyzji wykonawczej, taki tekst nie powinien być osobnym krokiem.
 
 Dopuszczalne:
 
 - `Jeśli nie masz drugiego Quicksilvera, zrób The Great White Beast.`
 - `Jeśli masz już drugi quicksilver, pomiń ten objazd.`
+- `Kup X teraz, jeśli to część standardowej ścieżki builda.`
+- `Pomiń X na kampanii; wróć do tego dopiero w późniejszym akcie.`, jeśli taka informacja naprawdę jest potrzebna.
 
 Niepożądane:
 
 - `Jeśli masz sensowną tarczę i wymagany level...`
 - `Jeśli wolisz, możesz może kupić...` w kroku, który ma być częścią głównej ścieżki.
+- `Możesz już kupić X.` bez informacji, czy w tym poradniku trzeba to zrobić teraz.
+- `X jest już dostępne.` jako osobny krok bez decyzji wykonawczej.
 
 ## 9. Czego usuwać z głównej listy kroków
 
@@ -123,10 +130,12 @@ Z głównej listy usuwamy albo scalamy rzeczy, które są zbyt ogólne, oczywist
 
 - luźne przypomnienia o gearze,
 - ogólne porady typu `sprawdź vendor`,
+- szerokie rady buildowe typu `craftuj resisty`, `pilnuj socketów`, `szukaj lepszej broni`, jeśli nie dotyczą jednego konkretnego momentu trasy,
 - mikrokroki bez własnej wartości trasy,
 - kroki zależne od niepewnego stanu questa,
 - kroki, które nie mówią u kogo coś odebrać albo kupić,
 - kroki opisane zbyt mgliście, np. `zrób reward`, `wróć do wejścia`, `po odblokowaniu kup`.
+- rzeczy, które miałyby sens tylko wtedy, gdyby były powtarzane przez wiele kolejnych kroków albo przez całą kampanię.
 
 Takie rzeczy powinny trafić albo do `Zasad ogólnych`, albo zostać dopisane do sąsiedniego kroku, albo zostać usunięte.
 
@@ -146,9 +155,11 @@ Przed uznaniem aktu za gotowy sprawdź:
 - Czy wejścia do ważnych lokacji są widoczne jako osobne kroki.
 - Czy rewardy i zakupy mają wskazanego NPC.
 - Czy nie ma ogólników typu `reward gemowy`, `po odblokowaniu`, `wróć do wejścia`.
+- Czy każdy krok jasno mówi, czy trzeba go zrobić teraz, pominąć, czy wykonać tylko pod wyraźnym warunkiem.
 - Czy waypoint, portal i logout są wpisane tam, gdzie wpływają na trasę.
 - Czy nie ma osobnych kroków, które powinny być scalone z sąsiednim.
 - Czy nie ma osobnych kroków, które są tylko luźną poradą gearową.
+- Czy nie ma w akcie ogólnych rad, które musiałyby wracać w wielu kolejnych krokach, żeby w ogóle miały sens.
 - Czy krok nie zawiera zbędnego warunku, jeśli jest częścią głównej ścieżki.
 - Czy po przeczytaniu kroku gracz wie dokładnie: gdzie iść, co zrobić, do kogo wrócić.
 
