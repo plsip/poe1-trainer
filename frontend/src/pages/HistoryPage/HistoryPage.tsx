@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import * as api from '../../api/client'
 import type { RunSession, DetailedRankingEntry, RankingStats } from '../../api/types'
+import { getCanonicalGuideSlug } from '../../utils/guideSlug'
 
 function formatMs(ms: number) {
   const totalSec = Math.floor(ms / 1000)
@@ -15,19 +16,25 @@ function formatMs(ms: number) {
 
 export function HistoryPage() {
   const { slug } = useParams<{ slug: string }>()
+  const navigate = useNavigate()
   const [runs, setRuns] = useState<RunSession[]>([])
   const [ranking, setRanking] = useState<DetailedRankingEntry[]>([])
   const [stats, setStats] = useState<RankingStats | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const canonicalSlug = getCanonicalGuideSlug(slug)
 
   useEffect(() => {
-    if (!slug) return
+    if (!slug || !canonicalSlug) return
+    if (canonicalSlug !== slug) {
+      navigate(`/guides/${canonicalSlug}/history`, { replace: true })
+      return
+    }
     setLoading(true)
     Promise.all([
-      api.listRuns(slug),
-      api.getRanking(slug),
-      api.getRankingStats(slug),
+      api.listRuns(canonicalSlug),
+      api.getRanking(canonicalSlug),
+      api.getRankingStats(canonicalSlug),
     ])
       .then(([r, rank, st]) => {
         setRuns(r ?? [])
@@ -36,7 +43,7 @@ export function HistoryPage() {
       })
       .catch((e) => setError(String(e)))
       .finally(() => setLoading(false))
-  }, [slug])
+  }, [slug, canonicalSlug, navigate])
 
   if (loading) return <p>Ładowanie historii…</p>
   if (error) return <p style={{ color: 'red' }}>{error}</p>
@@ -48,7 +55,7 @@ export function HistoryPage() {
 
   return (
     <div style={{ maxWidth: 960, margin: '0 auto', padding: '1.5rem' }}>
-      <h1>Historia runów — {slug}</h1>
+      <h1>Historia runów — {canonicalSlug}</h1>
 
       {/* ── Statystyki ── */}
       {stats && stats.count > 0 && (
