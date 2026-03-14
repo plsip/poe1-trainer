@@ -304,27 +304,38 @@ Kolejność lokacji:
 
 <span style="color:white;">Toxic Conduits</span> -> <span style="color:white;">Doedre's Cesspool</span> -> <span style="color:white;">The Cauldron</span> -> <span style="color:white;">Sewer Outlet</span> -> <span style="color:white;">The Quay</span> -> <span style="color:white;">Ressurection Site</span> -> <span style="color:white;">The Quay</span> -> <span style="color:white;">Grain Gate</span> -> <span style="color:white;">Imperial Fields</span> -> <span style="color:white;">Solaris Temple Level 1</span> -> <span style="color:white;">Solaris Temple Level 2</span> -> <span style="color:white;">Solaris Concourse</span> -> <span style="color:white;">Harbour Bridge</span> -> <span style="color:white;">Lunaris Concourse</span> -> <span style="color:white;">Bath House</span> -> <span style="color:white;">High Gardens</span> -> <span style="color:white;">Lunaris Temple Level 1</span> -> <span style="color:white;">Lunaris Temple Level 2</span> -> <span style="color:white;">Harbour Bridge</span> -> <span style="color:white;">Sky Shrine</span> -> <span style="color:white;">Blood Aqueduct</span> -> <span style="color:white;">Highgate</span>
 
-1. Wejdź do <span style="color:white;">Toxic Conduits</span>, potem <span style="color:white;">Doedre's Cesspool</span> i <span style="color:white;">The Cauldron</span>.
-2. Zabij <span style="color:red;">Doedre</span>, wyjdź do <span style="color:white;">Sewer Outlet</span>, złap waypoint i idź prawą ścieżką do <span style="color:white;">The Quay</span>.
-3. Weź <span style="color:green;">Ankh of Eternity</span> z <span style="color:green;">Sealed Casket</span> blisko długiego mostu.
-4. Wejdź do <span style="color:white;">Ressurection Site</span>, zabij <span style="color:red;">Tolmana</span>, zrób logout albo portal do miasta do <span style="color:green;">Clarissy</span>, potem waypointem wróć do <span style="color:white;">The Quay</span>.
-5. Wejdź do <span style="color:white;">Grain Gate</span>, złap waypoint i idź mniej więcej w górę prawej ściany strefy.
-6. Zabij Gemling Legionnaires.
-7. Wejdź do <span style="color:white;">Imperial Fields</span>, trzymaj się drogi i złap waypoint.
-8. Wróć waypointem do miasta i odbierz Book of Skill rewardy.
-9. Wróć waypointem do <span style="color:white;">Imperial Fields</span> i wejdź do <span style="color:white;">Solaris Temple Level 1</span>, potem <span style="color:white;">Level 2</span>.
-10. Zabij <span style="color:red;">Dawna</span>, zabierz <span style="color:green;">Sun Orb</span>, potem zrób logout albo portal do miasta i waypointem wróć do <span style="color:white;">Solaris Temple Level 2</span>.
-11. Wróć z <span style="color:white;">Solaris Temple Level 2</span> do <span style="color:white;">Solaris Temple Level 1</span> i przejdź do <span style="color:white;">Solaris Concourse</span>.
-12. Przebiegnij do <span style="color:white;">Harbour Bridge</span>, potem do <span style="color:white;">Lunaris Concourse</span>, złap waypoint i wejdź do <span style="color:white;">Bath House</span>.
-13. Zrób <span style="color:teal;">Labyrinth Trial</span> blisko waypointa.
-14. Wejdź do <span style="color:white;">High Gardens</span>, zabij <span style="color:red;">Yugula</span> i odbierz skill book. Pantheonu <span style="color:red;">Yugula</span> nie używaj, to tylko obowiązkowy objazd po passive point.
-15. Wróć waypointem do <span style="color:white;">Lunaris Concourse</span> i wejdź do <span style="color:white;">Lunaris Temple Level 1</span> i <span style="color:white;">2</span>.
-16. Zabij <span style="color:red;">Duska</span>, weź <span style="color:green;">Moon Orb</span>, potem zrób logout albo portal do miasta i waypointem wróć do <span style="color:white;">Lunaris Concourse</span>.
-17. Wróć przez <span style="color:white;">Harbour Bridge</span> do <span style="color:white;">Sky Shrine</span>.
-18. Zabij <span style="color:red;">Solaris</span> i <span style="color:red;">Lunaris</span>.
-19. Wejdź do <span style="color:white;">Blood Aqueduct</span> i potem do <span style="color:white;">Highgate</span>.
-20. Nie rób innych długich objazdów po sekrety i niszowe rzeczy, jeśli celem jest szybka kampania.
-21. Dalej pilnuj resistów, bo końcówka kampanii łatwo karze za zaniedbania defensywne.
+1. Wejdź do <span style="color:white;">Toxic Conduits</span>.
+2. Wejdź do <span style="color:white;">Doedre's Cesspool</span>.
+3. Wejdź do <span style="color:white;">The Cauldron</span>.
+4. Zabij <span style="color:red;">Doedre</span>, wyjdź do <span style="color:white;">Sewer Outlet</span> i złap waypoint.
+5. Wejdź do <span style="color:white;">The Quay</span>.
+6. Weź <span style="color:green;">Ankh of Eternity</span> z <span style="color:green;">Sealed Casket</span> blisko długiego mostu.
+7. Wejdź do <span style="color:white;">Ressurection Site</span>.
+8. Zabij <span style="color:red;">Tolmana</span>, zrób logout albo portal do miasta, odbierz <span style="color:green;">Book of Skill</span> od <span style="color:green;">Clarissy</span> i waypointem wróć do <span style="color:white;">The Quay</span>.
+9. Wejdź do <span style="color:white;">Grain Gate</span> i złap waypoint.
+10. Trzymaj się prawej ściany strefy i zabij <span style="color:red;">Gemling Legionnaires</span>.
+11. Wejdź do <span style="color:white;">Imperial Fields</span>, trzymaj się drogi i złap waypoint.
+12. Wróć waypointem do miasta i odbierz <span style="color:green;">Book of Skill</span> od <span style="color:green;">Hargana</span>.
+13. Wróć waypointem do <span style="color:white;">Imperial Fields</span>.
+14. Wejdź do <span style="color:white;">Solaris Temple Level 1</span>.
+15. Wejdź do <span style="color:white;">Solaris Temple Level 2</span>.
+16. Zabij <span style="color:red;">Dawna</span>, zabierz <span style="color:green;">Sun Orb</span>, zrób logout albo portal do miasta i waypointem wróć do <span style="color:white;">Solaris Temple Level 2</span>.
+17. Wróć z <span style="color:white;">Solaris Temple Level 2</span> do <span style="color:white;">Solaris Temple Level 1</span>.
+18. Wejdź do <span style="color:white;">Solaris Concourse</span>.
+19. Wejdź do <span style="color:white;">Harbour Bridge</span>.
+20. Wejdź do <span style="color:white;">Lunaris Concourse</span> i złap waypoint.
+21. Wejdź do <span style="color:white;">Bath House</span>.
+22. Zrób <span style="color:teal;">Labyrinth Trial</span> blisko waypointa.
+23. Wejdź do <span style="color:white;">High Gardens</span>.
+24. Zabij <span style="color:red;">Yugula</span>, zrób logout albo portal do miasta i odbierz <span style="color:green;">Book of Skill</span> od <span style="color:green;">Hargana</span>.
+25. Wróć waypointem do <span style="color:white;">Lunaris Concourse</span>.
+26. Wejdź do <span style="color:white;">Lunaris Temple Level 1</span>.
+27. Wejdź do <span style="color:white;">Lunaris Temple Level 2</span>.
+28. Zabij <span style="color:red;">Duska</span>, weź <span style="color:green;">Moon Orb</span>, zrób logout albo portal do miasta i waypointem wróć do <span style="color:white;">Lunaris Concourse</span>.
+29. Wróć przez <span style="color:white;">Harbour Bridge</span> do <span style="color:white;">Sky Shrine</span>.
+30. Zabij <span style="color:red;">Solaris</span> i <span style="color:red;">Lunaris</span>.
+31. Wejdź do <span style="color:white;">Blood Aqueduct</span>.
+32. Wejdź do <span style="color:white;">Highgate</span>.
 
 ## Akt 9
 
