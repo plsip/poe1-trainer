@@ -71,6 +71,10 @@ export function getRunState(runId: number): Promise<CurrentState> {
   return request(`/runs/${runId}/state`)
 }
 
+export function getRunGuide(runId: number): Promise<Guide> {
+  return request(`/runs/${runId}/guide`)
+}
+
 export function getRecommendations(runId: number): Promise<Recommendation[]> {
   return request(`/runs/${runId}/recommendations`)
 }

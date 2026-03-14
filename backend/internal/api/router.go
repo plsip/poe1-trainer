@@ -27,6 +27,7 @@ func NewRouter(h *Handlers) http.Handler {
 	// --- runs ---
 	mux.HandleFunc("POST /runs", h.CreateRun)
 	mux.HandleFunc("GET /runs/{id}", h.GetRun)
+	mux.HandleFunc("GET /runs/{id}/guide", h.GetRunGuide)
 	mux.HandleFunc("GET /runs/{id}/state", h.GetRunState)
 	mux.HandleFunc("POST /runs/{id}/finish", h.FinishRun)
 	mux.HandleFunc("POST /runs/{id}/abandon", h.AbandonRun)

@@ -144,6 +144,24 @@ func (r *Repository) GetByID(ctx context.Context, id int) (*Guide, error) {
 	return g, nil
 }
 
+// GetByIDRevision fetches a guide by primary key and a specific revision.
+func (r *Repository) GetByIDRevision(ctx context.Context, id, revision int) (*Guide, error) {
+	g := &Guide{}
+	err := r.db.QueryRow(ctx, `
+		SELECT id, slug, title, build_name, version, current_revision, created_at
+		FROM guides WHERE id = $1`, id,
+	).Scan(&g.ID, &g.Slug, &g.Title, &g.BuildName, &g.Version, &g.CurrentRevision, &g.CreatedAt)
+	if err != nil {
+		return nil, fmt.Errorf("guide: get by id %d: %w", id, err)
+	}
+	steps, err := r.loadSteps(ctx, id, revision)
+	if err != nil {
+		return nil, err
+	}
+	g.Steps = steps
+	return g, nil
+}
+
 // List returns all guides without their steps.
 func (r *Repository) List(ctx context.Context) ([]Guide, error) {
 	rows, err := r.db.Query(ctx, `
@@ -189,6 +207,7 @@ func (r *Repository) loadSteps(ctx context.Context, guideID, revision int) ([]St
 		); err != nil {
 			return nil, err
 		}
+		s.Revision = revision
 		s.StepType = StepType(stepType)
 		s.CompletionMode = CompletionMode(completionMode)
 		steps = append(steps, s)
@@ -265,14 +284,14 @@ func (r *Repository) loadSteps(ctx context.Context, guideID, revision int) ([]St
 // GetStepByID returns a single step.
 func (r *Repository) GetStepByID(ctx context.Context, stepID int) (*Step, error) {
 	row := r.db.QueryRow(ctx, `
-		SELECT id, guide_id, step_number, act, section, title, description, area,
+		SELECT id, guide_id, revision, step_number, act, section, title, description, area,
 		       quest_name, step_type, completion_mode,
 		       is_checkpoint, requires_manual, sort_order
 		FROM guide_steps WHERE id = $1`, stepID)
 	var s Step
 	var stepType, completionMode string
 	if err := row.Scan(
-		&s.ID, &s.GuideID, &s.StepNumber, &s.Act, &s.Section,
+		&s.ID, &s.GuideID, &s.Revision, &s.StepNumber, &s.Act, &s.Section,
 		&s.Title, &s.Description, &s.Area,
 		&s.QuestName, &stepType, &completionMode,
 		&s.IsCheckpoint, &s.RequiresManual, &s.SortOrder,

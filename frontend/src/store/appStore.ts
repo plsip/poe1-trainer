@@ -108,11 +108,12 @@ export const useAppStore = create<AppState>((set, get) => ({
   loadRunState: async (runId) => {
     set({ stateLoading: true, error: null })
     try {
-      const [state, recs] = await Promise.all([
+      const [state, recs, guide] = await Promise.all([
         api.getRunState(runId),
         api.getRecommendations(runId),
+        api.getRunGuide(runId),
       ])
-      set({ runState: state, recommendations: recs ?? [], stateLoading: false })
+      set({ runState: state, recommendations: recs ?? [], activeGuide: guide, stateLoading: false })
     } catch (e) {
       set({ stateLoading: false, error: String(e) })
     }

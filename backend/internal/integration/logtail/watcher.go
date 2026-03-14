@@ -185,6 +185,16 @@ func (w *Watcher) run(ctx context.Context) {
 			setStatus(StatusActive, nil)
 		}
 
+		if reopen, err := w.shouldReopenFile(f); reopen {
+			if err != nil {
+				slog.Warn("logtail: file changed, reopening", "path", w.cfg.LogPath, "err", err)
+			} else {
+				slog.Info("logtail: file changed, reopening", "path", w.cfg.LogPath)
+			}
+			closeFile()
+			continue
+		}
+
 		// Faza 2: odczytaj dostępne linie.
 		gotData := false
 		for {
@@ -251,8 +261,20 @@ func (w *Watcher) openFile() (*os.File, error) {
 	if err != nil {
 		return nil, err
 	}
+	info, err := f.Stat()
+	if err != nil {
+		_ = f.Close()
+		return nil, fmt.Errorf("stat log file: %w", err)
+	}
 	offset := w.loadCheckpoint()
 	if offset > 0 {
+		if info.Size() < offset {
+			slog.Info("logtail: stale checkpoint beyond EOF, resetting to end", "offset", offset, "size", info.Size())
+			offset = info.Size()
+			if err := w.saveCheckpoint(offset); err != nil {
+				slog.Warn("logtail: checkpoint reset failed", "err", err)
+			}
+		}
 		if _, err := f.Seek(offset, io.SeekStart); err != nil {
 			// Checkpoint nieaktualny (plik mógł być obcięty) — start od końca.
 			slog.Warn("logtail: checkpoint seek failed, starting from end", "offset", offset, "err", err)
@@ -269,6 +291,28 @@ func (w *Watcher) openFile() (*os.File, error) {
 		}
 	}
 	return f, nil
+}
+
+func (w *Watcher) shouldReopenFile(f *os.File) (bool, error) {
+	openInfo, err := f.Stat()
+	if err != nil {
+		return true, fmt.Errorf("stat open file: %w", err)
+	}
+	pathInfo, err := os.Stat(w.cfg.LogPath) // #nosec G304 — lokalna ścieżka konfigurowana przez użytkownika
+	if err != nil {
+		return true, fmt.Errorf("stat log path: %w", err)
+	}
+	if !os.SameFile(openInfo, pathInfo) {
+		return true, nil
+	}
+	offset, err := f.Seek(0, io.SeekCurrent)
+	if err != nil {
+		return true, fmt.Errorf("read current offset: %w", err)
+	}
+	if pathInfo.Size() < offset {
+		return true, nil
+	}
+	return false, nil
 }
 
 // emitEvent konwertuje ParsedLine na DomainEvent i wysyła go do sink.

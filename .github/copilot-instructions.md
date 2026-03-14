@@ -29,7 +29,8 @@ It should avoid taking full control of decision-making when an educational desig
 - Work iteratively.
 - Define contracts before building broad features.
 - Keep domain logic, integrations, persistence, and transport separated.
-- Add tests for core progression logic and guide interpretation rules.
+- At the current stage, do not create unit tests or fix existing tests unless the user explicitly asks for tests.
+- Prefer runtime verification, logs, and manual checks over unit tests during early iteration.
 - Use English for code, identifiers, API names, schema names, and technical labels.
 - Use Polish for explanations and documentation unless asked otherwise.
 

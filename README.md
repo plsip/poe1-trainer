@@ -110,26 +110,29 @@ docker compose -f docker-compose.dev.yml up -d db
 
 Następnie uruchom backend i frontend lokalnie zgodnie z [docs/next-steps.md](docs/next-steps.md).
 
-### Konfiguracja ścieżki do LatestClient.txt
+### Konfiguracja ścieżki do Client.txt
 
-Obserwator `LatestClient.txt` jest opcjonalny — aplikacja działa bez niego.
-Backend domyślnie próbuje użyć tej ścieżki na Windows. `LOG_PATH` służy tylko do nadpisania domyślnej lokalizacji, na przykład w Dockerze.
+Obserwator logu klienta jest opcjonalny — aplikacja działa bez niego.
+Backend na Windows próbuje automatycznie znaleźć pierwszy istniejący plik z typowych lokalizacji `Client.txt` lub `LatestClient.txt`. `LOG_PATH` służy do ręcznego nadpisania tej ścieżki, na przykład w Dockerze.
 
-1. Ustal ścieżkę do `LatestClient.txt` na swoim hoście:
-   - Windows/Steam: `C:\Program Files (x86)\Steam\steamapps\common\Path of Exile\logs\LatestClient.txt`
+1. Ustal ścieżkę do pliku logu na swoim hoście. Typowe lokalizacje na Windows:
+   - `C:\Users\<user>\Documents\My Games\Path of Exile\Client.txt`
+   - `C:\Users\<user>\Documents\My Games\Path of Exile\logs\Client.txt`
+   - `C:\Program Files (x86)\Steam\steamapps\common\Path of Exile\logs\Client.txt`
+   - starsze instalacje mogą nadal używać `LatestClient.txt` w tych samych katalogach
 
 2. Jeśli uruchamiasz backend poza domyślną lokalizacją albo przez Docker, w pliku `.env` ustaw:
    ```
-   LOG_PATH=/mnt/poe-logs/LatestClient.txt
+   LOG_PATH=/mnt/poe-logs/Client.txt
    ```
 
-3. W `docker-compose.dev.yml` odkomentuj wolumen `poe-logs` w sekcji `backend.volumes`:
+3. W `docker-compose.dev.yml` ustaw `POE_LOG_DIR` na katalog zawierający plik logu i upewnij się, że jest montowany do backendu:
    ```yaml
    - ${POE_LOG_DIR}:/mnt/poe-logs:ro
    ```
-   Ustaw `POE_LOG_DIR` w `.env` na katalog zawierający `LatestClient.txt`:
+   Ustaw `POE_LOG_DIR` w `.env` na katalog zawierający `Client.txt`:
    ```
-   POE_LOG_DIR=C:/Program Files (x86)/Steam/steamapps/common/Path of Exile/logs
+   POE_LOG_DIR=C:/Users/<user>/Documents/My Games/Path of Exile
    ```
 
 > **Uwaga bezpieczeństwa:** wolumen montowany jest zawsze jako read-only (`:ro`).

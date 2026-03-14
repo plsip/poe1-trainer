@@ -255,13 +255,33 @@ func (h *Handlers) GetRunRecommendations(w http.ResponseWriter, r *http.Request)
 		writeError(w, http.StatusNotFound, err.Error())
 		return
 	}
-	g, err := h.guides.GetByID(r.Context(), state.Run.GuideID)
+	g, err := h.loadGuideForRun(r.Context(), &state.Run)
 	if err != nil {
 		writeError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 	recs := h.engine.Produce(g, state)
 	writeJSON(w, http.StatusOK, recs)
+}
+
+// GetRunGuide handles GET /runs/{id}/guide
+func (h *Handlers) GetRunGuide(w http.ResponseWriter, r *http.Request) {
+	id, ok := intPathParam(r, "id")
+	if !ok {
+		writeError(w, http.StatusBadRequest, "invalid run id")
+		return
+	}
+	run, err := h.runRepo.GetRun(r.Context(), id)
+	if err != nil {
+		writeError(w, http.StatusNotFound, err.Error())
+		return
+	}
+	g, err := h.loadGuideForRun(r.Context(), run)
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	writeJSON(w, http.StatusOK, g)
 }
 
 // ConfirmStep handles POST /runs/{id}/steps/{step_id}/confirm
@@ -418,6 +438,16 @@ func writeError(w http.ResponseWriter, status int, msg string) {
 
 func pathParam(r *http.Request, key string) string {
 	return r.PathValue(key)
+}
+
+func (h *Handlers) loadGuideForRun(ctx context.Context, run *runpkg.RunSession) (*guide.Guide, error) {
+	if run == nil {
+		return nil, fmt.Errorf("run is required")
+	}
+	if run.GuideRevision > 0 {
+		return h.guides.GetByIDRevision(ctx, run.GuideID, run.GuideRevision)
+	}
+	return h.guides.GetByID(ctx, run.GuideID)
 }
 
 func intPathParam(r *http.Request, key string) (int, bool) {
@@ -748,7 +778,7 @@ func (h *Handlers) GetAlerts(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	g, err := h.guides.GetByID(r.Context(), state.Run.GuideID)
+	g, err := h.loadGuideForRun(r.Context(), &state.Run)
 	if err != nil {
 		writeError(w, http.StatusInternalServerError, err.Error())
 		return
@@ -1095,4 +1125,3 @@ func generateOAuthState() (string, error) {
 	}
 	return hex.EncodeToString(b), nil
 }
-

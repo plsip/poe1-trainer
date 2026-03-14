@@ -1,14 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useAppStore } from '../../store/appStore'
-import { RecommendationList } from '../../components/RecommendationList'
 import { RunTimer } from '../../components/RunTimer'
 import { StepList } from '../../components/StepList'
-import { SplitsPanel } from '../../components/SplitsPanel'
-import { IntegrationStatus } from '../../components/IntegrationStatus'
 import { ChecksPanel } from '../../components/ChecksPanel'
 import { LogTailPanel } from '../../components/LogTailPanel'
-import type { GuideStep, CurrentState, DetailedRankingEntry, RunDeltasResponse } from '../../api/types'
+import type { GuideStep, CurrentState } from '../../api/types'
 import * as api from '../../api/client'
 
 export function RunPage() {
@@ -17,10 +14,8 @@ export function RunPage() {
 
   const {
     runState,
-    recommendations,
     stateLoading,
     error,
-    splits,
     checks,
     stepFilter,
     activeGuide,
@@ -36,8 +31,6 @@ export function RunPage() {
     setStepFilter,
   } = useAppStore()
 
-  const [ranking, setRanking] = useState<DetailedRankingEntry[]>([])
-  const [deltas, setDeltas] = useState<RunDeltasResponse | undefined>()
   const [paused, setPaused] = useState(false)
 
   const id = Number(runId)
@@ -51,25 +44,6 @@ export function RunPage() {
     loadSplits(id)
     loadChecks(id)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id])
-
-  // Load ranking once we have the guide slug
-  const guideSlug = activeGuide?.slug
-  useEffect(() => {
-    if (!guideSlug) return
-    api
-      .getRanking(guideSlug)
-      .then((r) => setRanking(r ?? []))
-      .catch(() => {})
-  }, [guideSlug])
-
-  // Load split deltas on mount
-  useEffect(() => {
-    if (!id) return
-    api
-      .getSplitDeltas(id)
-      .then((d) => setDeltas(d))
-      .catch(() => {})
   }, [id])
 
   // SSE stream — replaces polling; backend pushes run state updates
@@ -113,7 +87,6 @@ export function RunPage() {
     if (!confirm('Zakończyć run? Zostaną zapisane finalne splity.')) return
     await finishRun(id)
     loadSplits(id)
-    api.getSplitDeltas(id).then(setDeltas).catch(() => {})
   }
 
   const handleAbandon = async () => {

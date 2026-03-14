@@ -15,6 +15,7 @@ const (
 type RunSession struct {
 	ID            int        `json:"id"`
 	GuideID       int        `json:"guide_id"`
+	GuideRevision int        `json:"guide_revision"`
 	CharacterName string     `json:"character_name"`
 	League        string     `json:"league"`
 	Status        Status     `json:"status"`
@@ -70,7 +71,8 @@ type Event struct {
 
 // AreaEvent is emitted by the logtail watcher when the player enters an area.
 type AreaEvent struct {
-	AreaName string
+	AreaName   string
+	OccurredAt time.Time
 }
 
 // CurrentState is the aggregated state of an active run returned by the API.
@@ -79,6 +81,14 @@ type CurrentState struct {
 	CurrentStepID    int        `json:"current_step_id"`
 	ConfirmedStepIDs []int      `json:"confirmed_step_ids"`
 	ElapsedMs        int64      `json:"elapsed_ms"`
+	StepTimings      []StepTiming `json:"step_timings,omitempty"`
+}
+
+// StepTiming describes the measured time for reaching a step and its delta to PB.
+type StepTiming struct {
+	StepID    int    `json:"step_id"`
+	SplitMs   int64  `json:"split_ms"`
+	DeltaPBMs *int64 `json:"delta_pb_ms,omitempty"`
 }
 
 // ─── run_characters ──────────────────────────────────────────────────────────

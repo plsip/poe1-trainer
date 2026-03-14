@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
-import type { GuideStep, CurrentState, StepFilter, StepProgressStatus } from '../api/types'
-import { StatusBadge } from './StatusBadge'
+import type { GuideStep, CurrentState, StepFilter, StepProgressStatus, StepTiming } from '../api/types'
 
 function deriveStatus(step: GuideStep, state: CurrentState | null): StepProgressStatus {
   if (!state) return 'pending'
@@ -9,6 +8,23 @@ function deriveStatus(step: GuideStep, state: CurrentState | null): StepProgress
     return step.requires_manual ? 'needs_confirmation' : 'in_progress'
   }
   return 'pending'
+}
+
+function formatSplit(ms: number): string {
+  const totalSeconds = Math.max(0, Math.floor(ms / 1000))
+  const minutes = Math.floor(totalSeconds / 60)
+  const seconds = totalSeconds % 60
+  return `${minutes}:${String(seconds).padStart(2, '0')}`
+}
+
+function formatDelta(ms: number): string {
+  const sign = ms < 0 ? '-' : '+'
+  return `${sign}${formatSplit(Math.abs(ms))}`
+}
+
+function timingColor(timing?: StepTiming): string | undefined {
+  if (!timing || timing.delta_pb_ms === undefined || timing.delta_pb_ms === 0) return undefined
+  return timing.delta_pb_ms < 0 ? '#6ee7b7' : '#f87171'
 }
 
 interface Props {
@@ -33,6 +49,7 @@ export function StepList({
   onUndo,
 }: Props) {
   const [expandedId, setExpandedId] = useState<number | null>(state?.current_step_id ?? null)
+  const stepTimings = new Map((state?.step_timings ?? []).map((timing) => [timing.step_id, timing]))
 
   // Auto-expand whenever the current step changes
   useEffect(() => {
@@ -134,6 +151,8 @@ export function StepList({
               const status = deriveStatus(step, state)
               const isCurrent = step.id === state?.current_step_id
               const isExpanded = expandedId === step.id
+              const timing = stepTimings.get(step.id)
+              const deltaColor = timingColor(timing)
 
               return (
                 <li
@@ -184,6 +203,26 @@ export function StepList({
                       />
                     )}
 
+                    {timing && (
+                      <span
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.35rem',
+                          flexShrink: 0,
+                          fontSize: '0.72rem',
+                          color: '#bcbcbc',
+                        }}
+                      >
+                        <span>{formatSplit(timing.split_ms)}</span>
+                        {timing.delta_pb_ms !== undefined && (
+                          <span style={{ color: deltaColor, fontWeight: 700 }}>
+                            {formatDelta(timing.delta_pb_ms)}
+                          </span>
+                        )}
+                      </span>
+                    )}
+
                     {step.is_checkpoint && (
                       <span
                         style={{
@@ -215,6 +254,16 @@ export function StepList({
                         borderTop: '1px solid #2a2a2a',
                       }}
                     >
+                      {timing && (
+                        <div style={{ marginTop: '0.6rem', fontSize: '0.8rem', color: '#bcbcbc' }}>
+                          Czas wejścia: <span style={{ color: '#e5e7eb', fontWeight: 600 }}>{formatSplit(timing.split_ms)}</span>
+                          {timing.delta_pb_ms !== undefined && (
+                            <span style={{ marginLeft: '0.5rem', color: deltaColor, fontWeight: 700 }}>
+                              vs PB {formatDelta(timing.delta_pb_ms)}
+                            </span>
+                          )}
+                        </div>
+                      )}
                       {isActive && (
                         <div style={{ display: 'flex', gap: '0.4rem', marginTop: '0.6rem' }}>
                           {isCurrent && (

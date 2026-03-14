@@ -57,22 +57,21 @@ Kolejność lokacji:
 17. Postaw portal przy wejściu do <span style="color:white;">Flooded Depths</span>, jeśli znajdziesz je po drodze.
 18. Jeśli nie znajdziesz wejścia do <span style="color:white;">Flooded Depths</span> od razu, nie szukaj go na siłę i biegnij dalej w stronę <span style="color:white;">The Ledge</span>.
 19. Wejdź do <span style="color:white;">The Ledge</span> i złap waypoint.
-20. Wejdź do <span style="color:white;">The Climb</span> i złap waypoint, jeśli masz go po drodze.
-21. Wejdź do <span style="color:white;">Lower Prison</span>, złap waypoint, wróć do miasta, użyj postawionego portalu i wejdź do <span style="color:white;">Flooded Depths</span>.
-22. Zabij <span style="color:red;">Deep Dwellera</span> i wróć do miasta portalem albo logoutem.
-23. Odbierz <span style="color:green;">Book of Skill</span> od <span style="color:green;">Tarkleigha</span>.
-24. Wróć waypointem do <span style="color:white;">Lower Prison</span>.
-25. Zrób pierwszy <span style="color:teal;">Labyrinth Trial</span>.
-26. Wejdź do <span style="color:white;">Upper Prison</span>.
-27. W <span style="color:white;">Upper Prison</span> znajdź ukryte pomieszczenie z flaskami, kliknij wajchę i załóż lepsze utility flaski, jeśli wypadły.
-28. Wejdź do <span style="color:white;">Warden's Chambers</span>.
-29. Zabij <span style="color:red;">Brutusa</span> i wróć do miasta portalem albo logoutem.
-30. Odbierz reward gemowy od <span style="color:green;">Tarkleigha</span>.
-31. Kup <span style="color:#ff6a2f;">Spell Totem Support</span> u <span style="color:green;">Nessy</span> i wrzuć go na weapon swap do levelowania.
-32. Wejdź do <span style="color:white;">Prisoner's Gate</span>.
-33. Wejdź do <span style="color:white;">Ship Graveyard</span> i złap waypoint przy wejściu.
-34. Wejdź do <span style="color:white;">Cavern of Wrath</span> i złap waypoint.
-35. Znajdź wejście do <span style="color:white;">Ship Graveyard Cave</span> od strony <span style="color:white;">Cavern of Wrath</span>.
+20. Jeśli masz już postawiony portal przy wejściu do <span style="color:white;">Flooded Depths</span>, wróć do miasta, użyj go i wejdź do <span style="color:white;">Flooded Depths</span>.
+21. Zabij <span style="color:red;">Deep Dwellera</span>, wróć do miasta, odbierz <span style="color:green;">Book of Skill</span> od <span style="color:green;">Tarkleigha</span> i waypointem wróć do <span style="color:white;">The Ledge</span>.
+22. Wejdź do <span style="color:white;">The Climb</span> i złap waypoint, jeśli masz go po drodze.
+23. Wejdź do <span style="color:white;">Lower Prison</span> i złap waypoint.
+24. Zrób pierwszy <span style="color:teal;">Labyrinth Trial</span>.
+25. Wejdź do <span style="color:white;">Upper Prison</span>.
+26. W <span style="color:white;">Upper Prison</span> znajdź ukryte pomieszczenie z flaskami, kliknij wajchę i załóż lepsze utility flaski, jeśli wypadły.
+27. Wejdź do <span style="color:white;">Warden's Chambers</span>.
+28. Zabij <span style="color:red;">Brutusa</span> i wróć do miasta portalem albo logoutem.
+29. Odbierz reward gemowy od <span style="color:green;">Tarkleigha</span>.
+30. Kup <span style="color:#ff6a2f;">Spell Totem Support</span> u <span style="color:green;">Nessy</span> i wrzuć go na weapon swap do levelowania.
+31. Wejdź do <span style="color:white;">Prisoner's Gate</span>.
+32. Wejdź do <span style="color:white;">Ship Graveyard</span> i złap waypoint przy wejściu.
+33. Wejdź do <span style="color:white;">Cavern of Wrath</span> i złap waypoint.
+35. Wróć do Ship Graveyard i znajdź wejście do Ship Graveyard Cave.
 36. Wejdź do <span style="color:white;">Ship Graveyard Cave</span>, zabierz <span style="color:green;">Allflame</span> i wyjdź skrótem z powrotem do <span style="color:white;">Ship Graveyard</span>.
 37. Zabij <span style="color:red;">Fairgravesa</span> i wróć do miasta portalem albo logoutem.
 38. Odbierz <span style="color:green;">Book of Skill</span> od <span style="color:green;">Bestela</span>.

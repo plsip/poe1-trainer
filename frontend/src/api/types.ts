@@ -42,6 +42,7 @@ export interface GuideStep {
 export interface RunSession {
   id: number
   guide_id: number
+  guide_revision: number
   character_name: string
   league?: string
   status: 'active' | 'finished' | 'abandoned'
@@ -66,6 +67,13 @@ export interface CurrentState {
   current_step_id: number
   confirmed_step_ids: number[]
   elapsed_ms: number
+  step_timings?: StepTiming[]
+}
+
+export interface StepTiming {
+  step_id: number
+  split_ms: number
+  delta_pb_ms?: number
 }
 
 export interface Alert {

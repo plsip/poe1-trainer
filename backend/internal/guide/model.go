@@ -48,6 +48,7 @@ const (
 type Step struct {
 	ID              int              `json:"id"`
 	GuideID         int              `json:"guide_id"`
+	Revision        int              `json:"revision,omitempty"`
 	StepNumber      int              `json:"step_number"`
 	Act             int              `json:"act"`
 	Section         string           `json:"section,omitempty"`

@@ -84,8 +84,8 @@ func main() {
 				slog.Info("logtail: zmiana stanu", "status", string(s))
 			}
 		})
-		watcher.Start(ctx)
 		watcher.SetRawLineObserver(h.EmitLogLine)
+		watcher.Start(ctx)
 		h.SetWatcherStatusFunc(func() string { return string(watcher.Status()) })
 		log.Printf("logtail: nasłuchiwanie pliku %s", ltCfg.LogPath)
 
@@ -155,7 +155,7 @@ func dispatchLogtailEvent(ctx context.Context, repo *runpkg.Repository, svc *run
 		if ev.Area == nil {
 			return active.ID
 		}
-		if err := svc.HandleAreaEvent(ctx, active.ID, runpkg.AreaEvent{AreaName: ev.Area.AreaName}); err != nil {
+		if err := svc.HandleAreaEvent(ctx, active.ID, runpkg.AreaEvent{AreaName: ev.Area.AreaName, OccurredAt: ev.OccurredAt}); err != nil {
 			slog.Warn("logtail: HandleAreaEvent error", "run_id", active.ID, "area", ev.Area.AreaName, "err", err)
 		}
 	case progress.KindAreaGenerated:

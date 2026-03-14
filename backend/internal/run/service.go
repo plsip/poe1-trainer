@@ -3,6 +3,7 @@ package run
 import (
 	"context"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/poe1-trainer/internal/guide"
@@ -84,7 +85,12 @@ func (s *Service) GetCurrentState(ctx context.Context, runID int) (*CurrentState
 	}
 
 	// Determine current step: first unconfirmed step in guide order.
-	g, err := s.guideRepo.GetByID(ctx, run.GuideID)
+	g, err := s.loadGuideForRun(ctx, run)
+	if err != nil {
+		return nil, err
+	}
+
+	stepTimings, err := s.buildStepTimings(ctx, run, g)
 	if err != nil {
 		return nil, err
 	}
@@ -131,6 +137,7 @@ func (s *Service) GetCurrentState(ctx context.Context, runID int) (*CurrentState
 		CurrentStepID:    currentStepID,
 		ConfirmedStepIDs: confirmedIDs,
 		ElapsedMs:        elapsedMs,
+		StepTimings:      stepTimings,
 	}, nil
 }
 
@@ -146,13 +153,38 @@ func (s *Service) HandleAreaEvent(ctx context.Context, runID int, ev AreaEvent) 
 	if !run.IsActive {
 		return nil // silently drop events for finished runs
 	}
+	processedAt := time.Now()
 	// Auto-start: first area event starts the timer.
 	if run.TimerStartedAt == nil {
-		_ = s.repo.SetTimerStartedAt(ctx, runID, time.Now())
+		if err := s.repo.SetTimerStartedAt(ctx, runID, processedAt); err != nil {
+			return err
+		}
+		run.TimerStartedAt = &processedAt
 	}
-	return s.repo.RecordEvent(ctx, runID, EventAreaEntered, map[string]string{
+	if err := s.repo.RecordEvent(ctx, runID, EventAreaEntered, map[string]string{
 		"area": ev.AreaName,
-	})
+	}); err != nil {
+		return err
+	}
+
+	g, err := s.loadGuideForRun(ctx, run)
+	if err != nil {
+		return err
+	}
+	splits, err := s.repo.ListSplits(ctx, runID)
+	if err != nil {
+		return err
+	}
+	recorded := make(map[int]bool, len(splits))
+	for _, split := range splits {
+		recorded[split.StepID] = true
+	}
+	step := firstAreaStepForArea(g.Steps, ev.AreaName, recorded, lastRecordedSortOrder(g.Steps, recorded))
+	if step == nil {
+		return nil
+	}
+
+	return s.repo.RecordSplit(ctx, runID, step.ID, elapsedAt(run, processedAt))
 }
 
 // RecordLogEvent stores a non-authoritative logtail event for later analysis.
@@ -393,6 +425,130 @@ func (s *Service) RecordSplit(ctx context.Context, runID, stepID int, splitMs in
 		return fmt.Errorf("run: run %d is not active", runID)
 	}
 	return s.repo.RecordSplit(ctx, runID, stepID, splitMs)
+}
+
+func (s *Service) buildStepTimings(ctx context.Context, run *RunSession, g *guide.Guide) ([]StepTiming, error) {
+	splits, err := s.repo.ListSplits(ctx, run.ID)
+	if err != nil {
+		return nil, err
+	}
+	if len(splits) == 0 {
+		return nil, nil
+	}
+
+	pbRunID, pbSplits, err := s.repo.GetPBSplitsForGuide(ctx, run.GuideID)
+	if err != nil {
+		return nil, err
+	}
+
+	splitMap := make(map[int]int64, len(splits))
+	for _, split := range splits {
+		splitMap[split.StepID] = split.SplitMs
+	}
+	pbMap := make(map[int]int64, len(pbSplits))
+	for _, split := range pbSplits {
+		pbMap[split.StepID] = split.SplitMs
+	}
+
+	stepTimings := make([]StepTiming, 0, len(splits))
+	for _, step := range g.Steps {
+		splitMs, ok := splitMap[step.ID]
+		if !ok {
+			continue
+		}
+		timing := StepTiming{
+			StepID:  step.ID,
+			SplitMs: splitMs,
+		}
+		if pbMs, ok := pbMap[step.ID]; ok {
+			delta := splitMs - pbMs
+			if pbRunID != 0 {
+				timing.DeltaPBMs = &delta
+			}
+		}
+		stepTimings = append(stepTimings, timing)
+	}
+
+	return stepTimings, nil
+}
+
+func (s *Service) loadGuideForRun(ctx context.Context, run *RunSession) (*guide.Guide, error) {
+	if run.GuideRevision > 0 {
+		return s.guideRepo.GetByIDRevision(ctx, run.GuideID, run.GuideRevision)
+	}
+	return s.guideRepo.GetByID(ctx, run.GuideID)
+}
+
+func firstAreaStepForArea(steps []guide.Step, areaName string, recorded map[int]bool, minSortOrder int) *guide.Step {
+	entered := normalizeAreaName(areaName)
+	for i := range steps {
+		step := &steps[i]
+		if recorded[step.ID] {
+			continue
+		}
+		if step.SortOrder < minSortOrder {
+			continue
+		}
+		if stepMatchesArea(step, entered) {
+			return step
+		}
+	}
+	return nil
+}
+
+func lastRecordedSortOrder(steps []guide.Step, recorded map[int]bool) int {
+	lastSortOrder := 0
+	for _, step := range steps {
+		if !recorded[step.ID] {
+			continue
+		}
+		if step.SortOrder > lastSortOrder {
+			lastSortOrder = step.SortOrder
+		}
+	}
+	return lastSortOrder
+}
+
+func stepMatchesArea(step *guide.Step, areaName string) bool {
+	if step.CompletionMode != guide.CompletionLogtail && step.CompletionMode != guide.CompletionLogtailAsk {
+		return false
+	}
+	hasAreaCondition := false
+	for _, cond := range step.Conditions {
+		if cond.ConditionType != guide.ConditionLogtailArea {
+			continue
+		}
+		hasAreaCondition = true
+		if normalizeAreaName(cond.Payload["area"]) == areaName {
+			return true
+		}
+	}
+	if hasAreaCondition {
+		return false
+	}
+	return normalizeAreaName(step.Area) == areaName
+}
+
+func normalizeAreaName(areaName string) string {
+	normalized := strings.ToLower(strings.TrimSpace(areaName))
+	normalized = strings.TrimPrefix(normalized, "the ")
+	normalized = strings.Join(strings.Fields(normalized), " ")
+	return normalized
+}
+
+func elapsedAt(run *RunSession, at time.Time) int64 {
+	if run.TimerStartedAt == nil {
+		return 0
+	}
+	effectiveAt := at
+	if run.PausedAt != nil && at.After(*run.PausedAt) {
+		effectiveAt = *run.PausedAt
+	}
+	elapsedMs := effectiveAt.Sub(*run.TimerStartedAt).Milliseconds() - run.TotalPausedMs
+	if elapsedMs < 0 {
+		return 0
+	}
+	return elapsedMs
 }
 
 // ListPendingChecks returns all unanswered manual checks for a run.

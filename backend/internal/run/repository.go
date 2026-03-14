@@ -28,19 +28,19 @@ func (r *Repository) CreateRun(ctx context.Context, guideID int, characterName, 
 	var timerSQL string
 	if autoStart {
 		// timer_started_at stays NULL — set later by HandleAreaEvent
-		timerSQL = `INSERT INTO runs (guide_id, character_name, league)
-		VALUES ($1, $2, $3)
-		RETURNING id, guide_id, character_name, league, status, notes, started_at, finished_at,
+		timerSQL = `INSERT INTO runs (guide_id, guide_revision, character_name, league)
+		VALUES ($1, (SELECT current_revision FROM guides WHERE id = $1), $2, $3)
+		RETURNING id, guide_id, guide_revision, character_name, league, status, notes, started_at, finished_at,
 		          is_active, timer_started_at, paused_at, total_paused_ms`
 	} else {
 		// timer starts immediately
-		timerSQL = `INSERT INTO runs (guide_id, character_name, league, timer_started_at)
-		VALUES ($1, $2, $3, NOW())
-		RETURNING id, guide_id, character_name, league, status, notes, started_at, finished_at,
+		timerSQL = `INSERT INTO runs (guide_id, guide_revision, character_name, league, timer_started_at)
+		VALUES ($1, (SELECT current_revision FROM guides WHERE id = $1), $2, $3, NOW())
+		RETURNING id, guide_id, guide_revision, character_name, league, status, notes, started_at, finished_at,
 		          is_active, timer_started_at, paused_at, total_paused_ms`
 	}
 	err := r.db.QueryRow(ctx, timerSQL, guideID, characterName, league).
-		Scan(&run.ID, &run.GuideID, &run.CharacterName, &run.League, &run.Status, &run.Notes,
+		Scan(&run.ID, &run.GuideID, &run.GuideRevision, &run.CharacterName, &run.League, &run.Status, &run.Notes,
 			&run.StartedAt, &run.FinishedAt, &run.IsActive,
 			&run.TimerStartedAt, &run.PausedAt, &run.TotalPausedMs)
 	if err != nil {
@@ -54,10 +54,10 @@ func (r *Repository) CreateRun(ctx context.Context, guideID int, characterName, 
 func (r *Repository) GetActiveRun(ctx context.Context) (*RunSession, error) {
 	run := &RunSession{}
 	err := r.db.QueryRow(ctx, `
-		SELECT id, guide_id, character_name, league, status, notes, started_at, finished_at,
+		SELECT id, guide_id, guide_revision, character_name, league, status, notes, started_at, finished_at,
 		       is_active, timer_started_at, paused_at, total_paused_ms
 		FROM runs WHERE is_active = TRUE ORDER BY started_at DESC LIMIT 1`,
-	).Scan(&run.ID, &run.GuideID, &run.CharacterName, &run.League, &run.Status, &run.Notes,
+	).Scan(&run.ID, &run.GuideID, &run.GuideRevision, &run.CharacterName, &run.League, &run.Status, &run.Notes,
 		&run.StartedAt, &run.FinishedAt, &run.IsActive,
 		&run.TimerStartedAt, &run.PausedAt, &run.TotalPausedMs)
 	if err != nil {
@@ -73,10 +73,10 @@ func (r *Repository) GetActiveRun(ctx context.Context) (*RunSession, error) {
 func (r *Repository) GetRun(ctx context.Context, runID int) (*RunSession, error) {
 	run := &RunSession{}
 	err := r.db.QueryRow(ctx, `
-		SELECT id, guide_id, character_name, league, status, notes, started_at, finished_at,
+		SELECT id, guide_id, guide_revision, character_name, league, status, notes, started_at, finished_at,
 		       is_active, timer_started_at, paused_at, total_paused_ms
 		FROM runs WHERE id = $1`, runID,
-	).Scan(&run.ID, &run.GuideID, &run.CharacterName, &run.League, &run.Status, &run.Notes,
+	).Scan(&run.ID, &run.GuideID, &run.GuideRevision, &run.CharacterName, &run.League, &run.Status, &run.Notes,
 		&run.StartedAt, &run.FinishedAt, &run.IsActive,
 		&run.TimerStartedAt, &run.PausedAt, &run.TotalPausedMs)
 	if err != nil {
@@ -91,7 +91,7 @@ func (r *Repository) GetRun(ctx context.Context, runID int) (*RunSession, error)
 // ListRuns returns all runs for a guide, most recent first.
 func (r *Repository) ListRuns(ctx context.Context, guideID int) ([]RunSession, error) {
 	rows, err := r.db.Query(ctx, `
-		SELECT id, guide_id, character_name, league, status, notes, started_at, finished_at,
+		SELECT id, guide_id, guide_revision, character_name, league, status, notes, started_at, finished_at,
 		       is_active, timer_started_at, paused_at, total_paused_ms
 		FROM runs WHERE guide_id = $1 ORDER BY started_at DESC`, guideID)
 	if err != nil {
@@ -101,7 +101,7 @@ func (r *Repository) ListRuns(ctx context.Context, guideID int) ([]RunSession, e
 	runs := []RunSession{}
 	for rows.Next() {
 		var run RunSession
-		if err := rows.Scan(&run.ID, &run.GuideID, &run.CharacterName, &run.League, &run.Status, &run.Notes,
+		if err := rows.Scan(&run.ID, &run.GuideID, &run.GuideRevision, &run.CharacterName, &run.League, &run.Status, &run.Notes,
 			&run.StartedAt, &run.FinishedAt, &run.IsActive,
 			&run.TimerStartedAt, &run.PausedAt, &run.TotalPausedMs); err != nil {
 			return nil, err

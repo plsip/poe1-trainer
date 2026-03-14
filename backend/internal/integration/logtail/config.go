@@ -31,7 +31,7 @@ type Config struct {
 }
 
 // DefaultConfig zwraca Config wypełniony sensownymi wartościami domyślnymi.
-// Na Windows ścieżka logu wskazuje na LatestClient.txt ze standardowej instalacji PoE1 przez Steam.
+// Na Windows ścieżka logu wskazuje pierwszy istniejący kandydat Client.txt/LatestClient.txt.
 func DefaultConfig() Config {
 	return Config{
 		LogPath:             DefaultLogPath(),
@@ -42,14 +42,55 @@ func DefaultConfig() Config {
 	}
 }
 
-// DefaultLogPath zwraca domyślną ścieżkę do LatestClient.txt dla bieżącej platformy.
-// Na Windows zwraca standardową lokalizację instalacji Steam.
+// DefaultLogPath zwraca domyślną ścieżkę do logu klienta dla bieżącej platformy.
+// Na Windows preferuje pierwszy istniejący kandydat z typowych lokalizacji PoE1.
 // Na innych platformach zwraca pusty string — ścieżkę trzeba skonfigurować ręcznie.
 func DefaultLogPath() string {
-	if runtime.GOOS == "windows" {
-		return `C:\Program Files (x86)\Steam\steamapps\common\Path of Exile\logs\LatestClient.txt`
+	if runtime.GOOS != "windows" {
+		return ""
 	}
-	return ""
+	candidates := windowsLogPathCandidates()
+	for _, candidate := range candidates {
+		if _, err := os.Stat(candidate); err == nil {
+			return candidate
+		}
+	}
+	if len(candidates) == 0 {
+		return ""
+	}
+	return candidates[0]
+}
+
+func windowsLogPathCandidates() []string {
+	seen := make(map[string]struct{})
+	add := func(paths []string, value string) []string {
+		if value == "" {
+			return paths
+		}
+		if _, ok := seen[value]; ok {
+			return paths
+		}
+		seen[value] = struct{}{}
+		return append(paths, value)
+	}
+
+	var candidates []string
+	steamRoots := []string{
+		`C:\Program Files (x86)\Steam\steamapps\common\Path of Exile\logs`,
+		`C:\Program Files\Steam\steamapps\common\Path of Exile\logs`,
+	}
+	for _, root := range steamRoots {
+		candidates = add(candidates, filepath.Join(root, "Client.txt"))
+		candidates = add(candidates, filepath.Join(root, "LatestClient.txt"))
+	}
+	if home, err := os.UserHomeDir(); err == nil && home != "" {
+		docRoot := filepath.Join(home, "Documents", "My Games", "Path of Exile")
+		candidates = add(candidates, filepath.Join(docRoot, "Client.txt"))
+		candidates = add(candidates, filepath.Join(docRoot, "LatestClient.txt"))
+		candidates = add(candidates, filepath.Join(docRoot, "logs", "Client.txt"))
+		candidates = add(candidates, filepath.Join(docRoot, "logs", "LatestClient.txt"))
+	}
+	return candidates
 }
 
 func defaultCheckpointPath() string {
