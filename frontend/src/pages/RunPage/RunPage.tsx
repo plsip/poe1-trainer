@@ -227,10 +227,12 @@ export function RunPage() {
 
         {/* Right: Client.txt log + checks */}
         <div className="run-col-logtail">
-          {checks.some((c) => !c.is_confirmed) && (
-            <ChecksPanel checks={checks} onAnswer={handleAnswer} />
-          )}
-          <LogTailPanel isActive={isActive} />
+          <div className="run-sidebar-sticky">
+            <LogTailPanel isActive={isActive} />
+            {checks.some((c) => !c.is_confirmed) && (
+              <ChecksPanel checks={checks} onAnswer={handleAnswer} />
+            )}
+          </div>
         </div>
       </div>
     </div>

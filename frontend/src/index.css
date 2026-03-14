@@ -136,12 +136,16 @@ input[type="text"]:focus {
 /* ── Run dashboard layout ────────────────────────────────────────────────── */
 
 .run-dashboard {
+  --run-header-offset: 0px;
   display: flex;
   flex-direction: column;
   min-height: calc(100vh - 48px);
 }
 
 .run-header {
+  position: sticky;
+  top: var(--run-header-offset);
+  z-index: 30;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -149,7 +153,8 @@ input[type="text"]:focus {
   gap: 0.75rem;
   padding: 1rem 1.5rem 0.85rem;
   border-bottom: 1px solid #252525;
-  background: rgba(0, 0, 0, 0.25);
+  background: rgba(18, 18, 18, 0.94);
+  backdrop-filter: blur(10px);
 }
 
 .run-title {
@@ -190,7 +195,29 @@ input[type="text"]:focus {
 }
 
 .run-col-logtail {
+  position: sticky;
+  top: calc(var(--run-header-offset) + 5.75rem);
+  align-self: start;
   min-width: 0;
+}
+
+.run-sidebar-sticky {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 700px) {
+  .run-header {
+    position: static;
+  }
+
+  .run-col-logtail {
+    position: static;
+  }
+
+  .run-sidebar-sticky {
+    position: static;
+  }
 }
 
 /* ── LogTail panel ───────────────────────────────────────────────────────── */
@@ -198,19 +225,28 @@ input[type="text"]:focus {
 .logtail-panel {
   display: flex;
   flex-direction: column;
-  /* Fill most of the viewport height so plenty of lines are visible. */
-  max-height: calc(100vh - 120px);
+  max-height: calc(100vh - 9.5rem);
 }
 
 .logtail-scroll {
   flex: 1;
   overflow-y: auto;
-  max-height: calc(100vh - 200px);
+  max-height: calc(100vh - 13rem);
   font-family: 'Consolas', 'Menlo', monospace;
   font-size: 0.72rem;
   line-height: 1.45;
   color: #b0b0b0;
   word-break: break-all;
+}
+
+@media (max-width: 700px) {
+  .logtail-panel {
+    max-height: none;
+  }
+
+  .logtail-scroll {
+    max-height: 18rem;
+  }
 }
 
 .logtail-line {
