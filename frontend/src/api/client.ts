@@ -25,7 +25,27 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     const body = await res.json().catch(() => ({}))
     throw new Error((body as { error?: string }).error ?? `HTTP ${res.status}`)
   }
-  return res.json() as Promise<T>
+
+  if (res.status === 204) {
+    return undefined as T
+  }
+
+  const contentLength = res.headers.get('Content-Length')
+  if (contentLength === '0') {
+    return undefined as T
+  }
+
+  const contentType = res.headers.get('Content-Type') ?? ''
+  if (!contentType.includes('application/json')) {
+    return undefined as T
+  }
+
+  const text = await res.text()
+  if (!text.trim()) {
+    return undefined as T
+  }
+
+  return JSON.parse(text) as T
 }
 
 // ─── guides ────────────────────────────────────────────────────────────────
