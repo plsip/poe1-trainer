@@ -28,6 +28,7 @@
             "approve": true,
             "matchCommandLine": true
         },
-        "git remote": true
+        "git remote": true,
+        "git rev-parse": true
     }
 }
