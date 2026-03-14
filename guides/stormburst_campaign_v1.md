@@ -52,10 +52,10 @@ Kolejność lokacji:
 12. Biegnij prosto do <span style="color:red;">Hailrake'a</span>.
 13. Zabij <span style="color:red;">Hailrake'a</span>.
 14. Odbierz <span style="color:#d7d1c3;">Quicksilver Flask</span> od <span style="color:green;">Nessy</span>.
-15. Kup <span style="color:#ff6a2f;">Holy Flame Totem</span>, <span style="color:#7f7fff;">Flame Wall</span> i <span style="color:#7f7fff;">Frostblink</span> u <span style="color:green;">Nessy</span>.
-16. Wejdź do <span style="color:white;">Submerged Passage</span>.
-17. Kup <span style="color:#7f7fff;">Infused Channelling Support</span> u <span style="color:green;">Nessy</span>.
-18. Postaw portal przy wejściu do <span style="color:white;">Flooded Depths</span>, jeśli znajdziesz je po drodze.
+15. Kup <span style="color:#ff6a2f;">Holy Flame Totem</span>, <span style="color:#7f7fff;">Flame Wall</span>, <span style="color:#7f7fff;">Frostblink</span> oraz opcjonalnie <span style="color:#7f7fff;">Infused Channelling Support</span> u <span style="color:green;">Nessy</span>.
+16. Wróć waypointem do <span style="color:white;">Submerged Passage</span>.
+17. Postaw portal przy wejściu do <span style="color:white;">Flooded Depths</span>, jeśli znajdziesz je po drodze.
+18. Jeśli nie znajdziesz wejścia do <span style="color:white;">Flooded Depths</span> od razu, nie szukaj go na siłę i biegnij dalej w stronę <span style="color:white;">The Ledge</span>.
 19. Wejdź do <span style="color:white;">The Ledge</span> i złap waypoint.
 20. Wejdź do <span style="color:white;">The Climb</span> i złap waypoint, jeśli masz go po drodze.
 21. Wejdź do <span style="color:white;">Lower Prison</span>, złap waypoint, wróć do miasta, użyj postawionego portalu i wejdź do <span style="color:white;">Flooded Depths</span>.
