@@ -394,38 +394,3 @@ Kolejność lokacji:
 23. Wejdź do <span style="color:white;">Altar of Hunger</span>.
 24. Zabij <span style="color:red;">Kitavę</span>.
 25. Odbierz finalny <span style="color:green;">Book of Skill</span> od <span style="color:green;">Lani</span>.
-
-## Główny setup, do którego dążysz
-
-1. <span style="color:#7f7fff;">Storm Burst</span>.
-2. <span style="color:#ff6a2f;">Spell Totem Support</span>.
-3. <span style="color:#7f7fff;">Lightning Penetration</span>.
-4. <span style="color:#7f7fff;">Conductivity</span>.
-5. <span style="color:#ff6a2f;">Determination</span> albo <span style="color:#7f7fff;">Wrath</span>.
-6. <span style="color:#ff6a2f;">Decoy Totem</span> + <span style="color:#ff6a2f;">Multiple Totem Support</span>.
-7. <span style="color:#ff6a2f;">Cast when Damage Taken</span> level 1 + <span style="color:#ff6a2f;">Molten Shell</span> maksymalnie level 8.
-8. <span style="color:#ff6a2f;">Shield Charge</span>.
-9. <span style="color:#7f7fff;">Frostblink</span> albo <span style="color:#7f7fff;">Flame Dash</span>.
-10. Na mapach: <span style="color:#7f7fff;">Arcane Cloak</span> zamiast <span style="color:#ff6a2f;">Molten Shell</span>.
-
-## Najważniejsze decyzje z runa, które warto powtórzyć
-
-1. Wejść wcześnie w defensywę zamiast greedzić damage na starcie.
-2. Zrobić <span style="color:green;">Sapphire Ring</span> recipe od razu po krabie.
-3. Używać esencji na broń, a nie trzymać ich na później.
-4. Iść najpierw do <span style="color:red;">Aliry</span> po <span style="color:green;">+15 all res</span>.
-5. Levelować <span style="color:#7f7fff;">Storm Burst</span> i <span style="color:#ff6a2f;">Spell Totem Support</span> na swapie od momentu zdobycia.
-6. Nie przechodzić za wcześnie na totemy bez przygotowanych gemów, pierwszego laba i sensownej broni.
-7. Używać Docks albo podobnych lokacji do krótkiego dofarmienia, gdy build nie dowozi.
-8. W akcie 6 wrócić po <span style="color:white;">Twilight Strand</span> i pełny dostęp do gemów od <span style="color:green;">Lilly</span>.
-9. Po drugim labie dołożyć <span style="color:green;">Mind over Matter</span> zamiast próbować ratować się samym damage.
-10. Po każdym większym spadku mocy najpierw poprawić broń, resisty, flaski i sockety.
-
-## Najkrótsza wersja planu
-
-1. Akt 1: <span style="color:#7f7fff;">Rolling Magma</span> z <span style="color:red;">Hillocka</span>, <span style="color:#ff6a2f;">Holy Flame Totem</span> + <span style="color:#7f7fff;">Flame Wall</span> + <span style="color:#7f7fff;">Frostblink</span> po jajkach, <span style="color:#7f7fff;">Flame Dash</span> i <span style="color:#ff6a2f;">Spell Totem</span> po <span style="color:red;">Brutusie</span>, <span style="color:#7f7fff;">Storm Burst</span> na swap po <span style="color:red;">Merveil</span>.
-2. Akt 2: <span style="color:#7f7fff;">Wave of Conviction</span> po <span style="color:red;">Fidelitasie</span>, <span style="color:red;">Alira</span>, <span style="color:teal;">Labyrinth Triale</span>, krypta, crafting bench od levelu 12.
-3. Akt 3: <span style="color:#7f7fff;">Conductivity</span> i <span style="color:#7f7fff;">Wrath</span> albo <span style="color:#ff6a2f;">Determination</span> od <span style="color:green;">Clarissy</span>, farm <span style="color:white;">Docks</span> jeśli trzeba, dalej levelowanie gemów bez przedwczesnego switchu.
-4. Akt 4-5: po pierwszym labie switch na <span style="color:#7f7fff;">Storm Burst Totemy</span>, potem stabilizacja setupu, lepsza broń, linki i resisty.
-5. Akt 6: <span style="color:white;">Twilight Strand</span>, <span style="color:green;">Lilly</span>, domknięcie <span style="color:#ff6a2f;">Determination</span> albo <span style="color:#7f7fff;">Wrath</span>, <span style="color:#ff6a2f;">CWDT</span> level 1 + <span style="color:#ff6a2f;">Molten Shell</span> max 8, naprawa resistów.
-6. Akt 7-10: po drugim labie <span style="color:green;">Mind over Matter</span>, regularne upgrady broni, biżuterii, flaszek i capped resy.
