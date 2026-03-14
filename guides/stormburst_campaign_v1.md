@@ -370,28 +370,30 @@ Kolejność lokacji:
 <span style="color:white;">Cathedral Rooftop</span> -> <span style="color:white;">Cathedral Apex</span> -> <span style="color:white;">Cathedral Rooftop</span> -> <span style="color:white;">Ravaged Square</span> -> <span style="color:white;">Control Blocks</span> -> <span style="color:white;">Ravaged Square</span> -> <span style="color:white;">Ossuary</span> -> <span style="color:white;">Ravaged Square</span> -> <span style="color:white;">Torched Courts</span> -> <span style="color:white;">Desecrated Chambers</span> -> <span style="color:white;">Oriath Docks</span> -> <span style="color:white;">Ravaged Square</span> -> <span style="color:white;">Canals</span> -> <span style="color:white;">The Feeding Trough</span> -> <span style="color:white;">Altar of Hunger</span>
 
 1. Wejdź na <span style="color:white;">Cathedral Rooftop</span>.
-2. Przy wejściu od razu skręć w lewo do <span style="color:white;">Cathedral Apex</span>.
+2. Wejdź do <span style="color:white;">Cathedral Apex</span>.
 3. Uwolnij Bannona.
-4. Wróć tą samą drogą na <span style="color:white;">Cathedral Rooftop</span> i idź na prawo do <span style="color:white;">Ravaged Square</span>.
-5. Z <span style="color:white;">Ravaged Square</span> idź w dół i w prawo do <span style="color:white;">Control Blocks</span>, złap waypoint i zabij <span style="color:red;">Vilentę</span>.
-6. Zrób logout albo portal do miasta, odbierz <span style="color:green;">Book of Skill</span>, potem waypointem wróć do <span style="color:white;">Control Blocks</span>.
-7. Wróć tą samą drogą do <span style="color:white;">Ravaged Square</span>, idź w górę, złap waypoint i wejdź do <span style="color:white;">Ossuary</span>.
-8. Zrób <span style="color:teal;">Labyrinth Trial</span> blisko waypointa. Quest z <span style="color:green;">Elixir of Allure</span> możesz pominąć, bo daje tylko respec pointy.
-9. Zrób logout albo portal do miasta, potem waypointem wróć do <span style="color:white;">Ravaged Square</span>, wejdź do <span style="color:white;">Torched Courts</span>, potem do <span style="color:white;">Desecrated Chambers</span>, złap waypoint i zabij <span style="color:red;">Avariusa Reassembled</span>.
-10. Zrób logout albo portal do miasta do <span style="color:white;">Oriath Docks</span>, pogadaj z <span style="color:green;">Bannonem</span> i odbierz rewardy od <span style="color:green;">Lani</span>.
-11. To jest dobry moment na trzeci lab, zanim dostaniesz drugą karę od Kitavy.
-12. Upewnij się, że masz około 30% overcap elemental res przed zabiciem Kitavy.
-13. Pogadaj z <span style="color:green;">Innocence</span>.
-14. Wróć waypointem do <span style="color:white;">Ravaged Square</span>, znajdź <span style="color:green;">Innocence</span> i otwórz drogę dalej.
-15. Wejdź do <span style="color:white;">Canals</span>, potem do <span style="color:white;">The Feeding Trough</span>.
-16. Porozmawiaj z <span style="color:green;">Sinem</span> i wejdź do <span style="color:white;">Altar of Hunger</span>.
-17. Zabij <span style="color:red;">Kitavę</span>.
-18. Odbierz finalny <span style="color:green;">Skill Book</span> od <span style="color:green;">Lani</span>.
-19. Przed końcem kampanii domknij resisty i upewnij się, że po wejściu na mapy nie będziesz grał na rozsypanym gearze.
-20. Miej gotowy główny setup <span style="color:#7f7fff;">Storm Burst Totemów</span>, a nie wersję tymczasową z początku switchu.
-21. Jeśli nadal czegoś brakuje, popraw to prostym upgradem slotów zamiast polować na perfekcyjny item.
-22. Nie zostawiaj flaszek w słabym stanie. Instant <span style="color:#d7d1c3;">Life Flask</span> i utility flaski robią ogromną różnicę.
-23. Jeśli po kampanii chcesz od razu wejść na mapy, przygotuj gear defensywny jeszcze przed ostatnim bossem.
+4. Wróć na <span style="color:white;">Cathedral Rooftop</span>.
+5. Wejdź do <span style="color:white;">Ravaged Square</span>.
+6. Wejdź do <span style="color:white;">Control Blocks</span>.
+7. Złap waypoint i zabij <span style="color:red;">Vilentę</span>.
+8. Zrób logout albo portal do miasta, odbierz <span style="color:green;">Book of Skill</span> od <span style="color:green;">Lani</span> i wróć waypointem do <span style="color:white;">Control Blocks</span>.
+9. Wróć do <span style="color:white;">Ravaged Square</span>.
+10. Wejdź do <span style="color:white;">Ossuary</span>.
+11. Zrób <span style="color:teal;">Labyrinth Trial</span> przy waypointcie i pomiń quest z <span style="color:green;">Elixir of Allure</span>.
+12. Zrób logout albo portal do miasta i wróć waypointem do <span style="color:white;">Ravaged Square</span>.
+13. Wejdź do <span style="color:white;">Torched Courts</span>.
+14. Wejdź do <span style="color:white;">Desecrated Chambers</span>.
+15. Złap waypoint i zabij <span style="color:red;">Avariusa Reassembled</span>.
+16. Zrób logout albo portal do <span style="color:white;">Oriath Docks</span>, pogadaj z <span style="color:green;">Bannonem</span> i odbierz nagrodę od <span style="color:green;">Lani</span>.
+17. Zrób teraz trzeci lab, zanim zabijesz <span style="color:red;">Kitavę</span>.
+18. Pogadaj z <span style="color:green;">Innocence</span>.
+19. Wróć waypointem do <span style="color:white;">Ravaged Square</span>, znajdź <span style="color:green;">Innocence</span> i otwórz drogę dalej.
+20. Wejdź do <span style="color:white;">Canals</span>.
+21. Wejdź do <span style="color:white;">The Feeding Trough</span>.
+22. Porozmawiaj z <span style="color:green;">Sinem</span>.
+23. Wejdź do <span style="color:white;">Altar of Hunger</span>.
+24. Zabij <span style="color:red;">Kitavę</span>.
+25. Odbierz finalny <span style="color:green;">Book of Skill</span> od <span style="color:green;">Lani</span>.
 
 ## Główny setup, do którego dążysz
 
