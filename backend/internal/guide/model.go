@@ -9,6 +9,7 @@ type Guide struct {
 	Title          string    `json:"title"`
 	BuildName      string    `json:"build_name"`
 	Version        string    `json:"version"`
+	CurrentRevision int      `json:"-"`
 	BuildVersionID *int      `json:"build_version_id,omitempty"`
 	Steps          []Step    `json:"steps"`
 	CreatedAt      time.Time `json:"created_at"`

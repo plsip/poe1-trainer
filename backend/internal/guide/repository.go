@@ -29,25 +29,23 @@ func (r *Repository) Save(ctx context.Context, g *Guide) error {
 	defer tx.Rollback(ctx) //nolint:errcheck
 
 	var id int
+	var currentRevision int
 	err = tx.QueryRow(ctx, `
-		INSERT INTO guides (slug, title, build_name, version)
-		VALUES ($1, $2, $3, $4)
+		INSERT INTO guides (slug, title, build_name, version, current_revision)
+		VALUES ($1, $2, $3, $4, 1)
 		ON CONFLICT (slug) DO UPDATE
 			SET title = EXCLUDED.title,
 			    build_name = EXCLUDED.build_name,
-			    version = EXCLUDED.version
-		RETURNING id`,
+			    version = EXCLUDED.version,
+			    current_revision = guides.current_revision + 1
+		RETURNING id, current_revision`,
 		g.Slug, g.Title, g.BuildName, g.Version,
-	).Scan(&id)
+	).Scan(&id, &currentRevision)
 	if err != nil {
 		return fmt.Errorf("guide: upsert guide: %w", err)
 	}
 	g.ID = id
-
-	// Delete existing steps for re-import.
-	if _, err := tx.Exec(ctx, `DELETE FROM guide_steps WHERE guide_id = $1`, id); err != nil {
-		return fmt.Errorf("guide: delete old steps: %w", err)
-	}
+	g.CurrentRevision = currentRevision
 
 	for i := range g.Steps {
 		step := &g.Steps[i]
@@ -55,12 +53,12 @@ func (r *Repository) Save(ctx context.Context, g *Guide) error {
 		var stepID int
 		err = tx.QueryRow(ctx, `
 			INSERT INTO guide_steps
-				(guide_id, step_number, act, section, title, description, area,
+				(guide_id, revision, step_number, act, section, title, description, area,
 				 quest_name, step_type, completion_mode,
 				 is_checkpoint, requires_manual, sort_order)
-			VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)
+			VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)
 			RETURNING id`,
-			id, step.StepNumber, step.Act, step.Section,
+			id, currentRevision, step.StepNumber, step.Act, step.Section,
 			step.Title, step.Description, step.Area,
 			step.QuestName, string(step.StepType), string(step.CompletionMode),
 			step.IsCheckpoint, step.RequiresManual, step.SortOrder,
@@ -114,13 +112,13 @@ func (r *Repository) Save(ctx context.Context, g *Guide) error {
 func (r *Repository) GetBySlug(ctx context.Context, slug string) (*Guide, error) {
 	g := &Guide{}
 	err := r.db.QueryRow(ctx, `
-		SELECT id, slug, title, build_name, version, created_at
+		SELECT id, slug, title, build_name, version, current_revision, created_at
 		FROM guides WHERE slug = $1`, slug,
-	).Scan(&g.ID, &g.Slug, &g.Title, &g.BuildName, &g.Version, &g.CreatedAt)
+	).Scan(&g.ID, &g.Slug, &g.Title, &g.BuildName, &g.Version, &g.CurrentRevision, &g.CreatedAt)
 	if err != nil {
 		return nil, fmt.Errorf("guide: get by slug %q: %w", slug, err)
 	}
-	steps, err := r.loadSteps(ctx, g.ID)
+	steps, err := r.loadSteps(ctx, g.ID, g.CurrentRevision)
 	if err != nil {
 		return nil, err
 	}
@@ -132,13 +130,13 @@ func (r *Repository) GetBySlug(ctx context.Context, slug string) (*Guide, error)
 func (r *Repository) GetByID(ctx context.Context, id int) (*Guide, error) {
 	g := &Guide{}
 	err := r.db.QueryRow(ctx, `
-		SELECT id, slug, title, build_name, version, created_at
+		SELECT id, slug, title, build_name, version, current_revision, created_at
 		FROM guides WHERE id = $1`, id,
-	).Scan(&g.ID, &g.Slug, &g.Title, &g.BuildName, &g.Version, &g.CreatedAt)
+	).Scan(&g.ID, &g.Slug, &g.Title, &g.BuildName, &g.Version, &g.CurrentRevision, &g.CreatedAt)
 	if err != nil {
 		return nil, fmt.Errorf("guide: get by id %d: %w", id, err)
 	}
-	steps, err := r.loadSteps(ctx, id)
+	steps, err := r.loadSteps(ctx, id, g.CurrentRevision)
 	if err != nil {
 		return nil, err
 	}
@@ -165,12 +163,14 @@ func (r *Repository) List(ctx context.Context) ([]Guide, error) {
 	return guides, rows.Err()
 }
 
-func (r *Repository) loadSteps(ctx context.Context, guideID int) ([]Step, error) {
+func (r *Repository) loadSteps(ctx context.Context, guideID, revision int) ([]Step, error) {
 	rows, err := r.db.Query(ctx, `
 		SELECT id, guide_id, step_number, act, section, title, description, area,
 		       quest_name, step_type, completion_mode,
 		       is_checkpoint, requires_manual, sort_order
-		FROM guide_steps WHERE guide_id = $1 ORDER BY sort_order`, guideID)
+		FROM guide_steps
+		WHERE guide_id = $1 AND revision = $2
+		ORDER BY sort_order`, guideID, revision)
 	if err != nil {
 		return nil, fmt.Errorf("guide: load steps: %w", err)
 	}
