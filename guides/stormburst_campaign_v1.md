@@ -264,34 +264,39 @@ Kolejność lokacji:
 
 <span style="color:white;">Broken Bridge</span> -> <span style="color:white;">The Crossroads</span> -> <span style="color:white;">Fellshrine Ruins</span> -> <span style="color:white;">The Crypt</span> -> <span style="color:white;">The Crypt Level Two</span> -> <span style="color:white;">Bridge Encampment</span> -> <span style="color:white;">The Crossroads</span> -> <span style="color:white;">Chamber of Sins Level 1</span> -> <span style="color:white;">Maligaro's Sanctum</span> -> <span style="color:white;">Chamber of Sins Level 2</span> -> <span style="color:white;">The Den</span> -> <span style="color:white;">Ashen Fields</span> -> <span style="color:white;">Fortress Encampment</span> -> <span style="color:white;">Northern Forest</span> -> <span style="color:white;">Dread Thicket</span> -> <span style="color:white;">Bridge Encampment</span> -> <span style="color:white;">Northern Forest</span> -> <span style="color:white;">Causeway</span> -> <span style="color:white;">Vaal City</span> -> <span style="color:white;">Temple of Decay Level 1</span> -> <span style="color:white;">Temple of Decay Level 2</span> -> <span style="color:white;">Arakaali's Web</span> -> <span style="color:white;">Sarn Ramparts</span> -> <span style="color:white;">Sarn Encampment</span>
 
-1. Wyjdź do <span style="color:white;">Broken Bridge</span>, biegnij do <span style="color:white;">The Crossroads</span> i złap waypoint na środku.
-2. Z waypointa skręć w dół do <span style="color:white;">Fellshrine Ruins</span>.
-3. Wejdź do <span style="color:white;">The Crypt</span>, złap waypoint, zrób <span style="color:teal;">Labyrinth Trial</span> i zejdź na drugi poziom.
-4. Weź quest item z sarkofagu, zrób logout albo portal do miasta i oddaj questa.
-5. Wróć waypointem do <span style="color:white;">The Crossroads</span>, idź górną ścieżką do <span style="color:white;">Chamber of Sins Level 1</span>, złap waypoint przy centralnym skrzyżowaniu i użyj map device do wejścia do <span style="color:white;">Maligaro's Sanctum</span>.
-6. Zabij <span style="color:red;">Maligaro</span>, weź <span style="color:green;">Black Venom</span> i zrób logout albo portal do miasta.
-7. Odbierz <span style="color:green;">Obsidian Key</span> od <span style="color:green;">Silka</span>.
-8. Zejdź do <span style="color:white;">Chamber of Sins Level 2</span> i zrób <span style="color:teal;">Labyrinth Trial</span>.
-9. Idź do <span style="color:white;">The Den</span>, wyjdź do <span style="color:white;">Ashen Fields</span> i zabij <span style="color:red;">Ralakesha</span>, żeby odblokować <span style="color:green;">Soul of Ralakesh</span> jako minor Pantheon.
-10. Wejdź do <span style="color:white;">Fortress Encampment</span>.
-11. Zabij Greusta.
-12. Wejdź do <span style="color:white;">Northern Forest</span> i złap waypoint.
-13. Wejdź do <span style="color:white;">Dread Thicket</span>.
-14. Zrób <span style="color:white;">Den of Despair</span> i zabij <span style="color:red;">Gruthkula</span>.
-15. Zbierz 7 Fireflies.
-16. Zrób logout albo portal do miasta i odbierz dwa Books of Skill.
-17. Quest z naszyjnikiem Greusta potraktuj jako opcjonalny, jeśli chcesz maksymalnie trzymać tempo.
-18. Wróć waypointem do <span style="color:white;">Northern Forest</span>, wejdź do <span style="color:white;">Causeway</span> i złap waypoint.
-19. Weź <span style="color:green;">Kishara's Star</span> z lockboxa zwykle blisko wyjścia.
-20. Wejdź do <span style="color:white;">Vaal City</span>, znajdź <span style="color:green;">Yeenę</span> i waypoint w centrum strefy.
-21. Zrób logout albo portal do miasta, oddaj <span style="color:green;">Kishara's Star</span> za skill book, potem waypointem wróć do <span style="color:white;">Vaal City</span>.
-22. Porozmawiaj z <span style="color:green;">Yeeną</span> i wejdź do <span style="color:white;">Temple of Decay Level 1</span> i <span style="color:white;">2</span>.
-23. Wejdź do <span style="color:white;">Arakaali's Web</span> i zabij <span style="color:red;">Arakaali</span>.
-24. Wyjdź do <span style="color:white;">Sarn Ramparts</span>, a potem do <span style="color:white;">Sarn Encampment</span>.
-25. To jest dobry moment na drugi lab.
-26. Po drugim labie dołóż Mind over Matter na drzewku.
-27. Jeśli build znów mięknie, wróć do podstaw: broń, resisty, flaski, linki, gem levels.
-28. Nie próbuj nadrabiać problemów samym drzewkiem, jeśli gear jest wyraźnie za słaby.
+1. Wyjdź do <span style="color:white;">Broken Bridge</span>.
+2. Wejdź do <span style="color:white;">The Crossroads</span> i złap waypoint na środku.
+3. Wejdź do <span style="color:white;">Fellshrine Ruins</span>.
+4. Wejdź do <span style="color:white;">The Crypt</span>, złap waypoint i zrób <span style="color:teal;">Labyrinth Trial</span>.
+5. Zejdź do <span style="color:white;">The Crypt Level Two</span>.
+6. Weź quest item z sarkofagu, zrób logout albo portal do miasta i oddaj questa.
+7. Wróć waypointem do <span style="color:white;">The Crossroads</span>.
+8. Wejdź do <span style="color:white;">Chamber of Sins Level 1</span> i złap waypoint przy centralnym skrzyżowaniu.
+9. Użyj map device do wejścia do <span style="color:white;">Maligaro's Sanctum</span>.
+10. Zabij <span style="color:red;">Maligaro</span>, weź <span style="color:green;">Black Venom</span> i zrób logout albo portal do miasta.
+11. Odbierz <span style="color:green;">Obsidian Key</span> od <span style="color:green;">Silka</span>.
+12. Wróć waypointem do <span style="color:white;">Chamber of Sins Level 1</span>, zejdź do <span style="color:white;">Chamber of Sins Level 2</span> i zrób <span style="color:teal;">Labyrinth Trial</span>.
+13. Wejdź do <span style="color:white;">The Den</span>.
+14. Wejdź do <span style="color:white;">Ashen Fields</span>.
+15. Zabij <span style="color:red;">Ralakesha</span>.
+16. Wejdź do <span style="color:white;">Fortress Encampment</span>.
+17. Zabij Greusta.
+18. Wejdź do <span style="color:white;">Northern Forest</span> i złap waypoint.
+19. Wejdź do <span style="color:white;">Dread Thicket</span>.
+20. Wejdź do <span style="color:white;">Den of Despair</span> i zabij <span style="color:red;">Gruthkula</span>.
+21. Zbierz 7 Fireflies, zrób logout albo portal do miasta i odbierz dwa Books of Skill.
+22. Wróć waypointem do <span style="color:white;">Northern Forest</span>.
+23. Wejdź do <span style="color:white;">Causeway</span> i złap waypoint.
+24. Weź <span style="color:green;">Kishara's Star</span> z lockboxa zwykle blisko wyjścia.
+25. Wejdź do <span style="color:white;">Vaal City</span>, znajdź <span style="color:green;">Yeenę</span> i złap waypoint w centrum strefy.
+26. Zrób logout albo portal do miasta, oddaj <span style="color:green;">Kishara's Star</span> za skill book i waypointem wróć do <span style="color:white;">Vaal City</span>.
+27. Porozmawiaj z <span style="color:green;">Yeeną</span>.
+28. Wejdź do <span style="color:white;">Temple of Decay Level 1</span>.
+29. Wejdź do <span style="color:white;">Temple of Decay Level 2</span>.
+30. Wejdź do <span style="color:white;">Arakaali's Web</span>.
+31. Zabij <span style="color:red;">Arakaali</span>.
+32. Wyjdź do <span style="color:white;">Sarn Ramparts</span>.
+33. Wejdź do <span style="color:white;">Sarn Encampment</span>.
 
 ## Akt 8
 
