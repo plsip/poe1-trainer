@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useAppStore } from '../../store/appStore'
 import { RunTimer } from '../../components/RunTimer'
@@ -31,10 +31,9 @@ export function RunPage() {
     setStepFilter,
   } = useAppStore()
 
-  const [paused, setPaused] = useState(false)
-
   const id = Number(runId)
   const isActive = runState?.run.is_active ?? false
+  const isPaused = !!runState?.run.paused_at
   const steps: GuideStep[] = activeGuide?.steps ?? []
 
   // Initial load
@@ -96,12 +95,11 @@ export function RunPage() {
   }
 
   const handlePause = async () => {
-    if (paused) {
+    if (isPaused) {
       await api.resumeRun(id).catch(() => {})
     } else {
       await api.pauseRun(id).catch(() => {})
     }
-    setPaused(!paused)
     loadRunState(id)
   }
 
@@ -163,8 +161,7 @@ export function RunPage() {
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <RunTimer
-            startedAt={runState.run.started_at}
-            isActive={isActive}
+            isActive={isActive && !isPaused}
             serverElapsedMs={runState.elapsed_ms}
           />
 
@@ -181,10 +178,10 @@ export function RunPage() {
                 <button
                   className="btn-sm"
                   onClick={handlePause}
-                  title={paused ? 'Wznów timer' : 'Wstrzymaj timer (AFK)'}
-                  style={{ color: paused ? '#ffd166' : undefined }}
+                  title={isPaused ? 'Wznów timer' : 'Wstrzymaj timer (AFK)'}
+                  style={{ color: isPaused ? '#ffd166' : undefined }}
                 >
-                  {paused ? '▶ Wznów' : '⏸ Pauza'}
+                  {isPaused ? '▶ Wznów' : '⏸ Pauza'}
                 </button>
                 <button
                   className="btn-sm"
@@ -198,6 +195,11 @@ export function RunPage() {
                 >
                   Porzuć
                 </button>
+                {isPaused && (
+                  <button className="btn-sm" onClick={() => navigate(-1)}>
+                    ← Wróć
+                  </button>
+                )}
               </>
             )}
             {!isActive && (

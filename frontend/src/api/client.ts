@@ -91,6 +91,10 @@ export function listRuns(guideSlug: string): Promise<RunSession[]> {
   return request(`/guides/${guideSlug}/runs`)
 }
 
+export function listActiveRuns(): Promise<RunSession[]> {
+  return request('/runs/active')
+}
+
 export function getRanking(guideSlug: string): Promise<DetailedRankingEntry[]> {
   return request(`/guides/${guideSlug}/ranking`)
 }

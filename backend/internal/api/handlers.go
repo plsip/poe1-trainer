@@ -595,6 +595,20 @@ func (h *Handlers) ImportGuide(w http.ResponseWriter, r *http.Request) {
 
 // ─── Run extended actions ──────────────────────────────────────────────────
 
+// ListActiveRuns handles GET /runs/active — returns currently active runs (0 or 1).
+func (h *Handlers) ListActiveRuns(w http.ResponseWriter, r *http.Request) {
+	run, err := h.runRepo.GetActiveRun(r.Context())
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	if run == nil {
+		writeJSON(w, http.StatusOK, []any{})
+		return
+	}
+	writeJSON(w, http.StatusOK, []any{run})
+}
+
 // GetRun handles GET /runs/{id}
 func (h *Handlers) GetRun(w http.ResponseWriter, r *http.Request) {
 	id, ok := intPathParam(r, "id")
