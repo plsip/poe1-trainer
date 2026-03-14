@@ -43,7 +43,6 @@ Output requirements:
   - the final rewrite applied in Polish.
 - If a step was removed, say that explicitly.
 - If two or more steps were merged, say which ones and show the final merged wording.
-- After the findings, add a short `Applied Changes` section summarizing what you changed in the file.
 - If no problems are found, say that explicitly and do not make unnecessary edits.
 
 Constraints:
