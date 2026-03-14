@@ -229,41 +229,34 @@ Kolejność lokacji:
 
 <span style="color:white;">The Twilight Strand</span> -> <span style="color:white;">Lioneye's Watch</span> -> <span style="color:white;">The Coast</span> -> <span style="color:white;">Mud Flats</span> -> <span style="color:white;">Karui Fortress</span> -> <span style="color:white;">Tukohama's Keep</span> -> <span style="color:white;">The Ridge</span> -> <span style="color:white;">Lower Prison</span> -> <span style="color:white;">Shavronne's Tower</span> -> <span style="color:white;">Prison Rooftop</span> -> <span style="color:white;">Prisoner's Gate</span> -> <span style="color:white;">Valley of the Fire Drinker</span> -> <span style="color:white;">Prisoner's Gate</span> -> <span style="color:white;">Western Forest</span> -> <span style="color:white;">Riverways</span> -> <span style="color:white;">Wetlands</span> -> <span style="color:white;">Riverways</span> -> <span style="color:white;">Southern Forest</span> -> <span style="color:white;">Cavern of Anger</span> -> <span style="color:white;">The Beacon</span> -> <span style="color:white;">Brine King's Reef</span> -> <span style="color:white;">Brine King's Throne</span> -> Act 7
 
-1. Po wejściu do aktu 6 pamiętaj, że po karze do resistów musisz naprawić gear.
-2. Nie idź za daleko, jeśli resisty ci się rozsypały.
-3. Wróć waypointem do <span style="color:white;">The Twilight Strand</span> i zrób quest Fallen from Grace.
-4. Po wykonaniu questa Fallen from Grace kup wszystkie brakujące gemy. To jest twoje zabezpieczenie, jeśli coś pominąłeś u <span style="color:green;">Nessy</span>, <span style="color:green;">Yeeny</span>, <span style="color:green;">Clarissy</span> albo <span style="color:green;">Petarusa</span> i <span style="color:green;">Vanji</span>.
-5. Priorytet zakupów po Lilly:
-   - <span style="color:#ff6a2f;">Cast when Damage Taken</span>,
-   - <span style="color:#ff6a2f;">Molten Shell</span>,
-   - <span style="color:#66ff66;">Faster Attacks</span>,
-   - <span style="color:#66ff66;">Momentum</span>,
-   - <span style="color:#ff6a2f;">Decoy Totem</span>,
-   - <span style="color:#ff6a2f;">Multiple Totem Support</span>,
-   - <span style="color:#7f7fff;">Lightning Penetration</span>, jeśli jeszcze go nie masz.
-6. Jeśli jeszcze tego nie zrobiłeś, ustaw <span style="color:#ff6a2f;">Determination</span> jako aurę defensywną. Jeśli wolisz szybciej zabijać i czujesz się bezpiecznie, możesz zamiast niej grać <span style="color:#7f7fff;">Wrath</span>.
-7. Ustaw <span style="color:#ff6a2f;">Cast when Damage Taken</span> z <span style="color:#ff6a2f;">Molten Shellem</span>.
-8. Pilnuj konfiguracji: <span style="color:#ff6a2f;">Cast when Damage Taken</span> level 1, <span style="color:#ff6a2f;">Molten Shell</span> maksymalnie level 8.
-9. <span style="color:#7f7fff;">Arcane Cloak</span> możesz już kupić i levelować, ale na kampanii nie trzymaj go razem z <span style="color:#ff6a2f;">Molten Shellem</span>, bo oba są guard skillami.
-10. Ustaw <span style="color:#ff6a2f;">Decoy Totem</span> i połącz go z <span style="color:#ff6a2f;">Multiple Totem Support</span>, gdy tylko możesz.
-11. Zrób <span style="color:white;">The Coast</span> -> <span style="color:white;">Mud Flats</span> i zabij <span style="color:red;">The Dishonored Queen</span>.
-12. Wejdź do <span style="color:white;">Karui Fortress</span>, potem <span style="color:white;">Tukohama's Keep</span>, zabij <span style="color:red;">Tukohamę</span> i odbierz skill book. Pantheonu <span style="color:red;">Tukohamy</span> nie używaj, to tylko obowiązkowy objazd po passive point.
-13. Wejdź do <span style="color:white;">The Ridge</span>, złap waypoint i odbierz <span style="color:green;">Book of Skill</span>.
-14. Zejdź do <span style="color:white;">Lower Prison</span>, złap waypoint i zrób <span style="color:teal;">Labyrinth Trial</span>.
-15. Zrób <span style="color:white;">Shavronne's Tower</span> -> <span style="color:white;">Prison Rooftop</span> i zabij <span style="color:red;">Brutusa</span> oraz <span style="color:red;">Shavronne</span>.
-16. Wejdź do <span style="color:white;">Prisoner's Gate</span> i złap waypoint.
-17. Znajdź <span style="color:white;">Valley of the Fire Drinker</span>, zabij <span style="color:red;">Abberatha</span>, potem wróć tą samą drogą do <span style="color:white;">Prisoner's Gate</span> i odbierz skill book.
-18. Z <span style="color:white;">Prisoner's Gate</span> wejdź do <span style="color:white;">Western Forest</span>, potem do <span style="color:white;">Riverways</span> i łap waypointy po drodze.
-19. Z <span style="color:white;">Riverways</span> idź do <span style="color:white;">Wetlands</span>, zabij <span style="color:red;">Puppet Mistress</span> i odbierz skill book.
-20. Wróć waypointem do <span style="color:white;">Riverways</span>, idź do <span style="color:white;">Southern Forest</span> i złap waypoint przed <span style="color:white;">Cavern of Anger</span>.
-21. Weź <span style="color:green;">Black Flag</span>, przejdź do <span style="color:white;">The Beacon</span>, złap waypoint, odpal <span style="color:green;">Beacon</span>, popłyń dalej i na <span style="color:white;">Brine King's Reef</span> złap waypoint.
-22. W <span style="color:white;">Brine King's Throne</span> trzymaj się lewej ściany, żeby szybciej dojść do bossa.
-23. Zabij <span style="color:red;">Brine Kinga</span> i ustaw <span style="color:green;">Soul of the Brine King</span> jako główny Pantheon.
-24. Płyń do aktu 7.
-25. Jeśli masz słaby pas, rękawice albo tarczę, użyj gamble u Faustusa.
-26. Po gamble od razu dokończ brakujące resisty na crafting benchu.
-27. Jeśli trzeba, szukaj rękawic na bazie energy shield pod odpowiednie kolory socketów.
-28. Jeśli boss ma nieprzyjemną interfazę, możesz ją przeczekać portalem i wejściem z powrotem.
+1. Wróć waypointem do <span style="color:white;">The Twilight Strand</span> i zrób quest Fallen from Grace.
+2. Wróć do <span style="color:white;">Lioneye's Watch</span>, kup u <span style="color:green;">Lilly Roth</span> <span style="color:#ff6a2f;">Cast when Damage Taken</span>, <span style="color:#ff6a2f;">Molten Shell</span>, <span style="color:#66ff66;">Faster Attacks</span>, <span style="color:#66ff66;">Momentum</span>, <span style="color:#ff6a2f;">Decoy Totem</span> i <span style="color:#ff6a2f;">Multiple Totem Support</span>, a <span style="color:#7f7fff;">Lightning Penetration</span> tylko jeśli jeszcze go nie masz; przy okazji uzupełnij brakujące gemy i napraw resisty, jeśli kara z Aktu 5 je rozsypała.
+3. Ustaw <span style="color:#ff6a2f;">Determination</span> jako aurę defensywną; graj <span style="color:#7f7fff;">Wrath</span> tylko jeśli świadomie wybierasz bardziej ofensywny wariant kampanii.
+4. Połącz <span style="color:#ff6a2f;">Cast when Damage Taken</span> z <span style="color:#ff6a2f;">Molten Shellem</span> i zostaw <span style="color:#ff6a2f;">Cast when Damage Taken</span> na level 1, a <span style="color:#ff6a2f;">Molten Shell</span> maksymalnie na level 8.
+5. Kup u <span style="color:green;">Lilly Roth</span> <span style="color:#7f7fff;">Arcane Cloak</span> do levelowania, ale nie łącz go na kampanii z <span style="color:#ff6a2f;">Molten Shellem</span>.
+6. Ustaw <span style="color:#ff6a2f;">Decoy Totem</span> z <span style="color:#ff6a2f;">Multiple Totem Support</span>.
+7. Wejdź do <span style="color:white;">The Coast</span>.
+8. Wejdź do <span style="color:white;">Mud Flats</span> i zabij <span style="color:red;">The Dishonored Queen</span>.
+9. Wejdź do <span style="color:white;">Karui Fortress</span>.
+10. Wejdź do <span style="color:white;">Tukohama's Keep</span>.
+11. Zabij <span style="color:red;">Tukohamę</span>, zrób logout albo portal do miasta i odbierz <span style="color:green;">Books of Skill</span>.
+12. Wejdź do <span style="color:white;">The Ridge</span> i złap waypoint.
+13. Zejdź do <span style="color:white;">Lower Prison</span>, złap waypoint i zrób <span style="color:teal;">Labyrinth Trial</span>.
+14. Wejdź do <span style="color:white;">Shavronne's Tower</span>.
+15. Wejdź do <span style="color:white;">Prison Rooftop</span>.
+16. Zabij <span style="color:red;">Brutusa</span> i <span style="color:red;">Shavronne</span>.
+17. Wejdź do <span style="color:white;">Prisoner's Gate</span> i złap waypoint.
+18. Wejdź do <span style="color:white;">Valley of the Fire Drinker</span>, zabij <span style="color:red;">Abberatha</span>, wróć tą samą drogą do <span style="color:white;">Prisoner's Gate</span> i odbierz <span style="color:green;">Book of Skill</span>.
+19. Wejdź do <span style="color:white;">Western Forest</span>.
+20. Wejdź do <span style="color:white;">Riverways</span> i złap waypoint.
+21. Wejdź do <span style="color:white;">Wetlands</span>, zabij <span style="color:red;">Puppet Mistress</span>, zrób logout albo portal do miasta i odbierz <span style="color:green;">Book of Skill</span>.
+22. Wróć waypointem do <span style="color:white;">Riverways</span>.
+23. Wejdź do <span style="color:white;">Southern Forest</span> i złap waypoint przed <span style="color:white;">Cavern of Anger</span>.
+24. Wejdź do <span style="color:white;">Cavern of Anger</span> i weź <span style="color:green;">Black Flag</span>.
+25. Wejdź do <span style="color:white;">The Beacon</span>, złap waypoint i odpal <span style="color:green;">Beacon</span>.
+26. Popłyń na <span style="color:white;">Brine King's Reef</span> i złap waypoint.
+27. Wejdź do <span style="color:white;">Brine King's Throne</span> i trzymaj się lewej ściany, żeby szybciej dojść do bossa.
+28. Zabij <span style="color:red;">Brine Kinga</span>, ustaw <span style="color:green;">Soul of the Brine King</span> jako główny Pantheon i popłyń do aktu 7.
 
 ## Akt 7
 
