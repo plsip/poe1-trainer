@@ -136,9 +136,9 @@ Kolejność lokacji:
 2. Znajdź <span style="color:white;">Crematorium</span>, złap waypoint i zrób <span style="color:teal;">Labyrinth Trial</span>.
 3. Zabij <span style="color:red;">Piety</span>, weź <span style="color:green;">Tolman's Bracelet</span>, wróć do miasta portalem albo logoutem i odbierz <span style="color:green;">Sewer Keys</span> od <span style="color:green;">Clarissy</span>.
 4. Wróć waypointem do <span style="color:white;">The Slums</span>, znajdź <span style="color:white;">Sewer Grating</span> i wejdź do <span style="color:white;">Sewers</span>.
-5. W <span style="color:white;">Sewers</span> zabierz <span style="color:green;">Platinum Bust</span> do questa <span style="color:#7fa8d6;">Victario's Secrets</span>.
-6. Wejdź do <span style="color:white;">Marketplace</span>, złap waypoint i zabierz kolejny <span style="color:green;">Platinum Bust</span> do questa <span style="color:#7fa8d6;">Victario's Secrets</span>.
-7. Wejdź do <span style="color:white;">Catacombs</span>, zabierz ostatni <span style="color:green;">Platinum Bust</span>, zrób <span style="color:teal;">Labyrinth Trial</span>, potem wróć do miasta portalem albo logoutem, odbierz <span style="color:green;">Book of Skill</span> od <span style="color:green;">Hargana</span> i waypointem wróć do <span style="color:white;">Marketplace</span>.
+5. W <span style="color:white;">Sewers</span> zlokalizuj trzy <span style="color:green;">Platinum Busts</span>. Zawsze jest jeden przed Waypointem i dwa po nim.
+6. Wejdź do <span style="color:white;">Marketplace</span> i złap waypoint.
+7. Wejdź do <span style="color:white;">Catacombs</span>, zrób <span style="color:teal;">Labyrinth Trial</span>, potem wróć do miasta portalem albo logoutem, odbierz <span style="color:green;">Book of Skill</span> od <span style="color:green;">Hargana</span> i waypointem wróć do <span style="color:white;">Marketplace</span>.
 8. Wejdź do <span style="color:white;">Battlefront</span> i złap waypoint mniej więcej w centrum strefy.
 9. Weź <span style="color:green;">Ribbon Spool</span> z <span style="color:green;">Blackguard Chest</span>. To jest część questa Sever the Right Hand.
 
