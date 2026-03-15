@@ -83,6 +83,10 @@ export function confirmStep(runId: number, stepId: number): Promise<Checkpoint> 
   return request(`/runs/${runId}/steps/${stepId}/confirm`, { method: 'POST' })
 }
 
+export function confirmAct(runId: number, act: number): Promise<void> {
+  return request(`/runs/${runId}/acts/${act}/confirm`, { method: 'POST' })
+}
+
 export function finishRun(runId: number): Promise<void> {
   return request(`/runs/${runId}/finish`, { method: 'POST' })
 }

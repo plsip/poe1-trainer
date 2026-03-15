@@ -34,6 +34,7 @@ interface Props {
   isActive: boolean
   onFilterChange: (patch: Partial<StepFilter>) => void
   onConfirm: (stepId: number) => void
+  onConfirmAct?: (act: number) => void
   onSkip: (stepId: number) => void
   onUndo: (stepId: number) => void
 }
@@ -45,6 +46,7 @@ export function StepList({
   isActive,
   onFilterChange,
   onConfirm,
+  onConfirmAct,
   onSkip,
   onUndo,
 }: Props) {
@@ -141,9 +143,21 @@ export function StepList({
               marginBottom: '0.35rem',
               paddingBottom: '0.2rem',
               borderBottom: '1px solid #2a2a2a',
+              display: 'flex',
+              alignItems: 'center',
             }}
           >
-            Akt {actStr}
+            <span>Akt {actStr}</span>
+            {isActive && onConfirmAct && (
+              <button
+                className="btn-sm"
+                onClick={() => onConfirmAct(Number(actStr))}
+                style={{ fontSize: '0.75rem', padding: '0.2rem 0.5rem', marginLeft: 'auto' }}
+                title="Zatwierdź wszystkie nieukończone kroki w tym akcie"
+              >
+                ✓ Zatwierdź cały akt
+              </button>
+            )}
           </div>
 
           <ol style={{ listStyle: 'none', padding: 0, margin: 0 }}>

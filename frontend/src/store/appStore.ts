@@ -50,6 +50,7 @@ interface AppState {
   loadSplits: (runId: number) => Promise<void>
   loadChecks: (runId: number) => Promise<void>
   confirmStep: (runId: number, stepId: number) => Promise<void>
+  confirmAct: (runId: number, act: number) => Promise<void>
   skipStep: (runId: number, stepId: number) => Promise<void>
   undoStep: (runId: number, stepId: number) => Promise<void>
   finishRun: (runId: number) => Promise<void>
@@ -151,6 +152,20 @@ export const useAppStore = create<AppState>((set, get) => ({
     set({ error: null })
     try {
       await api.confirmStep(runId, stepId)
+      await Promise.all([
+        get().loadRunState(runId),
+        get().loadAlerts(runId),
+        get().loadChecks(runId),
+      ])
+    } catch (e) {
+      set({ error: String(e) })
+    }
+  },
+
+  confirmAct: async (runId, act) => {
+    set({ error: null })
+    try {
+      await api.confirmAct(runId, act)
       await Promise.all([
         get().loadRunState(runId),
         get().loadAlerts(runId),

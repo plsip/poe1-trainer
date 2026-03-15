@@ -23,6 +23,7 @@ export function RunPage() {
     loadSplits,
     loadChecks,
     confirmStep,
+    confirmAct,
     skipStep,
     undoStep,
     finishRun,
@@ -78,6 +79,7 @@ export function RunPage() {
   // ─── Action handlers ─────────────────────────────────────────────────────
 
   const handleConfirm = (stepId: number) => confirmStep(id, stepId)
+  const handleConfirmAct = (act: number) => confirmAct(id, act)
   const handleSkip = (stepId: number) => skipStep(id, stepId)
   const handleUndo = (stepId: number) => undoStep(id, stepId)
   const handleAnswer = (checkId: number, value: string) => answerCheck(id, checkId, value)
@@ -222,6 +224,7 @@ export function RunPage() {
             isActive={isActive}
             onFilterChange={setStepFilter}
             onConfirm={handleConfirm}
+            onConfirmAct={handleConfirmAct}
             onSkip={handleSkip}
             onUndo={handleUndo}
           />
