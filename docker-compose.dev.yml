@@ -79,7 +79,7 @@ services:
       - run
       - ./cmd/import
       - -file=/guides/stormburst_campaign.md
-      - -slug=stormburst_campaign_v1
+      - -slug=stormburst_campaign
       - -title=Stormburst Totemy — Kampania
       - -build=Storm Burst Totemy
     restart: "no"

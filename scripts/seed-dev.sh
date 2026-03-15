@@ -27,7 +27,7 @@ cd "$REPO_ROOT/backend"
 go run ./cmd/import \
   -db "$DB_URL" \
   -file "$GUIDE_FILE" \
-  -slug stormburst_campaign_v1 \
+  -slug stormburst_campaign \
   -title "Stormburst Totemy — Kampania" \
   -build "Storm Burst Totemy" \
   -version "$GUIDE_VERSION"
