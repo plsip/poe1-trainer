@@ -1,4 +1,5 @@
 import type { Split, GuideStep, DetailedRankingEntry, RunDeltasResponse } from '../api/types'
+import { buildActStepNumberMap, formatActStepLabel } from '../utils/stepNumbers'
 
 function formatMs(ms: number) {
   const totalSec = Math.floor(ms / 1000)
@@ -33,6 +34,7 @@ interface Props {
 
 export function SplitsPanel({ splits, steps, elapsedMs, ranking, deltas }: Props) {
   const stepMap = new Map(steps.map((s) => [s.id, s]))
+  const actStepNumbers = buildActStepNumberMap(steps)
 
   const pb = ranking.length > 0 ? ranking[0] : null
   const pbMs = pb?.total_ms ?? null
@@ -100,7 +102,7 @@ export function SplitsPanel({ splits, steps, elapsedMs, ranking, deltas }: Props
                 <tr key={split.id} style={{ borderBottom: '1px solid #1e1e1e' }}>
                   <td style={{ padding: '0.25rem 0.4rem', color: '#ccc' }}>
                     {step
-                      ? `A${step.act} · ${step.title || `Krok ${step.step_number}`}`
+                      ? `${formatActStepLabel(step, actStepNumbers.get(step.id))} · ${step.title || `Krok ${actStepNumbers.get(step.id) ?? step.step_number}`}`
                       : `Krok #${split.step_id}`}
                   </td>
                   <td style={{ padding: '0.25rem 0.4rem', textAlign: 'right', fontFamily: 'monospace', color: '#e0e0e0' }}>

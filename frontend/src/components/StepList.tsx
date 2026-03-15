@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import type { GuideStep, CurrentState, StepFilter, StepProgressStatus, StepTiming } from '../api/types'
+import { buildActStepNumberMap } from '../utils/stepNumbers'
 
 function deriveStatus(step: GuideStep, state: CurrentState | null): StepProgressStatus {
   if (!state) return 'pending'
@@ -52,6 +53,7 @@ export function StepList({
 }: Props) {
   const [expandedId, setExpandedId] = useState<number | null>(state?.current_step_id ?? null)
   const stepTimings = new Map((state?.step_timings ?? []).map((timing) => [timing.step_id, timing]))
+  const actStepNumbers = buildActStepNumberMap(steps)
 
   // Auto-expand whenever the current step changes
   useEffect(() => {
@@ -194,7 +196,7 @@ export function StepList({
                     <span
                       style={{ fontSize: '0.75rem', color: '#666', width: 28, flexShrink: 0 }}
                     >
-                      {step.step_number}
+                      {actStepNumbers.get(step.id) ?? step.step_number}
                     </span>
                     {!isExpanded ? (
                       <span
@@ -208,7 +210,7 @@ export function StepList({
                           whiteSpace: 'nowrap',
                         }}
                       >
-                        {step.title || `Krok ${step.step_number}`}
+                        {step.title || `Krok ${actStepNumbers.get(step.id) ?? step.step_number}`}
                       </span>
                     ) : (
                       <span

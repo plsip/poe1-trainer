@@ -43,6 +43,7 @@ func (e *Engine) Produce(g *guide.Guide, state *runpkg.CurrentState) []Recommend
 		CurrentStep:      currentStep,
 		NextStep:         nextStep,
 		ConfirmedStepIDs: confirmedSet,
+		ActualAct:        actStepNumber(g, currentStep),
 		ElapsedMs:        state.ElapsedMs,
 	}
 
@@ -64,10 +65,14 @@ func (e *Engine) currentStepRec(in Input) []Recommendation {
 			Priority: PriorityLow,
 		}}
 	}
+	actStepNumber := in.CurrentStep.StepNumber
+	if in.ActualAct > 0 {
+		actStepNumber = in.ActualAct
+	}
 	return []Recommendation{{
 		ID:       fmt.Sprintf("step_%d", in.CurrentStep.ID),
 		Text:     in.CurrentStep.Title,
-		Reason:   fmt.Sprintf("Akt %d — krok %d.", in.CurrentStep.Act, in.CurrentStep.StepNumber),
+		Reason:   fmt.Sprintf("Akt %d — krok %d w tym akcie.", in.CurrentStep.Act, actStepNumber),
 		Priority: PriorityHigh,
 		StepID:   in.CurrentStep.ID,
 	}}
@@ -138,4 +143,23 @@ func gemColorLabel(color string) string {
 
 func sanitize(s string) string {
 	return strings.NewReplacer(" ", "_", "'", "", "/", "_").Replace(strings.ToLower(s))
+}
+
+func actStepNumber(g *guide.Guide, step *guide.Step) int {
+	if g == nil || step == nil {
+		return 0
+	}
+
+	count := 0
+	for i := range g.Steps {
+		if g.Steps[i].Act != step.Act {
+			continue
+		}
+		count++
+		if g.Steps[i].ID == step.ID {
+			return count
+		}
+	}
+
+	return 0
 }
