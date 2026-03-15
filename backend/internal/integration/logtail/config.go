@@ -28,6 +28,12 @@ type Config struct {
 	// GameNotRunningAfter określa czas bez nowych danych po którym status
 	// zmienia się na StatusGameNotRunning. Musi być > IdleAfter. Domyślnie 5m.
 	GameNotRunningAfter time.Duration
+
+	// LogLocation określa strefę czasową używaną do interpretacji znaczników
+	// czasu w Client.txt. PoE zapisuje czas lokalny maszyny gracza.
+	// W środowisku Docker (UTC) należy ustawić LOG_TZ na właściwą strefę,
+	// np. "Europe/Warsaw". Nil oznacza time.Local.
+	LogLocation *time.Location
 }
 
 // DefaultConfig zwraca Config wypełniony sensownymi wartościami domyślnymi.
@@ -39,6 +45,7 @@ func DefaultConfig() Config {
 		PollInterval:        250 * time.Millisecond,
 		IdleAfter:           30 * time.Second,
 		GameNotRunningAfter: 5 * time.Minute,
+		LogLocation:         time.Local,
 	}
 }
 

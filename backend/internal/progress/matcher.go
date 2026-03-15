@@ -39,7 +39,7 @@ func (m AreaMatcher) Match(event DomainEvent, step guide.Step) (StepUpdate, bool
 	if event.Kind != KindAreaEntered || event.Area == nil {
 		return StepUpdate{}, false
 	}
-	entered := strings.TrimSpace(event.Area.AreaName)
+	entered := normalizeAreaName(event.Area.AreaName)
 	for _, cond := range step.Conditions {
 		if cond.ConditionType != guide.ConditionLogtailArea {
 			continue
@@ -48,7 +48,7 @@ func (m AreaMatcher) Match(event DomainEvent, step guide.Step) (StepUpdate, bool
 		if !ok {
 			continue
 		}
-		if !strings.EqualFold(entered, strings.TrimSpace(expected)) {
+		if normalizeAreaName(expected) != entered {
 			continue
 		}
 		newStatus := runpkg.StepCompleted
@@ -178,4 +178,11 @@ func (m ManualMatcher) Match(event DomainEvent, step guide.Step) (StepUpdate, bo
 			OccurredAt:  event.OccurredAt,
 		},
 	}, true
+}
+
+func normalizeAreaName(areaName string) string {
+	normalized := strings.ToLower(strings.TrimSpace(areaName))
+	normalized = strings.TrimPrefix(normalized, "the ")
+	normalized = strings.Join(strings.Fields(normalized), " ")
+	return normalized
 }

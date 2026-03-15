@@ -25,6 +25,8 @@ services:
       # LOG_PATH przekazywany z hosta (.env lub shell).
       # Zostaw puste aby wyłączyć obserwację loga — aplikacja działa bez tego.
       LOG_PATH: "${LOG_PATH:-}"
+      # LOG_TZ: strefa czasowa logu PoE (kontener działa w UTC, PoE zapisuje czas lokalny).
+      LOG_TZ: "${LOG_TZ:-}"
     ports:
       - "8080:8080"
     depends_on:

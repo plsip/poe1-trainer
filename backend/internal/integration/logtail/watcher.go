@@ -218,7 +218,7 @@ func (w *Watcher) run(ctx context.Context) {
 				w.rawLineObserver(full)
 			}
 
-			parsed, parseErr := ParseLine(full)
+			parsed, parseErr := ParseLine(full, w.cfg.LogLocation)
 			if parseErr != nil {
 				slog.Warn("logtail: parser error", "line", full, "err", parseErr)
 				setStatus(StatusParserError, parseErr)

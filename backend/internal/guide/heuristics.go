@@ -101,7 +101,7 @@ func ClassifyStepType(plain, raw string) StepType {
 	// ─── 8. Navigation ────────────────────────────────────────────────────────
 	// Krok zawiera obszar (biały span) i czasownik ruchu LUB "złap waypoint".
 	if f.HasWhite && containsAny(lower,
-		"idź", "biegnij", "wejdź", "przejdź", "złap waypoint",
+		"idź", "biegnij", "wejdź", "wyjdź", "przejdź", "złap waypoint",
 		"wróć waypointem", "wróć do", "leć do", "dostań się do",
 	) {
 		return StepTypeNavigation

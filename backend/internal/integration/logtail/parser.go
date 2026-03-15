@@ -75,6 +75,9 @@ var (
 
 // ParseLine dekoduje pojedynczą surową linię Client.txt.
 //
+// loc określa strefę czasową znaczników czasu w pliku logu — PoE zapisuje czas
+// lokalny maszyny gracza. Przekaż nil aby użyć time.Local.
+//
 // Zwraca (nil, nil) dla linii strukturalnie poprawnych, ale nieinteresujących
 // (czat, upadek przedmiotów, aktywacja umiejętności itp.).
 //
@@ -82,7 +85,7 @@ var (
 // nie może być zdekodowana — wywołujący powinien traktować to jako StatusParserError.
 //
 // Zwraca (*ParsedLine, nil) dla zdekodowanych linii ze zdarzeniem.
-func ParseLine(raw string) (*ParsedLine, error) {
+func ParseLine(raw string, loc *time.Location) (*ParsedLine, error) {
 	raw = strings.TrimRight(raw, "\r\n ")
 	if raw == "" {
 		return nil, nil
@@ -94,7 +97,10 @@ func ParseLine(raw string) (*ParsedLine, error) {
 		return nil, nil
 	}
 
-	ts, err := time.ParseInLocation(logTimestampLayout, m[1], time.Local)
+	if loc == nil {
+		loc = time.Local
+	}
+	ts, err := time.ParseInLocation(logTimestampLayout, m[1], loc)
 	if err != nil {
 		// Zniekształcony znacznik czasu w linii strukturalnej = błąd parsera.
 		return nil, fmt.Errorf("parse timestamp %q: %w", m[1], err)

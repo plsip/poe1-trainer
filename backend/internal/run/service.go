@@ -3,10 +3,12 @@ package run
 import (
 	"context"
 	"fmt"
+	"log/slog"
 	"strings"
 	"sync"
 	"time"
 
+	"github.com/poe1-trainer/internal/game"
 	"github.com/poe1-trainer/internal/guide"
 )
 
@@ -14,6 +16,7 @@ import (
 type Service struct {
 	repo      *Repository
 	guideRepo *guide.Repository
+	gameRepo  game.AreaRepository
 	mu        sync.Mutex
 	areaHints map[int]areaHint
 }
@@ -25,8 +28,8 @@ type areaHint struct {
 }
 
 // NewService creates a new Service.
-func NewService(repo *Repository, guideRepo *guide.Repository) *Service {
-	return &Service{repo: repo, guideRepo: guideRepo, areaHints: map[int]areaHint{}}
+func NewService(repo *Repository, guideRepo *guide.Repository, gameRepo game.AreaRepository) *Service {
+	return &Service{repo: repo, guideRepo: guideRepo, gameRepo: gameRepo, areaHints: map[int]areaHint{}}
 }
 
 // CreateRun starts a new run for the given guide.
@@ -166,10 +169,18 @@ func (s *Service) HandleAreaEvent(ctx context.Context, runID int, ev AreaEvent) 
 	if processedAt.IsZero() {
 		processedAt = time.Now()
 	}
-	if ev.AreaCode == "" {
+	if ev.AreaCode == "" && ev.AreaName != "" {
 		if hint, ok := s.takeAreaHint(runID, processedAt); ok {
 			ev.AreaCode = hint.areaCode
 			ev.AreaLevel = hint.areaLevel
+		} else {
+			if areas, err := s.gameRepo.GetByName(ctx, ev.AreaName); err == nil && len(areas) == 1 {
+				ev.AreaCode = areas[0].AreaCode
+			}
+		}
+	} else if ev.AreaCode != "" && ev.AreaName == "" {
+		if area, err := s.gameRepo.GetByCode(ctx, ev.AreaCode); err == nil && area != nil {
+			ev.AreaName = area.Name
 		}
 	}
 	// Auto-start: first area event starts the timer.
@@ -180,7 +191,8 @@ func (s *Service) HandleAreaEvent(ctx context.Context, runID int, ev AreaEvent) 
 		run.TimerStartedAt = &processedAt
 	}
 	if err := s.repo.RecordEvent(ctx, runID, EventAreaEntered, map[string]string{
-		"area": ev.AreaName,
+		"area":      ev.AreaName,
+		"area_code": ev.AreaCode,
 	}); err != nil {
 		return err
 	}
@@ -197,12 +209,47 @@ func (s *Service) HandleAreaEvent(ctx context.Context, runID int, ev AreaEvent) 
 	for _, split := range splits {
 		recorded[split.StepID] = true
 	}
-	step := firstAreaStepForArea(g.Steps, ev.AreaName, actFromAreaCode(ev.AreaCode), recorded, lastRecordedSortOrder(g.Steps, recorded))
+	checkpoints, err := s.repo.ListCheckpoints(ctx, runID)
+	if err != nil {
+		return err
+	}
+	confirmedSet := make(map[int]bool, len(checkpoints))
+	for _, cp := range checkpoints {
+		confirmedSet[cp.StepID] = true
+	}
+	act := 0
+	if area, err := s.gameRepo.GetByCode(ctx, ev.AreaCode); err == nil && area != nil && area.Act != nil {
+		act = *area.Act
+	} else {
+		act = actFromAreaCode(ev.AreaCode)
+	}
+	// Use the confirmed-checkpoint watermark so that a prematurely recorded
+	// split for a "future" step (e.g. step 53 when the user first enters
+	// Forest Encampment in act 2) does not raise minSortOrd and block correct
+	// matching for earlier logtail steps (e.g. steps 47-49 in act 2).
+	minSortOrd := lastRecordedSortOrder(g.Steps, confirmedSet)
+	step := firstAreaStepForArea(g.Steps, ev.AreaName, act, recorded, minSortOrd)
+	slog.Info("logtail: area split probe",
+		"run_id", runID,
+		"area", ev.AreaName,
+		"area_code", ev.AreaCode,
+		"act", act,
+		"min_sort_order", minSortOrd,
+		"recorded_count", len(recorded),
+		"step_found", step != nil,
+	)
 	if step == nil {
 		return nil
 	}
 
-	if err := s.repo.RecordSplit(ctx, runID, step.ID, elapsedAt(run, processedAt)); err != nil {
+	splitMs := elapsedAt(run, processedAt)
+	slog.Info("logtail: recording split",
+		"run_id", runID,
+		"step_id", step.ID,
+		"sort_order", step.SortOrder,
+		"split_ms", splitMs,
+	)
+	if err := s.repo.RecordSplit(ctx, runID, step.ID, splitMs); err != nil {
 		return err
 	}
 
@@ -217,10 +264,14 @@ func (s *Service) HandleAreaEvent(ctx context.Context, runID int, ev AreaEvent) 
 
 // HandleAreaGenerated stores the latest generated area context for the run.
 func (s *Service) HandleAreaGenerated(ctx context.Context, runID int, areaCode string, areaLevel int, occurredAt time.Time) error {
-	if err := s.RecordLogEvent(ctx, runID, EventAreaGenerated, map[string]string{
+	payload := map[string]string{
 		"area_code":  areaCode,
 		"area_level": fmt.Sprint(areaLevel),
-	}); err != nil {
+	}
+	if area, err := s.gameRepo.GetByCode(ctx, areaCode); err == nil && area != nil {
+		payload["area"] = area.Name
+	}
+	if err := s.RecordLogEvent(ctx, runID, EventAreaGenerated, payload); err != nil {
 		return err
 	}
 	s.mu.Lock()
@@ -533,7 +584,8 @@ func firstAreaStepForArea(steps []guide.Step, areaName string, act int, recorded
 		if recorded[step.ID] {
 			continue
 		}
-		if act > 0 && step.Act != act {
+		// Allow +/- 1 act difference for boundary zones (e.g. City of Sarn = A3 in game, A2 in guide)
+		if act > 0 && step.Act > 0 && (step.Act < act-1 || step.Act > act+1) {
 			continue
 		}
 		if step.SortOrder < minSortOrder {
@@ -596,7 +648,7 @@ func staleAreaSplitIDs(steps []guide.Step, splits []Split, selected *guide.Step,
 		if step.ID == selected.ID {
 			continue
 		}
-		if step.Act == selected.Act {
+		if step.Act != selected.Act {
 			continue
 		}
 		if step.SortOrder >= selected.SortOrder {

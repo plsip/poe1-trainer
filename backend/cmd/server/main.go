@@ -14,6 +14,7 @@ import (
 	"github.com/poe1-trainer/internal/api"
 	buildpkg "github.com/poe1-trainer/internal/build"
 	"github.com/poe1-trainer/internal/db"
+	"github.com/poe1-trainer/internal/game"
 	"github.com/poe1-trainer/internal/guide"
 	"github.com/poe1-trainer/internal/integration/ggg"
 	"github.com/poe1-trainer/internal/integration/logtail"
@@ -40,7 +41,8 @@ func main() {
 	guideRepo := guide.NewRepository(store.Pool)
 	buildRepo := buildpkg.NewRepository(store.Pool)
 	runRepo := runpkg.NewRepository(store.Pool)
-	runService := runpkg.NewService(runRepo, guideRepo)
+	gameRepo := game.NewPostgresAreaRepository(store.Pool)
+	runService := runpkg.NewService(runRepo, guideRepo, gameRepo)
 	engine := recommendation.NewEngine()
 	ruleEngine := rule.NewEngine()
 
@@ -70,9 +72,20 @@ func main() {
 
 	// Konfiguracja logtail watchera (opcjonalna).
 	// LOG_PATH nadpisuje ścieżkę domyślną do LatestClient.txt, jeśli środowisko tego wymaga.
+	// LOG_TZ ustawia strefę czasową znaczników czasu w pliku logu (np. "Europe/Warsaw").
+	// Wymagane gdy kontener działa w UTC, a PoE zapisuje czas lokalny gracza.
 	ltCfg := logtail.DefaultConfig()
 	if logPath := os.Getenv("LOG_PATH"); logPath != "" {
 		ltCfg.LogPath = logPath
+	}
+	if logTZ := os.Getenv("LOG_TZ"); logTZ != "" {
+		loc, err := time.LoadLocation(logTZ)
+		if err != nil {
+			log.Printf("logtail: nieprawidłowa strefa LOG_TZ=%q: %v — używam time.Local", logTZ, err)
+		} else {
+			ltCfg.LogLocation = loc
+			log.Printf("logtail: strefa czasowa logu: %s", loc)
+		}
 	}
 	if ltCfg.LogPath != "" {
 
