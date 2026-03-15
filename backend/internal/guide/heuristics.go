@@ -161,12 +161,16 @@ func ExtractQuestName(plain string) string {
 //
 // Reguła:
 //   - navigation + znana lokacja → logtail (Client.txt loguje wejście do strefy)
+//   - labyrinth + znana lokacja  → logtail_ask (wejście wykryte, gracz potwierdza trial)
 //   - wszystkie pozostałe        → manual (gracz klika "Potwierdź")
 //
 // GGG API nie jest obsługiwana w MVP.
 func InferCompletionMode(stepType StepType, area string) CompletionMode {
 	if stepType == StepTypeNavigation && area != "" {
 		return CompletionLogtail
+	}
+	if stepType == StepTypeLabyrinth && area != "" {
+		return CompletionLogtailAsk
 	}
 	return CompletionManual
 }
@@ -175,6 +179,8 @@ func InferCompletionMode(stepType StepType, area string) CompletionMode {
 
 // BuildConditions generates the inference rule set for a step.
 // For navigation steps with a known area, a logtail_area condition is added.
+// For labyrinth steps with a known area, a logtail_area condition is added first
+// (triggers needs_confirmation on area entry) followed by a manual_confirm fallback.
 // All other steps get a manual_confirm condition as a fallback.
 func BuildConditions(stepType StepType, area string) []StepCondition {
 	var conds []StepCondition
@@ -185,6 +191,21 @@ func BuildConditions(stepType StepType, area string) []StepCondition {
 			Payload:       map[string]string{"area": area},
 			Priority:      0,
 			Notes:         "auto-detected: player enters the area",
+		})
+		return conds
+	}
+
+	if stepType == StepTypeLabyrinth && area != "" {
+		conds = append(conds, StepCondition{
+			ConditionType: ConditionLogtailArea,
+			Payload:       map[string]string{"area": area},
+			Priority:      0,
+			Notes:         "auto-detected: player enters the labyrinth zone",
+		})
+		conds = append(conds, StepCondition{
+			ConditionType: ConditionManualConfirm,
+			Priority:      1,
+			Notes:         "player confirms labyrinth trial completed",
 		})
 		return conds
 	}

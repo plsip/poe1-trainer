@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"flag"
 	"fmt"
 	"log"
@@ -52,9 +53,15 @@ func main() {
 
 	repo := guide.NewRepository(store.Pool)
 	if err := repo.Save(ctx, g); err != nil {
+		if errors.Is(err, guide.ErrVersionUnchanged) {
+			fmt.Printf("guide %q already at version %s (revision %d) — nothing to import\n",
+				g.Slug, g.Version, g.CurrentRevision)
+			return
+		}
 		log.Fatalf("save: %v", err)
 	}
-	fmt.Printf("guide %q saved with ID %d\n", g.Slug, g.ID)
+	fmt.Printf("guide %q saved with ID %d (revision %d, version %s)\n",
+		g.Slug, g.ID, g.CurrentRevision, g.Version)
 }
 
 func envOrDefault(key, def string) string {

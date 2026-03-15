@@ -5,6 +5,7 @@ import (
 	"crypto/rand"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -606,6 +607,10 @@ func (h *Handlers) ImportGuide(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if err := h.guides.Save(r.Context(), g); err != nil {
+		if errors.Is(err, guide.ErrVersionUnchanged) {
+			writeJSON(w, http.StatusOK, g)
+			return
+		}
 		writeError(w, http.StatusInternalServerError, err.Error())
 		return
 	}

@@ -3,11 +3,17 @@ package guide
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
+
+// ErrVersionUnchanged is returned by Save when the guide's git version has not
+// changed since the last import. The call is a no-op; g.ID and g.CurrentRevision
+// are still populated with the existing values.
+var ErrVersionUnchanged = errors.New("guide version unchanged")
 
 // Repository provides persistence for guides.
 type Repository struct {
@@ -20,7 +26,10 @@ func NewRepository(db *pgxpool.Pool) *Repository {
 }
 
 // Save persists a parsed Guide (upsert by slug).
-// Returns the guide with IDs filled in.
+// If the guide's Version (git commit hash) has not changed since the last import,
+// Save returns ErrVersionUnchanged and is otherwise a no-op; g.ID and
+// g.CurrentRevision are populated with the existing values.
+// A new revision is only created when the Version string changes.
 func (r *Repository) Save(ctx context.Context, g *Guide) error {
 	tx, err := r.db.Begin(ctx)
 	if err != nil {
@@ -28,6 +37,25 @@ func (r *Repository) Save(ctx context.Context, g *Guide) error {
 	}
 	defer tx.Rollback(ctx) //nolint:errcheck
 
+	// Check whether this guide slug already exists and what version it carries.
+	var existingID int
+	var existingVersion string
+	var existingRevision int
+	checkErr := tx.QueryRow(ctx,
+		`SELECT id, version, current_revision FROM guides WHERE slug = $1`, g.Slug,
+	).Scan(&existingID, &existingVersion, &existingRevision)
+
+	switch {
+	case checkErr == nil && existingVersion == g.Version:
+		// Same git commit — nothing to import.
+		g.ID = existingID
+		g.CurrentRevision = existingRevision
+		return ErrVersionUnchanged
+	case checkErr != nil && !errors.Is(checkErr, pgx.ErrNoRows):
+		return fmt.Errorf("guide: check existing version: %w", checkErr)
+	}
+
+	// New guide or new git version: upsert the header row.
 	var id int
 	var currentRevision int
 	err = tx.QueryRow(ctx, `
