@@ -304,6 +304,25 @@ func (h *Handlers) ConfirmStep(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, cp)
 }
 
+// ConfirmAct handles POST /runs/{id}/acts/{act}/confirm
+func (h *Handlers) ConfirmAct(w http.ResponseWriter, r *http.Request) {
+	runID, ok := intPathParam(r, "id")
+	if !ok {
+		writeError(w, http.StatusBadRequest, "invalid run id")
+		return
+	}
+	act, ok := intPathParam(r, "act")
+	if !ok {
+		writeError(w, http.StatusBadRequest, "invalid act")
+		return
+	}
+	if err := h.runs.ConfirmAct(r.Context(), runID, act, runpkg.ConfirmedByManual); err != nil {
+		writeError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+	writeJSON(w, http.StatusOK, map[string]string{"status": "ok"})
+}
+
 // FinishRun handles POST /runs/{id}/finish
 func (h *Handlers) FinishRun(w http.ResponseWriter, r *http.Request) {
 	id, ok := intPathParam(r, "id")

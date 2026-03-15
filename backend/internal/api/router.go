@@ -38,6 +38,7 @@ func NewRouter(h *Handlers) http.Handler {
 	// --- step actions ---
 	mux.HandleFunc("GET /runs/{id}/recommendations", h.GetRunRecommendations)
 	mux.HandleFunc("POST /runs/{id}/steps/{step_id}/confirm", h.ConfirmStep)
+	mux.HandleFunc("POST /runs/{id}/acts/{act}/confirm", h.ConfirmAct)
 	mux.HandleFunc("POST /runs/{id}/steps/{step_id}/skip", h.SkipStep)
 	mux.HandleFunc("POST /runs/{id}/steps/{step_id}/undo", h.UndoStep)
 	mux.HandleFunc("POST /runs/{id}/steps/{step_id}/split", h.RecordSplit)

@@ -79,6 +79,45 @@ func (s *Service) ConfirmStep(ctx context.Context, runID, stepID int, by Confirm
 	return cp, nil
 }
 
+// ConfirmAct confirms all unconfirmed steps for a specific act.
+func (s *Service) ConfirmAct(ctx context.Context, runID, act int, by ConfirmedBy) error {
+	run, err := s.repo.GetRun(ctx, runID)
+	if err != nil {
+		return err
+	}
+	if !run.IsActive {
+		return fmt.Errorf("run: run %d is not active", runID)
+	}
+
+	guide, err := s.guideRepo.GetByID(ctx, run.GuideID)
+	if err != nil {
+		return err
+	}
+
+	checkpoints, err := s.repo.ListCheckpoints(ctx, runID)
+	if err != nil {
+		return err
+	}
+	confirmed := make(map[int]bool)
+	for _, cp := range checkpoints {
+		confirmed[cp.StepID] = true
+	}
+
+	for _, step := range guide.Steps {
+		if step.Act == act && !confirmed[step.ID] {
+			if _, err := s.repo.ConfirmStep(ctx, runID, step.ID, by); err != nil {
+				return err
+			}
+			_ = s.repo.RecordEvent(ctx, runID, EventStepConfirmed, map[string]string{
+				"step_id": fmt.Sprint(step.ID),
+				"by":      string(by),
+				"act":     fmt.Sprint(act),
+			})
+		}
+	}
+	return nil
+}
+
 // GetCurrentState returns the aggregated state for an active run.
 func (s *Service) GetCurrentState(ctx context.Context, runID int) (*CurrentState, error) {
 	run, err := s.repo.GetRun(ctx, runID)

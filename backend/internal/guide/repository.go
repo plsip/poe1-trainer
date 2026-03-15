@@ -165,7 +165,7 @@ func (r *Repository) GetByIDRevision(ctx context.Context, id, revision int) (*Gu
 // List returns all guides without their steps.
 func (r *Repository) List(ctx context.Context) ([]Guide, error) {
 	rows, err := r.db.Query(ctx, `
-		SELECT id, slug, title, build_name, version, created_at FROM guides ORDER BY id`)
+		SELECT id, slug, title, build_name, version, created_at FROM guides ORDER BY id DESC`)
 	if err != nil {
 		return nil, fmt.Errorf("guide: list: %w", err)
 	}
