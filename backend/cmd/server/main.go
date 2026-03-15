@@ -87,6 +87,8 @@ func main() {
 			log.Printf("logtail: strefa czasowa logu: %s", loc)
 		}
 	}
+	// Przekaż konfigurację logu do handlera replay, niezależnie od tego czy watcher działa.
+	h.SetLogConfig(ltCfg.LogPath, ltCfg.LogLocation)
 	if ltCfg.LogPath != "" {
 
 		ch := make(chan progress.DomainEvent, 64)

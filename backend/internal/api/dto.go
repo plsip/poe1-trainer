@@ -94,6 +94,26 @@ type AnswerCheckRequest struct {
 	ResponseValue string `json:"response_value"`
 }
 
+// ─── Log replay ─────────────────────────────────────────────────────────────────
+
+// ReplayLogRequest is the optional body for POST /runs/{id}/replay-log.
+type ReplayLogRequest struct {
+	// LogPath overrides the server-configured log path for this request only.
+	// Leave empty to use the server default (LOG_PATH env / auto-detected path).
+	LogPath string `json:"log_path,omitempty"`
+	// LogTZ overrides the timezone used to parse log timestamps, e.g. "Europe/Warsaw".
+	// Leave empty to use the server-configured LOG_TZ or time.Local.
+	LogTZ string `json:"log_tz,omitempty"`
+}
+
+// ReplayLogResponse is the body returned by POST /runs/{id}/replay-log.
+type ReplayLogResponse struct {
+	LinesRead        int   `json:"lines_read"`
+	EventsDispatched int   `json:"events_dispatched"`
+	ParseErrors      int   `json:"parse_errors"`
+	DurationMs       int64 `json:"duration_ms"`
+}
+
 // ─── Alerts ───────────────────────────────────────────────────────────────────
 
 // Alert aggregates a single gem or gear suggestion for the current step or campaign phase.

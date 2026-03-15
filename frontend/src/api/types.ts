@@ -180,3 +180,10 @@ export interface RunDeltasResponse {
   prev_run_id?: number
   splits: SplitDelta[]
 }
+
+export interface ReplayLogResult {
+  lines_read: number
+  events_dispatched: number
+  parse_errors: number
+  duration_ms: number
+}

@@ -56,6 +56,9 @@ func NewRouter(h *Handlers) http.Handler {
 	mux.HandleFunc("GET /runs/{id}/events", h.ListEvents)
 	mux.HandleFunc("POST /runs/{id}/events", h.RecordEvent)
 
+	// --- log replay (development / QA tool) ---
+	mux.HandleFunc("POST /runs/{id}/replay-log", h.ReplayLog)
+
 	// --- splits, deltas & ranking ---
 	mux.HandleFunc("GET /runs/{id}/splits", h.ListSplits)
 	mux.HandleFunc("GET /runs/{id}/split-deltas", h.GetSplitDeltas)

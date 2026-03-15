@@ -39,6 +39,10 @@ type Handlers struct {
 	// watcherStatus returns the current logtail status string.
 	// Nil when LOG_PATH is not configured.
 	watcherStatus func() string
+	// logPath is the absolute path to Client.txt used by the replay endpoint.
+	logPath string
+	// logLocation is the timezone for parsing log timestamps (nil = time.Local).
+	logLocation *time.Location
 
 	// logLines broadcasts raw Client.txt lines to logtail SSE subscribers.
 	logLines lineBroadcaster
@@ -50,6 +54,13 @@ type Handlers struct {
 // Called from main after the watcher is created.
 func (h *Handlers) SetWatcherStatusFunc(fn func() string) {
 	h.watcherStatus = fn
+}
+
+// SetLogConfig stores the log file path and timezone used by the replay endpoint.
+// Called from main once the logtail config is resolved.
+func (h *Handlers) SetLogConfig(path string, loc *time.Location) {
+	h.logPath = path
+	h.logLocation = loc
 }
 
 // EmitLogLine broadcasts a raw log line to all logtail SSE subscribers.

@@ -12,6 +12,7 @@ import type {
   RunEvent,
   RunDeltasResponse,
   IntegrationStatus,
+  ReplayLogResult,
 } from './types'
 
 const BASE = '/api'
@@ -171,7 +172,25 @@ export function getIntegrationStatus(): Promise<IntegrationStatus> {
 export function listEvents(runId: number): Promise<RunEvent[]> {
   return request(`/runs/${runId}/events`)
 }
+// ─── log replay ───────────────────────────────────────────────────────────
 
+/**
+ * Replays the Client.txt log file into the given run from the beginning.
+ * The backend reads the configured log path (LOG_PATH) and feeds all parsed
+ * events into the run. Use this to verify split timing against a completed log.
+ */
+export function replayLog(
+  runId: number,
+  opts?: { logPath?: string; logTz?: string },
+): Promise<ReplayLogResult> {
+  return request(`/runs/${runId}/replay-log`, {
+    method: 'POST',
+    body: JSON.stringify({
+      log_path: opts?.logPath,
+      log_tz: opts?.logTz,
+    }),
+  })
+}
 // ─── SSE streams ───────────────────────────────────────────────────────────
 
 /**

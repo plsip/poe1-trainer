@@ -5,6 +5,7 @@ import { RunTimer } from '../../components/RunTimer'
 import { StepList } from '../../components/StepList'
 import { ChecksPanel } from '../../components/ChecksPanel'
 import { LogTailPanel } from '../../components/LogTailPanel'
+import { ReplayLogButton } from '../../components/ReplayLogButton'
 import type { GuideStep, CurrentState } from '../../api/types'
 import * as api from '../../api/client'
 
@@ -197,6 +198,7 @@ export function RunPage() {
                 >
                   Porzuć
                 </button>
+                <ReplayLogButton runId={id} onDone={() => loadRunState(id)} />
                 {isPaused && (
                   <button className="btn-sm" onClick={() => navigate(-1)}>
                     ← Wróć
