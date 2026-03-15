@@ -99,11 +99,6 @@ func (s *Service) GetCurrentState(ctx context.Context, runID int) (*CurrentState
 		return nil, err
 	}
 
-	stepTimings, err := s.buildStepTimings(ctx, run, g)
-	if err != nil {
-		return nil, err
-	}
-
 	confirmedSet := make(map[int]bool, len(confirmedIDs))
 	for _, id := range confirmedIDs {
 		confirmedSet[id] = true
@@ -115,6 +110,11 @@ func (s *Service) GetCurrentState(ctx context.Context, runID int) (*CurrentState
 			currentStepID = step.ID
 			break
 		}
+	}
+
+	stepTimings, err := s.buildStepTimings(ctx, run, g, confirmedSet, currentStepID)
+	if err != nil {
+		return nil, err
 	}
 
 	var elapsedMs int64
@@ -469,7 +469,7 @@ func (s *Service) RecordSplit(ctx context.Context, runID, stepID int, splitMs in
 	return s.repo.RecordSplit(ctx, runID, stepID, splitMs)
 }
 
-func (s *Service) buildStepTimings(ctx context.Context, run *RunSession, g *guide.Guide) ([]StepTiming, error) {
+func (s *Service) buildStepTimings(ctx context.Context, run *RunSession, g *guide.Guide, confirmedSet map[int]bool, currentStepID int) ([]StepTiming, error) {
 	splits, err := s.repo.ListSplits(ctx, run.ID)
 	if err != nil {
 		return nil, err
@@ -494,6 +494,11 @@ func (s *Service) buildStepTimings(ctx context.Context, run *RunSession, g *guid
 
 	stepTimings := make([]StepTiming, 0, len(splits))
 	for _, step := range g.Steps {
+		// Only show timings for confirmed steps or the current step;
+		// auto-recorded area splits for future steps must not be surfaced.
+		if !confirmedSet[step.ID] && step.ID != currentStepID {
+			continue
+		}
 		splitMs, ok := splitMap[step.ID]
 		if !ok {
 			continue
