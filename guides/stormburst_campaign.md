@@ -90,7 +90,7 @@ Kolejność lokacji:
 
 <span style="color:white;">The Old Fields</span> -> optional <span style="color:white;">The Den</span> -> <span style="color:white;">The Crossroads</span> -> <span style="color:white;">Chamber of Sins Level 1</span> -> <span style="color:white;">Chamber of Sins Level 2</span> -> <span style="color:white;">The Crossroads</span> -> <span style="color:white;">Fellshrine Ruins</span> -> <span style="color:white;">The Crypt Level 1</span> -> <span style="color:white;">The Crypt Level 2</span> -> <span style="color:white;">The Crossroads</span> -> <span style="color:white;">Broken Bridge</span> -> <span style="color:white;">Forest Encampment</span> -> <span style="color:white;">Riverways</span> -> <span style="color:white;">Western Forest</span> -> <span style="color:white;">Weaver's Chambers</span> -> <span style="color:white;">Riverways</span> -> <span style="color:white;">Wetlands</span> -> <span style="color:white;">Western Forest</span> -> <span style="color:white;">Forest Encampment</span> -> <span style="color:white;">Wetlands</span> -> <span style="color:white;">Vaal Ruins</span> -> <span style="color:white;">Northern Forest</span> -> <span style="color:white;">The Caverns</span> -> <span style="color:white;">Ancient Pyramid</span> -> <span style="color:white;">Pyramid Apex</span> -> <span style="color:white;">City of Sarn</span>
 
-1. Wyjdź do <span style="color:white;">The Old Fields</span>.
+1. Wejdź do <span style="color:white;">The Old Fields</span>.
 2. Jeśli nie masz drugiego <span style="color:#d7d1c3;">Quicksilver Flask</span>, zrób questa <span style="color:#7fa8d6;">The Great White Beast</span>: wejdź do <span style="color:white;">The Den</span>, zabij bossa i wyjdź z powrotem do <span style="color:white;">The Old Fields</span>. Jeśli masz już drugi quicksilver, pomiń ten objazd.
 3. Wejdź do <span style="color:white;">The Crossroads</span> i złap waypoint, idąc po drodze.
 4. Z waypointa skręć w lewo i wejdź do <span style="color:white;">Chamber of Sins Level 1</span>.
@@ -119,7 +119,7 @@ Kolejność lokacji:
 27. Podążaj ścianą mapy, znajdź obóz <span style="color:red;">Blackguardów</span>, zabij lidera, weź <span style="color:green;">Thaumetic Emblem</span> i otwórz <span style="color:green;">Thaumetic Seal</span>.
 28. Zrób logout albo portal do miasta, waypointem wróć do <span style="color:white;">Lioneye's Watch</span> z Aktu 1 i odbierz u <span style="color:green;">Bestela</span> <span style="color:green;">Book of Skill</span>.
 29. Wróć waypointem do <span style="color:white;">Wetlands</span>, zatruj korzenie i wejdź do <span style="color:white;">Vaal Ruins</span>.
-30. W <span style="color:white;">Vaal Ruins</span> kliknij <span style="color:green;">Ancient Seal</span> i wyjdź do <span style="color:white;">Northern Forest</span>.
+30. W <span style="color:white;">Vaal Ruins</span> kliknij <span style="color:green;">Ancient Seal</span> i wejdź do <span style="color:white;">Northern Forest</span>.
 31. W <span style="color:white;">Northern Forest</span> biegnij do <span style="color:white;">The Caverns</span> i złap waypoint. <span style="color:white;">Dread Thicket</span> pomiń na tym etapie.
 32. Znajdź <span style="color:white;">Ancient Pyramid</span> i wejdź do niej.
 33. Wejdź na <span style="color:white;">Pyramid Apex</span>.
@@ -132,7 +132,7 @@ Kolejność lokacji:
 
 <span style="color:white;">The Slums</span> -> <span style="color:white;">Crematorium</span> -> <span style="color:white;">The Slums</span> -> <span style="color:white;">Sewers</span> -> <span style="color:white;">Marketplace</span> -> <span style="color:white;">Catacombs</span> -> <span style="color:white;">Marketplace</span> -> <span style="color:white;">Battlefront</span> -> <span style="color:white;">The Docks</span> -> <span style="color:white;">Battlefront</span> -> <span style="color:white;">Solaris Temple Level 1</span> -> <span style="color:white;">Solaris Temple Level 2</span> -> <span style="color:white;">Sewers</span> -> <span style="color:white;">Ebony Barracks</span> -> <span style="color:white;">Lunaris Temple Level 1</span> -> <span style="color:white;">Lunaris Temple Level 2</span> -> <span style="color:white;">Ebony Barracks</span> -> <span style="color:white;">Imperial Gardens</span> -> optional <span style="color:white;">Library</span> -> <span style="color:white;">Imperial Gardens</span> -> <span style="color:white;">Sceptre of God</span> -> <span style="color:white;">Upper Sceptre of God</span> -> <span style="color:white;">The Aqueduct</span> -> <span style="color:white;">Highgate</span>
 
-1. Wyjdź do <span style="color:white;">The Slums</span>.
+1. Wejdź do <span style="color:white;">The Slums</span>.
 2. Znajdź <span style="color:white;">Crematorium</span>, złap waypoint i zrób <span style="color:teal;">Labyrinth Trial</span>.
 3. Zabij <span style="color:red;">Piety</span>, weź <span style="color:green;">Tolman's Bracelet</span>, wróć do miasta portalem albo logoutem i odbierz <span style="color:green;">Sewer Keys</span> od <span style="color:green;">Clarissy</span>.
 4. Wróć waypointem do <span style="color:white;">The Slums</span>, znajdź <span style="color:white;">Sewer Grating</span> i wejdź do <span style="color:white;">Sewers</span>.
@@ -229,8 +229,8 @@ Kolejność lokacji:
 
 <span style="color:white;">The Twilight Strand</span> -> <span style="color:white;">Lioneye's Watch</span> -> <span style="color:white;">The Coast</span> -> <span style="color:white;">Mud Flats</span> -> <span style="color:white;">Karui Fortress</span> -> <span style="color:white;">Tukohama's Keep</span> -> <span style="color:white;">The Ridge</span> -> <span style="color:white;">Lower Prison</span> -> <span style="color:white;">Shavronne's Tower</span> -> <span style="color:white;">Prison Rooftop</span> -> <span style="color:white;">Prisoner's Gate</span> -> <span style="color:white;">Valley of the Fire Drinker</span> -> <span style="color:white;">Prisoner's Gate</span> -> <span style="color:white;">Western Forest</span> -> <span style="color:white;">Riverways</span> -> <span style="color:white;">Wetlands</span> -> <span style="color:white;">Riverways</span> -> <span style="color:white;">Southern Forest</span> -> <span style="color:white;">Cavern of Anger</span> -> <span style="color:white;">The Beacon</span> -> <span style="color:white;">Brine King's Reef</span> -> <span style="color:white;">Brine King's Throne</span> -> Act 7
 
-1. Wróć waypointem do <span style="color:white;">The Twilight Strand</span> i zrób quest Fallen from Grace.
-2. Wróć do <span style="color:white;">Lioneye's Watch</span>, kup u <span style="color:green;">Lilly Roth</span> <span style="color:#ff6a2f;">Cast when Damage Taken</span>, <span style="color:#ff6a2f;">Molten Shell</span>, <span style="color:#66ff66;">Faster Attacks</span>, <span style="color:#66ff66;">Momentum</span>, <span style="color:#ff6a2f;">Decoy Totem</span> i <span style="color:#ff6a2f;">Multiple Totem Support</span>, a <span style="color:#7f7fff;">Lightning Penetration</span> tylko jeśli jeszcze go nie masz; przy okazji uzupełnij brakujące gemy i napraw resisty, jeśli kara z Aktu 5 je rozsypała.
+1. Wejdź do <span style="color:white;">The Twilight Strand</span>, wyczyść strefę, zrób logout albo portal do miasta i porozmawiaj z <span style="color:green;">Lilly Roth</span>, żeby zamknąć <span style="color:green;">Fallen from Grace</span>.
+2. W <span style="color:white;">Lioneye's Watch</span> kup u <span style="color:green;">Lilly Roth</span> <span style="color:#ff6a2f;">Cast when Damage Taken</span>, <span style="color:#ff6a2f;">Molten Shell</span>, <span style="color:#66ff66;">Faster Attacks</span>, <span style="color:#66ff66;">Momentum</span>, <span style="color:#ff6a2f;">Decoy Totem</span> i <span style="color:#ff6a2f;">Multiple Totem Support</span>, a <span style="color:#7f7fff;">Lightning Penetration</span> tylko jeśli jeszcze go nie masz.
 3. Ustaw <span style="color:#ff6a2f;">Determination</span> jako aurę defensywną; graj <span style="color:#7f7fff;">Wrath</span> tylko jeśli świadomie wybierasz bardziej ofensywny wariant kampanii.
 4. Połącz <span style="color:#ff6a2f;">Cast when Damage Taken</span> z <span style="color:#ff6a2f;">Molten Shellem</span> i zostaw <span style="color:#ff6a2f;">Cast when Damage Taken</span> na level 1, a <span style="color:#ff6a2f;">Molten Shell</span> maksymalnie na level 8.
 5. Kup u <span style="color:green;">Lilly Roth</span> <span style="color:#7f7fff;">Arcane Cloak</span> do levelowania, ale nie łącz go na kampanii z <span style="color:#ff6a2f;">Molten Shellem</span>.
@@ -239,24 +239,27 @@ Kolejność lokacji:
 8. Wejdź do <span style="color:white;">Mud Flats</span> i zabij <span style="color:red;">The Dishonored Queen</span>.
 9. Wejdź do <span style="color:white;">Karui Fortress</span>.
 10. Wejdź do <span style="color:white;">Tukohama's Keep</span>.
-11. Zabij <span style="color:red;">Tukohamę</span>, zrób logout albo portal do miasta i odbierz <span style="color:green;">Books of Skill</span>.
+11. Zabij <span style="color:red;">Tukohamę</span>, porozmawiaj z <span style="color:green;">Sinem</span> i ustaw <span style="color:green;">Soul of Tukohama</span> jako mniejszy Pantheon.
 12. Wejdź do <span style="color:white;">The Ridge</span> i złap waypoint.
-13. Zejdź do <span style="color:white;">Lower Prison</span>, złap waypoint i zrób <span style="color:teal;">Labyrinth Trial</span>.
-14. Wejdź do <span style="color:white;">Shavronne's Tower</span>.
-15. Wejdź do <span style="color:white;">Prison Rooftop</span>.
-16. Zabij <span style="color:red;">Brutusa</span> i <span style="color:red;">Shavronne</span>.
-17. Wejdź do <span style="color:white;">Prisoner's Gate</span> i złap waypoint.
-18. Wejdź do <span style="color:white;">Valley of the Fire Drinker</span>, zabij <span style="color:red;">Abberatha</span>, wróć tą samą drogą do <span style="color:white;">Prisoner's Gate</span> i odbierz <span style="color:green;">Book of Skill</span>.
-19. Wejdź do <span style="color:white;">Western Forest</span>.
-20. Wejdź do <span style="color:white;">Riverways</span> i złap waypoint.
-21. Wejdź do <span style="color:white;">Wetlands</span>, zabij <span style="color:red;">Puppet Mistress</span>, zrób logout albo portal do miasta i odbierz <span style="color:green;">Book of Skill</span>.
-22. Wróć waypointem do <span style="color:white;">Riverways</span>.
-23. Wejdź do <span style="color:white;">Southern Forest</span> i złap waypoint przed <span style="color:white;">Cavern of Anger</span>.
-24. Wejdź do <span style="color:white;">Cavern of Anger</span> i weź <span style="color:green;">Black Flag</span>.
-25. Wejdź do <span style="color:white;">The Beacon</span>, złap waypoint i odpal <span style="color:green;">Beacon</span>.
-26. Popłyń na <span style="color:white;">Brine King's Reef</span> i złap waypoint.
-27. Wejdź do <span style="color:white;">Brine King's Throne</span> i trzymaj się lewej ściany, żeby szybciej dojść do bossa.
-28. Zabij <span style="color:red;">Brine Kinga</span>, ustaw <span style="color:green;">Soul of the Brine King</span> jako główny Pantheon i popłyń do aktu 7.
+13. Wróć waypointem do <span style="color:white;">Lioneye's Watch</span> i odbierz <span style="color:green;">Book of Skill</span> od <span style="color:green;">Tarkleigha</span>.
+14. Wróć waypointem do <span style="color:white;">The Ridge</span>.
+15. Zejdź do <span style="color:white;">Lower Prison</span>, złap waypoint i zrób <span style="color:teal;">Labyrinth Trial</span>.
+16. Wejdź do <span style="color:white;">Shavronne's Tower</span>.
+17. Wejdź do <span style="color:white;">Prison Rooftop</span>.
+18. Zabij <span style="color:red;">Brutusa</span> i <span style="color:red;">Shavronne</span>.
+19. Wejdź do <span style="color:white;">Prisoner's Gate</span> i złap waypoint.
+20. Wejdź do <span style="color:white;">Valley of the Fire Drinker</span>, zabij <span style="color:red;">Abberatha</span>, zrób logout albo portal do miasta i odbierz <span style="color:green;">Book of Skill</span> od <span style="color:green;">Bestela</span>.
+21. Wróć waypointem do <span style="color:white;">Prisoner's Gate</span>.
+22. Wejdź do <span style="color:white;">Western Forest</span>.
+23. Wejdź do <span style="color:white;">Riverways</span> i złap waypoint.
+24. Wejdź do <span style="color:white;">Wetlands</span>, zabij <span style="color:red;">Puppet Mistress</span>, zrób logout albo portal do miasta i odbierz <span style="color:green;">Book of Skill</span> od <span style="color:green;">Tarkleigha</span>.
+25. Wróć waypointem do <span style="color:white;">Riverways</span>.
+26. Wejdź do <span style="color:white;">Southern Forest</span> i złap waypoint przed <span style="color:white;">Cavern of Anger</span>.
+27. Wejdź do <span style="color:white;">Cavern of Anger</span> i weź <span style="color:green;">Black Flag</span>.
+28. Wejdź do <span style="color:white;">The Beacon</span>, złap waypoint i uruchom <span style="color:green;">Beacon</span>.
+29. Porozmawiaj z <span style="color:green;">Weylam Roth</span>, popłyń na <span style="color:white;">Brine King's Reef</span> i złap waypoint.
+30. Wejdź do <span style="color:white;">Brine King's Throne</span> i trzymaj się lewej ściany, żeby szybciej dojść do bossa.
+31. Zabij <span style="color:red;">Brine Kinga</span>, porozmawiaj z <span style="color:green;">Sinem</span>, ustaw <span style="color:green;">Soul of the Brine King</span> jako główny Pantheon i popłyń z <span style="color:green;">Weylamem Rothem</span> do aktu 7.
 
 ## Akt 7
 
@@ -264,7 +267,7 @@ Kolejność lokacji:
 
 <span style="color:white;">Broken Bridge</span> -> <span style="color:white;">The Crossroads</span> -> <span style="color:white;">Fellshrine Ruins</span> -> <span style="color:white;">The Crypt</span> -> <span style="color:white;">The Crypt Level Two</span> -> <span style="color:white;">Bridge Encampment</span> -> <span style="color:white;">The Crossroads</span> -> <span style="color:white;">Chamber of Sins Level 1</span> -> <span style="color:white;">Maligaro's Sanctum</span> -> <span style="color:white;">Chamber of Sins Level 2</span> -> <span style="color:white;">The Den</span> -> <span style="color:white;">Ashen Fields</span> -> <span style="color:white;">Fortress Encampment</span> -> <span style="color:white;">Northern Forest</span> -> <span style="color:white;">Dread Thicket</span> -> <span style="color:white;">Bridge Encampment</span> -> <span style="color:white;">Northern Forest</span> -> <span style="color:white;">Causeway</span> -> <span style="color:white;">Vaal City</span> -> <span style="color:white;">Temple of Decay Level 1</span> -> <span style="color:white;">Temple of Decay Level 2</span> -> <span style="color:white;">Arakaali's Web</span> -> <span style="color:white;">Sarn Ramparts</span> -> <span style="color:white;">Sarn Encampment</span>
 
-1. Wyjdź do <span style="color:white;">Broken Bridge</span>.
+1. Wejdź do <span style="color:white;">Broken Bridge</span>.
 2. Wejdź do <span style="color:white;">The Crossroads</span> i złap waypoint na środku.
 3. Wejdź do <span style="color:white;">Fellshrine Ruins</span>.
 4. Wejdź do <span style="color:white;">The Crypt</span>, złap waypoint i zrób <span style="color:teal;">Labyrinth Trial</span>.
@@ -295,7 +298,7 @@ Kolejność lokacji:
 29. Wejdź do <span style="color:white;">Temple of Decay Level 2</span>.
 30. Wejdź do <span style="color:white;">Arakaali's Web</span>.
 31. Zabij <span style="color:red;">Arakaali</span>.
-32. Wyjdź do <span style="color:white;">Sarn Ramparts</span>.
+32. Wejdź do <span style="color:white;">Sarn Ramparts</span>.
 33. Wejdź do <span style="color:white;">Sarn Encampment</span>.
 
 ## Akt 8
@@ -307,7 +310,7 @@ Kolejność lokacji:
 1. Wejdź do <span style="color:white;">Toxic Conduits</span>.
 2. Wejdź do <span style="color:white;">Doedre's Cesspool</span>.
 3. Wejdź do <span style="color:white;">The Cauldron</span>.
-4. Zabij <span style="color:red;">Doedre</span>, wyjdź do <span style="color:white;">Sewer Outlet</span> i złap waypoint.
+4. Zabij <span style="color:red;">Doedre</span>, wejdź do <span style="color:white;">Sewer Outlet</span> i złap waypoint.
 5. Wejdź do <span style="color:white;">The Quay</span>.
 6. Weź <span style="color:green;">Ankh of Eternity</span> z <span style="color:green;">Sealed Casket</span> blisko długiego mostu.
 7. Wejdź do <span style="color:white;">Ressurection Site</span>.
