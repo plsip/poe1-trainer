@@ -193,7 +193,7 @@ func (r *Repository) GetByIDRevision(ctx context.Context, id, revision int) (*Gu
 // List returns all guides without their steps.
 func (r *Repository) List(ctx context.Context) ([]Guide, error) {
 	rows, err := r.db.Query(ctx, `
-		SELECT id, slug, title, build_name, version, created_at FROM guides ORDER BY id DESC`)
+		SELECT id, slug, title, build_name, version, current_revision, created_at FROM guides ORDER BY id DESC`)
 	if err != nil {
 		return nil, fmt.Errorf("guide: list: %w", err)
 	}
@@ -201,12 +201,16 @@ func (r *Repository) List(ctx context.Context) ([]Guide, error) {
 	guides := []Guide{}
 	for rows.Next() {
 		var g Guide
-		if err := rows.Scan(&g.ID, &g.Slug, &g.Title, &g.BuildName, &g.Version, &g.CreatedAt); err != nil {
+		if err := rows.Scan(&g.ID, &g.Slug, &g.Title, &g.BuildName, &g.Version, &g.CurrentRevision, &g.CreatedAt); err != nil {
 			return nil, err
 		}
 		guides = append(guides, g)
 	}
-	return guides, rows.Err()
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return guides, nil
 }
 
 func (r *Repository) loadSteps(ctx context.Context, guideID, revision int) ([]Step, error) {

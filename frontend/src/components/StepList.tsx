@@ -52,13 +52,54 @@ export function StepList({
   onUndo,
 }: Props) {
   const [expandedId, setExpandedId] = useState<number | null>(state?.current_step_id ?? null)
+  const [collapsedActs, setCollapsedActs] = useState<Set<number>>(new Set())
+  const [actsHydrated, setActsHydrated] = useState(false)
   const stepTimings = new Map((state?.step_timings ?? []).map((timing) => [timing.step_id, timing]))
   const actStepNumbers = buildActStepNumberMap(steps)
+  const guideId = steps[0]?.guide_id
+
+  // Hydrate collapsedActs from localStorage once the guide ID is known.
+  useEffect(() => {
+    if (!guideId || actsHydrated) return
+    const stored = localStorage.getItem(`poe1_collapsedActs_${guideId}`)
+    if (stored) {
+      try {
+        setCollapsedActs(new Set(JSON.parse(stored) as number[]))
+      } catch { /* ignore malformed data */ }
+    }
+    setActsHydrated(true)
+  }, [guideId, actsHydrated])
+
+  // Persist collapsedActs to localStorage whenever it changes (after hydration).
+  useEffect(() => {
+    if (!actsHydrated || !guideId) return
+    localStorage.setItem(`poe1_collapsedActs_${guideId}`, JSON.stringify([...collapsedActs]))
+  }, [actsHydrated, guideId, collapsedActs])
 
   // Auto-expand whenever the current step changes
   useEffect(() => {
-    if (state?.current_step_id) setExpandedId(state.current_step_id)
+    if (state?.current_step_id) {
+      setExpandedId(state.current_step_id)
+      const currentAct = steps.find((s) => s.id === state.current_step_id)?.act
+      if (currentAct !== undefined) {
+        setCollapsedActs((prev) => {
+          if (!prev.has(currentAct)) return prev
+          const next = new Set(prev)
+          next.delete(currentAct)
+          return next
+        })
+      }
+    }
   }, [state?.current_step_id])
+
+  function toggleAct(act: number) {
+    setCollapsedActs((prev) => {
+      const next = new Set(prev)
+      if (next.has(act)) next.delete(act)
+      else next.add(act)
+      return next
+    })
+  }
 
   const acts = [...new Set(steps.map((s) => s.act))].sort((a, b) => a - b)
 
@@ -147,13 +188,22 @@ export function StepList({
               borderBottom: '1px solid #2a2a2a',
               display: 'flex',
               alignItems: 'center',
+              cursor: 'pointer',
+              userSelect: 'none',
             }}
+            onClick={() => toggleAct(Number(actStr))}
           >
+            <span style={{ marginRight: '0.4rem', fontSize: '0.7rem', color: '#888' }}>
+              {collapsedActs.has(Number(actStr)) ? '▶' : '▼'}
+            </span>
             <span>Akt {actStr}</span>
-            {isActive && onConfirmAct && (
+            <span style={{ marginLeft: '0.5rem', fontSize: '0.7rem', fontWeight: 400, color: '#888' }}>
+              ({actSteps.length})
+            </span>
+            {isActive && onConfirmAct && !collapsedActs.has(Number(actStr)) && (
               <button
                 className="btn-sm"
-                onClick={() => onConfirmAct(Number(actStr))}
+                onClick={(e) => { e.stopPropagation(); onConfirmAct(Number(actStr)) }}
                 style={{ fontSize: '0.75rem', padding: '0.2rem 0.5rem', marginLeft: 'auto' }}
                 title="Zatwierdź wszystkie nieukończone kroki w tym akcie"
               >
@@ -162,6 +212,7 @@ export function StepList({
             )}
           </div>
 
+          {!collapsedActs.has(Number(actStr)) && (
           <ol style={{ listStyle: 'none', padding: 0, margin: 0 }}>
             {actSteps.map((step) => {
               const status = deriveStatus(step, state)
@@ -314,6 +365,7 @@ export function StepList({
               )
             })}
           </ol>
+          )}
         </section>
       ))}
     </div>
