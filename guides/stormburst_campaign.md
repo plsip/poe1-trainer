@@ -348,18 +348,18 @@ Kolejność lokacji:
 
 1. Z <span style="color:white;">The Descent</span> trzymaj się prawej strony, zjedź <span style="color:green;">Supply Hoists</span> do <span style="color:white;">Vastiri Desert</span> i złap waypoint.
 2. Znajdź <span style="color:green;">Storm Weathered Chest</span>, przeżyj fale mumi i weź <span style="color:green;">Storm Blade</span>.
-3. Wróć waypointem do miasta, oddaj <span style="color:green;">Storm Blade</span> i waypointem wróć do <span style="color:white;">Vastiri Desert</span>.
+3. Wróć do miasta portalem, porozmawiaj z <span style="color:green;">Petarusem i Vanją</span>. Porozmawiaj z <span style="color:green;">Sinem</span>, potem ponownie z <span style="color:green;">Petarusem i Vanją</span>, odbierz <span style="color:green;">Bottled Storm</span> i użyj swojego portalu, żeby wrócić do <span style="color:white;">Vastiri Desert</span>.
 4. Wejdź do <span style="color:white;">The Oasis</span>.
 5. Wejdź do <span style="color:white;">The Sand Pit</span>.
-6. Zabij <span style="color:red;">Shakari</span>, wróć do miasta portalem albo logoutem i odbierz <span style="color:green;">Book of Skill</span>.
+6. Zabij <span style="color:red;">Shakari</span>, wróć do miasta portalem albo logoutem i odbierz <span style="color:green;">Book of Skill</span> od <span style="color:green;">Irashy</span>.
 7. Wróć waypointem do <span style="color:white;">Vastiri Desert</span>, wejdź do <span style="color:white;">The Foothills</span> i złap waypoint, zwykle w górnej prawej części strefy.
-8. Wejdź do <span style="color:white;">Boiling Lake</span>, zabij <span style="color:red;">Basiliska</span> i zabierz <span style="color:green;">Basilisk Acid</span>.
+8. Wejdź do <span style="color:white;">Boiling Lake</span>, zabij <span style="color:red;">Basiliska</span> i zabierz <span style="color:green;">Basilisk Acid</span>. Poznasz, że jesteś w części strefy z Basiliskiem, gdy zaczniesz widzieć grupy skamieniałych przeciwników.
 9. Zrób logout albo portal do miasta, potem waypointem wróć do <span style="color:white;">The Foothills</span>.
 10. Wejdź do <span style="color:white;">The Tunnel</span>, złap waypoint i zrób <span style="color:teal;">Labyrinth Trial</span>.
 11. Wejdź do <span style="color:white;">The Quarry</span> i złap waypoint na środku strefy.
 12. Z <span style="color:white;">The Quarry</span> idź najpierw do bliższej z dwóch lokacji: <span style="color:white;">The Refinery</span> albo <span style="color:white;">Shrine of the Winds</span>.
 13. Wejdź do <span style="color:white;">The Refinery</span>, zabij <span style="color:red;">General Adusa</span>, użyj maszyny, weź <span style="color:green;">Trarthan Powder</span> i wróć do <span style="color:white;">The Quarry</span>.
-14. Wejdź do <span style="color:white;">Shrine of the Winds</span>, zabij <span style="color:red;">Garukhan</span>, wróć do <span style="color:white;">The Quarry</span> i odbierz <span style="color:green;">Book of Skill</span>.
+14. Wejdź do <span style="color:white;">Shrine of the Winds</span>, zabij <span style="color:red;">Garukhan</span> i wróć do <span style="color:white;">The Quarry</span>.
 15. Porozmawiaj z <span style="color:green;">Sinem</span> i wejdź do <span style="color:white;">Belly of the Beast</span>.
 16. Przejdź do <span style="color:white;">Rotting Core</span>.
 17. Wejdź do <span style="color:white;">The Black Core</span>.
@@ -374,17 +374,17 @@ Kolejność lokacji:
 
 1. Wejdź na <span style="color:white;">Cathedral Rooftop</span>.
 2. Wejdź do <span style="color:white;">Cathedral Apex</span>.
-3. Uwolnij Bannona.
+3. Zabij <span style="color:red;">Cultists</span> i <span style="color:red;">Gargoyles</span>, aby uwolnić <span style="color:green;">Bannona</span>.
 4. Wróć na <span style="color:white;">Cathedral Rooftop</span>.
 5. Wejdź do <span style="color:white;">Ravaged Square</span>.
-6. Wejdź do <span style="color:white;">Control Blocks</span>.
+6. Idź w dół i w prawo, aż znajdziesz wejście do <span style="color:white;">Control Blocks</span>, i wejdź do środka.
 7. Złap waypoint i zabij <span style="color:red;">Vilentę</span>.
 8. Zrób logout albo portal do miasta, odbierz <span style="color:green;">Book of Skill</span> od <span style="color:green;">Lani</span> i wróć waypointem do <span style="color:white;">Control Blocks</span>.
 9. Wróć do <span style="color:white;">Ravaged Square</span>.
-10. Wejdź do <span style="color:white;">Ossuary</span>.
-11. Zrób <span style="color:teal;">Labyrinth Trial</span> przy waypointcie i pomiń quest z <span style="color:green;">Elixir of Allure</span>.
+10. Idź w górę, aż natkniesz się na waypoint, aktywuj go i wejdź do <span style="color:white;">Ossuary</span>.
+11. Zrób <span style="color:teal;">Labyrinth Trial</span> przy waypointcie.
 12. Zrób logout albo portal do miasta i wróć waypointem do <span style="color:white;">Ravaged Square</span>.
-13. Wejdź do <span style="color:white;">Torched Courts</span>.
+13. Znajdź wejście do <span style="color:white;">Torched Courts</span>, wejdź tam i przejdź przez lokację.
 14. Wejdź do <span style="color:white;">Desecrated Chambers</span>.
 15. Złap waypoint i zabij <span style="color:red;">Avariusa Reassembled</span>.
 16. Zrób logout albo portal do <span style="color:white;">Oriath Docks</span>, pogadaj z <span style="color:green;">Bannonem</span> i odbierz nagrodę od <span style="color:green;">Lani</span>.
