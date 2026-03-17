@@ -237,6 +237,7 @@ input[type="text"]:focus {
   line-height: 1.45;
   color: #b0b0b0;
   word-break: break-all;
+  color-scheme: dark;
 }
 
 @media (max-width: 700px) {

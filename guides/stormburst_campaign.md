@@ -162,7 +162,7 @@ Kolejność lokacji:
 23. Złap waypoint w <span style="color:white;">Imperial Gardens</span> i trzymaj się tiled path.
 24. Jeśli potrzebujesz konkretnych gemów od <span style="color:green;">Siosy</span>, wejdź do <span style="color:white;">Library</span> i zrób quest <span style="color:#7fa8d6;">A Fixture of Fate</span>; jeśli nie, pomiń ten objazd.
 25. W <span style="color:white;">Imperial Gardens</span> zrób ostatni <span style="color:teal;">Labyrinth Trial</span> do pierwszego laba.
-26. Wejdź do <span style="color:white;">Sceptre of God</span>.
+26. Użyj <span style="color:green;">Tower Key</span> na bramie i wejdź do <span style="color:white;">Sceptre of God</span>.
 27. Wejdź do <span style="color:white;">Upper Sceptre of God</span> i zabij <span style="color:red;">Dominusa</span>.
 28. Wejdź do <span style="color:white;">The Aqueduct</span>.
 29. Przebiegnij <span style="color:white;">The Aqueduct</span> i wejdź do <span style="color:white;">Highgate</span>.
@@ -271,35 +271,35 @@ Kolejność lokacji:
 2. Wejdź do <span style="color:white;">The Crossroads</span> i złap waypoint na środku.
 3. Wejdź do <span style="color:white;">Fellshrine Ruins</span>.
 4. Wejdź do <span style="color:white;">The Crypt</span>, złap waypoint i zrób <span style="color:teal;">Labyrinth Trial</span>.
-5. Zejdź do <span style="color:white;">The Crypt Level Two</span>.
-6. Weź quest item z sarkofagu, zrób logout albo portal do miasta i oddaj questa.
+5. Znajdź Sarkofag i zejdź do <span style="color:white;">The Crypt Level Two</span>.
+6. Znajdź <span style="color:green;">Container of Sins</span> i weź <span style="color:green;">Maligaro's Map</span>, zrób logout albo portal do miasta i oddaj questa.
 7. Wróć waypointem do <span style="color:white;">The Crossroads</span>.
 8. Wejdź do <span style="color:white;">Chamber of Sins Level 1</span> i złap waypoint przy centralnym skrzyżowaniu.
 9. Użyj map device do wejścia do <span style="color:white;">Maligaro's Sanctum</span>.
-10. Zabij <span style="color:red;">Maligaro</span>, weź <span style="color:green;">Black Venom</span> i zrób logout albo portal do miasta.
+10. Zabij <span style="color:red;">Maligaro</span>, weź <span style="color:green;">Black Venom</span> i opuść mapę przez Portal Scroll.
 11. Odbierz <span style="color:green;">Obsidian Key</span> od <span style="color:green;">Silka</span>.
-12. Wróć waypointem do <span style="color:white;">Chamber of Sins Level 1</span>, zejdź do <span style="color:white;">Chamber of Sins Level 2</span> i zrób <span style="color:teal;">Labyrinth Trial</span>.
+12. Zejdź do <span style="color:white;">Chamber of Sins Level 2</span> i zrób <span style="color:teal;">Labyrinth Trial</span>.
 13. Wejdź do <span style="color:white;">The Den</span>.
 14. Wejdź do <span style="color:white;">Ashen Fields</span>.
-15. Zabij <span style="color:red;">Ralakesha</span>.
-16. Wejdź do <span style="color:white;">Fortress Encampment</span>.
-17. Zabij Greusta.
-18. Wejdź do <span style="color:white;">Northern Forest</span> i złap waypoint.
-19. Wejdź do <span style="color:white;">Dread Thicket</span>.
-20. Wejdź do <span style="color:white;">Den of Despair</span> i zabij <span style="color:red;">Gruthkula</span>.
-21. Zbierz 7 Fireflies, zrób logout albo portal do miasta i odbierz dwa Books of Skill.
-22. Wróć waypointem do <span style="color:white;">Northern Forest</span>.
-23. Wejdź do <span style="color:white;">Causeway</span> i złap waypoint.
-24. Weź <span style="color:green;">Kishara's Star</span> z lockboxa zwykle blisko wyjścia.
-25. Wejdź do <span style="color:white;">Vaal City</span>, znajdź <span style="color:green;">Yeenę</span> i złap waypoint w centrum strefy.
-26. Zrób logout albo portal do miasta, oddaj <span style="color:green;">Kishara's Star</span> za skill book i waypointem wróć do <span style="color:white;">Vaal City</span>.
+15. Wejdź do <span style="color:white;">Fortress Encampment</span>.
+16. Zabij Greusta.
+17. Wejdź do <span style="color:white;">Northern Forest</span> i złap waypoint.
+18. Wejdź do <span style="color:white;">Dread Thicket</span>.
+19. Wejdź do <span style="color:white;">Den of Despair</span> i zabij <span style="color:red;">Gruthkula</span>.
+20. Zbierz 7 Fireflies, zrób logout albo portal do miasta i odbierz dwa Books of Skill.
+21. Wróć waypointem do <span style="color:white;">Northern Forest</span>.
+22. Wejdź do <span style="color:white;">Causeway</span> i złap waypoint.
+23. Weź <span style="color:green;">Kishara's Star</span> z lockboxa zwykle blisko wyjścia.
+24. Wejdź do <span style="color:white;">Vaal City</span>, znajdź <span style="color:green;">Yeenę</span> i złap waypoint w centrum strefy.
+25. Zrób logout albo portal do miasta, oddaj <span style="color:green;">Kishara's Star</span> <span style="color:green;">Weylamowi</span> za skill book i waypointem wróć do <span style="color:white;">Vaal City</span>.
 27. Porozmawiaj z <span style="color:green;">Yeeną</span>.
 28. Wejdź do <span style="color:white;">Temple of Decay Level 1</span>.
 29. Wejdź do <span style="color:white;">Temple of Decay Level 2</span>.
 30. Wejdź do <span style="color:white;">Arakaali's Web</span>.
 31. Zabij <span style="color:red;">Arakaali</span>.
 32. Wejdź do <span style="color:white;">Sarn Ramparts</span>.
-33. Wejdź do <span style="color:white;">Sarn Encampment</span>.
+33. Zrób teraz <span style="color:teal;">Cruel Lab</span> po kolejne 2 punkty ascendancji.
+34. Wejdź do <span style="color:white;">Sarn Encampment</span>.
 
 ## Akt 8
 
@@ -318,18 +318,18 @@ Kolejność lokacji:
 9. Wejdź do <span style="color:white;">Grain Gate</span> i złap waypoint.
 10. Trzymaj się prawej ściany strefy i zabij <span style="color:red;">Gemling Legionnaires</span>.
 11. Wejdź do <span style="color:white;">Imperial Fields</span>, trzymaj się drogi i złap waypoint.
-12. Wróć waypointem do miasta i odbierz <span style="color:green;">Book of Skill</span> od <span style="color:green;">Hargana</span>.
+12. Wróć waypointem do miasta i odbierz <span style="color:green;">Book of Skill</span> od <span style="color:green;">Maramoa</span>.
 13. Wróć waypointem do <span style="color:white;">Imperial Fields</span>.
 14. Wejdź do <span style="color:white;">Solaris Temple Level 1</span>.
 15. Wejdź do <span style="color:white;">Solaris Temple Level 2</span>.
-16. Zabij <span style="color:red;">Dawna</span>, zabierz <span style="color:green;">Sun Orb</span>, zrób logout albo portal do miasta i waypointem wróć do <span style="color:white;">Solaris Temple Level 2</span>.
-17. Wróć z <span style="color:white;">Solaris Temple Level 2</span> do <span style="color:white;">Solaris Temple Level 1</span>.
+16. Zabij <span style="color:red;">Dawna</span>, zabierz <span style="color:green;">Sun Orb</span>, zrób logout albo portal do miasta i waypointem wróć do <span style="color:white;">Solaris Temple Level 1</span>.
+17. Wróć z <span style="color:white;">Solaris Temple Level 1</span> do <span style="color:white;">Solaris Temple Level 2</span>.
 18. Wejdź do <span style="color:white;">Solaris Concourse</span>.
 19. Wejdź do <span style="color:white;">Harbour Bridge</span>.
 20. Wejdź do <span style="color:white;">Lunaris Concourse</span> i złap waypoint.
 21. Wejdź do <span style="color:white;">Bath House</span>.
 22. Zrób <span style="color:teal;">Labyrinth Trial</span> blisko waypointa.
-23. Wejdź do <span style="color:white;">High Gardens</span>.
+23. Wejdź do <span style="color:white;">High Gardens</span> i idź dalej, aż natrafisz na <span style="color:white;">Pools of Terror</span>.
 24. Zabij <span style="color:red;">Yugula</span>, zrób logout albo portal do miasta i odbierz <span style="color:green;">Book of Skill</span> od <span style="color:green;">Hargana</span>.
 25. Wróć waypointem do <span style="color:white;">Lunaris Concourse</span>.
 26. Wejdź do <span style="color:white;">Lunaris Temple Level 1</span>.
